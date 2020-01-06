@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@android:color/background_light"
     tools:context=".SearchProviderActivity">
 
     <TextView
@@ -25,20 +25,20 @@
 
     <ImageView
         android:id="@+id/main_bar_image_search_act"
-        android:layout_width="524dp"
-        android:layout_height="102dp"
+        android:layout_width="425dp"
+        android:layout_height="104dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/main_bar_search_act" />
+        app:srcCompat="@drawable/main_bar_background" />
 
     <Button
         android:id="@+id/searchProviderButton_search_act"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginStart="165dp"
+        android:layout_marginStart="160dp"
         android:layout_marginBottom="32dp"
-        android:background="@drawable/main_button_search_act"
+        android:background="@drawable/ic_main_button_unavailable"
         android:fontFamily="serif"
         android:textAlignment="center"
         android:textAllCaps="false"
@@ -85,9 +85,10 @@
         android:layout_marginTop="42dp"
         android:layout_marginEnd="48dp"
         android:background="@android:color/background_light"
+        android:padding="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_bottom"
-        app:srcCompat="@drawable/search_icon" />
+        app:srcCompat="@drawable/ic_search_btn" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_results_list"
