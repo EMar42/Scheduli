@@ -47,7 +47,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     }
 
     private void recoverPasswordToEmail() {
-        //TODO implement
         //TODO Add notification on success of password sending
         if (checkIfEmpty(userEmail))
             userEmail.setError("Email cannot be empty");

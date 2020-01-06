@@ -4,11 +4,17 @@
     //Login Screen Strings
     <string name="login_title">Welcome to Scheduli</string>
     <string name="login_subTitle">Login to your account</string>
+    <string name="return_to_login_screen">Return to login screen</string>
 
     //Forgot Password Strings
     <string name="forgot_pass_title">Recover Password</string>
     <string name="forgot_pass_subTitle">Let\'s get your password back</string>
-    <string name="forgot_pass_return_button">Return to login screen</string>
+
+
+    //Sign-up Strings
+    <string name="sign_up_title">Create Account</string>
+    <string name="sign_up_subTitle">What gets scheduled gets done.</string>
+    <string name="sign_up_confirm">Let\'s start</string>
 
     //General Strings
     <string name="username">Username</string>
@@ -20,5 +26,7 @@
     <string name="app_icon_description">main app icon</string>
     <string name="send_password">Send password</string>
     <string name="cancel">Cancel</string>
+    <string name="full_name">Full Name</string>
+
 
 </resources>

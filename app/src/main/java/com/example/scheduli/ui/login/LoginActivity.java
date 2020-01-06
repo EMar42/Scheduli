@@ -72,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (user != null) {
                     Log.i(LOGIN_TAG, "Got user form sign up activity logging in");
                     String uid = user.getUid();
+                    //TODO add sound on login
                     //TODO implemennt intent change once user logged in to the app from sign-up.
                     //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     //intent.putExtra("LOGGED_IN_USER_UID", uid);
@@ -111,6 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.i(LOGIN_TAG, "Succesful login to the application using " + userEmail.getText().toString());
                         FirebaseUser user = usersUtils.getFireBaseAuth().getCurrentUser();
                         String uid = user.getUid();
+                        //TODO add sound on login
                         //TODO once added main activity point to there
                         //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         //intent.putExtra("LOGGED_IN_USER_UID", uid);
