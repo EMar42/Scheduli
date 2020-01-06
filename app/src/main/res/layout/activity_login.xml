@@ -90,6 +90,7 @@
 
     <Button
         android:id="@+id/btn_login_forgot_password"
+        style="@style/appBorderLessButtons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -102,6 +103,7 @@
 
     <Button
         android:id="@+id/btn_login_signup"
+        style="@style/appBorderLessButtons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
