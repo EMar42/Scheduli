@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.scheduli.R;
 import com.example.scheduli.ui.forgotPassowrd.ForgotPasswordActivity;
+import com.example.scheduli.ui.mainScreen.MainActivity;
 import com.example.scheduli.ui.signup.SignupActivity;
 import com.example.scheduli.utils.UsersUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -74,10 +75,10 @@ public class LoginActivity extends AppCompatActivity {
                     String uid = user.getUid();
                     //TODO add sound on login
                     //TODO implemennt intent change once user logged in to the app from sign-up.
-                    //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    //intent.putExtra("LOGGED_IN_USER_UID", uid);
-                    //startActivity(intent);
-                    //finish();
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.putExtra("LOGGED_IN_USER_UID", uid);
+                    startActivity(intent);
+                    finish();
                 }
             }
         };
@@ -114,10 +115,10 @@ public class LoginActivity extends AppCompatActivity {
                         String uid = user.getUid();
                         //TODO add sound on login
                         //TODO once added main activity point to there
-                        //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        //intent.putExtra("LOGGED_IN_USER_UID", uid);
-                        //startActivity(intent);
-                        //finish();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("LOGGED_IN_USER_UID", uid);
+                        startActivity(intent);
+                        finish();
                     }
                 }
             });
