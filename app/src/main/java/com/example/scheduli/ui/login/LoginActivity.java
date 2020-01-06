@@ -2,6 +2,7 @@ package com.example.scheduli.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
+    private static final String LOGIN_TAG = "Login Activity";
+
 
     private EditText userEmail, userPassword;
     private Button createAccount, loginToApp, forgotPassword;
@@ -67,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
+                    Log.i(LOGIN_TAG, "Got user form sign up activity logging in");
                     String uid = user.getUid();
                     //TODO implemennt intent change once user logged in to the app from sign-up.
                     //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -101,8 +105,10 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (!task.isSuccessful()) {
+                        Log.e(LOGIN_TAG, "Failed to login with email " + userEmail.getText().toString());
                         Toast.makeText(LoginActivity.this, "Sign-in failed", Toast.LENGTH_SHORT).show();
                     } else {
+                        Log.i(LOGIN_TAG, "Succesful login to the application using " + userEmail.getText().toString());
                         FirebaseUser user = usersUtils.getFireBaseAuth().getCurrentUser();
                         String uid = user.getUid();
                         //TODO once added main activity point to there

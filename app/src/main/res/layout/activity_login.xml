@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/ic_scheduli_app_icon" />
+        app:srcCompat="@drawable/ic_scheduli_app_icon" />
 
     <Button
         android:id="@+id/btn_login_to_account"

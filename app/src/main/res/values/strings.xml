@@ -8,6 +8,7 @@
     //Forgot Password Strings
     <string name="forgot_pass_title">Recover Password</string>
     <string name="forgot_pass_subTitle">Let\'s get your password back</string>
+    <string name="forgot_pass_return_button">Return to login screen</string>
 
     //General Strings
     <string name="username">Username</string>
