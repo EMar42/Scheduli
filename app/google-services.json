@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "162644467639",
+    "firebase_url": "https://scheduli-b1643.firebaseio.com",
+    "project_id": "scheduli-b1643",
+    "storage_bucket": "scheduli-b1643.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:162644467639:android:7b57960563d7ea0e779232",
+        "android_client_info": {
+          "package_name": "com.example.scheduli"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "162644467639-u86meo23obm1mc79afichmgr77nmk9nl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.scheduli",
+            "certificate_hash": "111fef72185271788224105507c5745a922134a1"
+          }
+        },
+        {
+          "client_id": "162644467639-q31actmvdqfq5h901c2a9m3q6okohdnf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRzH0VPXqct_y_-QgwAfG0A7K4JPNevLI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "162644467639-q31actmvdqfq5h901c2a9m3q6okohdnf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
