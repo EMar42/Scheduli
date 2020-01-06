@@ -1,4 +1,4 @@
-package com.example.scheduli.Utils;
+package com.example.scheduli.utils;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,5 +29,4 @@ public class UsersUtils {
     public FirebaseUser getCurrentUser(){
         return firebaseAuth.getCurrentUser();
     }
-
 }
