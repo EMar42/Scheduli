@@ -120,7 +120,7 @@
 
     <Button
         android:id="@+id/btn_sign_up_return"
-        style="@style/appButtonStyle"
+        style="@style/Base.TextAppearance.AppCompat.Medium.Inverse"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"

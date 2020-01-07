@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.scheduli.R;
+import com.example.scheduli.data.Provider;
+import com.example.scheduli.data.ProviderDataRepository;
 import com.example.scheduli.data.User;
 import com.example.scheduli.data.UserDataRepository;
 import com.example.scheduli.utils.UsersUtils;
@@ -26,6 +28,8 @@ public class SignupActivity extends AppCompatActivity {
     private EditText userEmail, userName, userPassword, userFullName;
     private Button signUpToApp, returnToLogin;
     private UserDataRepository userDataRepository;
+    private ProviderDataRepository providerRepository; // TEST
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +87,10 @@ public class SignupActivity extends AppCompatActivity {
 
     private void writeNewUserToDataBase(String uid, String email, String userName, String fullName) {
         User user = new User(userName, fullName, email);
+//        Provider provider = new Provider(userName,fullName,email,"company","profession"); // TEST
         userDataRepository.createNewUserInApp(uid, user);
+//        providerRepository.createNewProviderInApp(uid, provider);  // TEST
+
     }
 
     private boolean isFormValid() {
