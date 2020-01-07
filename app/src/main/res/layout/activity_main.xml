@@ -12,7 +12,7 @@
         android:id="@+id/searchProviderButton"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginStart="160dp"
+        android:layout_marginStart="155dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/ic_main_button"
         android:fontFamily="serif"

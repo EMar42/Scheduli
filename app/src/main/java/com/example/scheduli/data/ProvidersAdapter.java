@@ -46,6 +46,9 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
         return providerList.size();
     }
 
+
+
+
     class ProviderViewHolder extends RecyclerView.ViewHolder {
 
         TextView textViewName, textViewProfession, textViewId;
@@ -53,9 +56,9 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
         public ProviderViewHolder(@NonNull View itemView) {
             super(itemView);
 
-//            textViewName = itemView.findViewById(R.id.text_view_name);
-//            textViewProfession = itemView.findViewById(R.id.text_view_profession);
-//            textViewId = itemView.findViewById(R.id.text_view_id);
+            textViewName = itemView.findViewById(R.id.text_view_name);
+            textViewProfession = itemView.findViewById(R.id.text_view_profession);
+            textViewId = itemView.findViewById(R.id.text_view_id);
         }
     }
 }

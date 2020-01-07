@@ -26,7 +26,6 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginActivity extends AppCompatActivity {
     private static final String LOGIN_TAG = "Login Activity";
 
-
     private EditText userEmail, userPassword;
     private Button createAccount, loginToApp, forgotPassword;
     private UsersUtils usersUtils;
@@ -38,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         usersUtils = UsersUtils.getInstance();
         initView();
+
 
         //add login button action
         loginToApp.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +90,11 @@ public class LoginActivity extends AppCompatActivity {
         createAccount = findViewById(R.id.btn_login_signup);
         loginToApp = findViewById(R.id.btn_login_to_account);
         forgotPassword = findViewById(R.id.btn_login_forgot_password);
+
+        //For testing
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        //For testing
     }
 
     private void loginUserToApp() {
