@@ -5,6 +5,9 @@ import android.util.Log;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+/**
+ * Use this class for actions with the database that concern users.
+ * */
 public class UserDataRepository {
     private static final String TAG_USER_REPOSITORY = "User repository";
     private static UserDataRepository instance;
