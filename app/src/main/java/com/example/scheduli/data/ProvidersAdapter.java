@@ -37,8 +37,8 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
     public void onBindViewHolder(@NonNull ProviderViewHolder holder, int position) {
         Provider provider = providerList.get(position);
         holder.textViewName.setText(provider.companyName);
-        holder.textViewGenre.setText("profession: " + provider.profession);
-        holder.textViewAge.setText("id: " + provider.uid);
+        holder.textViewProfession.setText("profession: " + provider.profession);
+        holder.textViewId.setText("id: " + provider.uid);
     }
 
     @Override
@@ -48,15 +48,14 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
 
     class ProviderViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textViewName, textViewGenre, textViewAge, textViewCountry;
+        TextView textViewName, textViewProfession, textViewId;
 
         public ProviderViewHolder(@NonNull View itemView) {
             super(itemView);
 
 //            textViewName = itemView.findViewById(R.id.text_view_name);
-//            textViewGenre = itemView.findViewById(R.id.text_view_genre);
-//            textViewAge = itemView.findViewById(R.id.text_view_age);
-//            textViewCountry = itemView.findViewById(R.id.text_view_country);
+//            textViewProfession = itemView.findViewById(R.id.text_view_profession);
+//            textViewId = itemView.findViewById(R.id.text_view_id);
         }
     }
 }
