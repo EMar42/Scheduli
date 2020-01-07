@@ -6,15 +6,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.scheduli.R;
 import com.example.scheduli.data.Provider;
-import com.example.scheduli.data.User;
-import com.example.scheduli.utils.UsersUtils;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.scheduli.data.ProvidersAdapter;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,9 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SearchProviderActivity extends AppCompatActivity {
 
@@ -34,15 +34,15 @@ public class SearchProviderActivity extends AppCompatActivity {
 
     private List<Provider> providersList;
 
+    ProvidersAdapter adapter;
+
      DatabaseReference ref;
-    static FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_provider);
+
 
 
         searchField = (EditText)findViewById(R.id.editText_search_field);
@@ -53,13 +53,28 @@ public class SearchProviderActivity extends AppCompatActivity {
         resultsList.setHasFixedSize(true);
         resultsList.setLayoutManager(new LinearLayoutManager(this));
         providersList = new ArrayList<>();
+        adapter = new ProvidersAdapter(this, providersList);
+        resultsList.setAdapter(adapter);
 
-        //select * from users
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAll();
+
+            }
+        });
+        showAll();
+
+
+    }
+
+
+
+    //select * from providers
+    private void showAll() {
         ref = FirebaseDatabase.getInstance().getReference("providers");
         ref.addListenerForSingleValueEvent(valueEventListener);
-
-
-
     }
 
 
@@ -82,5 +97,12 @@ public class SearchProviderActivity extends AppCompatActivity {
         }
     };
 
+    private void addProvider(){
 
+        Provider provider = new Provider("company","pro");
+
+        ref.child("providers").setValue(provider);
+
+
+    }
 }
