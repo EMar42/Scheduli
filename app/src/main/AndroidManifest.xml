@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.scheduli">
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".BaseMenuActivity" />
-        <activity android:name=".ui.SearchProvider.SearchProviderActivity"></activity>
+        <activity android:name=".ui.SearchProvider.SearchProviderActivity" />
         <activity android:name=".ui.SearchProviderActivity" />
         <activity android:name=".ui.mainScreen.MainActivity" />
         <activity android:name=".ui.MainActivity" />

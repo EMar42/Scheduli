@@ -90,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
     private void checkLoginStatus() {
         FirebaseUser user = UsersUtils.getInstance().getCurrentUser();
         if (user != null) {
+            Log.i(LOGIN_TAG, "Entering app user already logged in");
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.putExtra("LOGGED_IN_USER_UID", user.getUid() + " " + user.getDisplayName());
             startActivity(intent);

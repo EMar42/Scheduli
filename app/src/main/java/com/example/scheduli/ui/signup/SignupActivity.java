@@ -15,6 +15,7 @@ import com.example.scheduli.R;
 import com.example.scheduli.data.ProviderDataRepository;
 import com.example.scheduli.data.User;
 import com.example.scheduli.data.UserDataRepository;
+import com.example.scheduli.utils.SignUpNotification;
 import com.example.scheduli.utils.UsersUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -74,6 +75,7 @@ public class SignupActivity extends AppCompatActivity {
                         AuthResult result = task.getResult();
                         String uid = result.getUser().getUid();
                         writeNewUserToDataBase(uid, email, userNameString, fullName);
+                        SignUpNotification.notify(getApplicationContext(), fullName, 1);
                         //TODO add notification for new account creation
                         finish();
                     }

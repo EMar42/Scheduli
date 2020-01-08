@@ -30,5 +30,12 @@
     <string name="app_settings">App Settings</string>
     <string name="logout">Logout</string>
 
+    <string name="sign_up_notification_placeholder_text_template">
+        We want to welcome you to our app %1$s.
+        Thank you…
+    </string>
+    <string name="new_user_channel">added new user</string>
+    <string name="channel_description">notification sent for new users added to the app</string>
+
 
 </resources>
