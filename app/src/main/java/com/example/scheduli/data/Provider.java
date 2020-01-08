@@ -4,10 +4,13 @@ import java.util.ArrayList;
 
 public class Provider extends User {
 
-
+    int imageResource;
     String uid;
     String companyName;
     String profession;
+
+
+
     ArrayList<Service> services;
 
     public Provider(String userName, String fullName, String email, String companyName, String profession) {
@@ -19,9 +22,11 @@ public class Provider extends User {
         this.services = new ArrayList<Service>();
     }
 
-    public Provider(String companyName, String profession) {
+    public Provider(int imageResource, String companyName, String profession) {
         // TODO: get user Uid
         //  this.uid = super.getUserId;
+
+        this.imageResource=imageResource;
         this.companyName = companyName;
         this.profession = profession;
         this.services = new ArrayList<Service>();
@@ -56,5 +61,9 @@ public class Provider extends User {
 
     public void setServices(ArrayList<Service> services) {
         this.services = services;
+    }
+
+    public int getImageResource() {
+        return imageResource;
     }
 }

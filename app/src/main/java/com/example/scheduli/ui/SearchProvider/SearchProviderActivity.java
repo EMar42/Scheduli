@@ -27,13 +27,10 @@ import java.util.List;
 public class SearchProviderActivity extends AppCompatActivity {
 
     private EditText searchField;
-    private ImageView searchBtn;
+    private ImageButton searchBtn;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayout;
-
-
-
 
     private List<Provider> providersList;
 
@@ -46,19 +43,26 @@ public class SearchProviderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_provider);
 
-
+        providersList = new ArrayList<>();
+        providersList.add(new Provider(R.drawable.ic_list_icon,"Bar","sdf"));
+        providersList.add(new Provider(R.drawable.ic_list_icon,"Shuster","sdf"));
+        providersList.add(new Provider(R.drawable.ic_list_icon,"Evgeny","sdf"));
 
         searchField = (EditText)findViewById(R.id.editText_search_field);
         searchBtn = (ImageButton)findViewById(R.id.search_provider_button);
 
-
         recyclerView = (RecyclerView) findViewById(R.id.search_results_list);
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        providersList = new ArrayList<>();
-        adapter = new ProvidersAdapter(this, providersList);
-        recyclerView.setAdapter(adapter);
+
+        mLayout = new LinearLayoutManager(this);
+        mAdapter = new ProvidersAdapter(providersList);
+
+
+        recyclerView.setLayoutManager(mLayout);
+        recyclerView.setAdapter(mAdapter);
+
+//        adapter = new ProvidersAdapter(this, providersList);
 
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
@@ -68,11 +72,8 @@ public class SearchProviderActivity extends AppCompatActivity {
 
             }
         });
-        providersList.add(new Provider("111","sdf"));
-        providersList.add(new Provider("222","sdf"));
-        providersList.add(new Provider("333","sdf"));
 
-        showAll();
+//        showAll();
 
 
     }
@@ -108,9 +109,9 @@ public class SearchProviderActivity extends AppCompatActivity {
 
     private void addProvider(){
 
-        Provider provider = new Provider("company","pro");
+//        Provider provider = new Provider("company","pro");
 
-        ref.child("providers").setValue(provider);
+//        ref.child("providers").setValue(provider);
 
 
     }
