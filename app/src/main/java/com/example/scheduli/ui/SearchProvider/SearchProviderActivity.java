@@ -6,12 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.scheduli.R;
 import com.example.scheduli.data.Provider;
@@ -30,7 +28,12 @@ public class SearchProviderActivity extends AppCompatActivity {
 
     private EditText searchField;
     private ImageView searchBtn;
-    private RecyclerView resultsList;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayout;
+
+
+
 
     private List<Provider> providersList;
 
@@ -48,13 +51,14 @@ public class SearchProviderActivity extends AppCompatActivity {
         searchField = (EditText)findViewById(R.id.editText_search_field);
         searchBtn = (ImageButton)findViewById(R.id.search_provider_button);
 
-        resultsList = (RecyclerView) findViewById(R.id.search_results_list);
 
-        resultsList.setHasFixedSize(true);
-        resultsList.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView = (RecyclerView) findViewById(R.id.search_results_list);
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         providersList = new ArrayList<>();
         adapter = new ProvidersAdapter(this, providersList);
-        resultsList.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
 
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +68,10 @@ public class SearchProviderActivity extends AppCompatActivity {
 
             }
         });
+        providersList.add(new Provider("111","sdf"));
+        providersList.add(new Provider("222","sdf"));
+        providersList.add(new Provider("333","sdf"));
+
         showAll();
 
 
@@ -75,6 +83,7 @@ public class SearchProviderActivity extends AppCompatActivity {
     private void showAll() {
         ref = FirebaseDatabase.getInstance().getReference("providers");
         ref.addListenerForSingleValueEvent(valueEventListener);
+
     }
 
 

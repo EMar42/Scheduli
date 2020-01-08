@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,13 +14,14 @@ import com.example.scheduli.R;
 
 import java.util.List;
 
-import static android.media.CamcorderProfile.get;
-
 public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.ProviderViewHolder> {
 
 
+    public ImageView imageView;
     private Context mCtx;
     private List<Provider> providerList;
+    public TextView companyName;
+    public TextView profession;
 
     public ProvidersAdapter(Context mCtx, List<Provider> providerList) {
         this.mCtx = mCtx;
