@@ -27,6 +27,8 @@
     <string name="send_password">Send password</string>
     <string name="cancel">Cancel</string>
     <string name="full_name">Full Name</string>
+    <string name="app_settings">App Settings</string>
+    <string name="logout">Logout</string>
 
 
 </resources>

@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.scheduli.R;
-import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.ProviderDataRepository;
 import com.example.scheduli.data.User;
 import com.example.scheduli.data.UserDataRepository;

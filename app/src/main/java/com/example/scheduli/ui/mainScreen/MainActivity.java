@@ -1,16 +1,17 @@
 package com.example.scheduli.ui.mainScreen;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.widget.Toolbar;
+
+import com.example.scheduli.BaseMenuActivity;
 import com.example.scheduli.R;
 import com.example.scheduli.ui.SearchProvider.SearchProviderActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseMenuActivity {
 
     Button button;
     Button searchProviderButton;
@@ -19,9 +20,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         searchProviderButton = (Button) findViewById(R.id.searchProviderButton);
-
+        Toolbar mainToolbar = findViewById(R.id.app_main_toolbar);
+        setSupportActionBar(mainToolbar);
 
         searchProviderButton.setOnClickListener(new View.OnClickListener() {
             @Override

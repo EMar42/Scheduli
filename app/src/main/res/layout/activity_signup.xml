@@ -107,6 +107,7 @@
 
     <Button
         android:id="@+id/btn_sign_up_create"
+        style="@style/appCompactButtons"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -120,7 +121,7 @@
 
     <Button
         android:id="@+id/btn_sign_up_return"
-        style="@style/Base.TextAppearance.AppCompat.Medium.Inverse"
+        style="@style/appBorderLessButtons"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"

@@ -36,6 +36,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         usersUtils = UsersUtils.getInstance();
+
+        checkLoginStatus();
+
         initView();
 
 
@@ -69,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         userLoginStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                FirebaseUser user = UsersUtils.getInstance().getCurrentUser();
                 if (user != null) {
                     Log.i(LOGIN_TAG, "Got user form sign up activity logging in");
                     String uid = user.getUid();
@@ -84,17 +87,22 @@ public class LoginActivity extends AppCompatActivity {
         };
     }
 
+    private void checkLoginStatus() {
+        FirebaseUser user = UsersUtils.getInstance().getCurrentUser();
+        if (user != null) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("LOGGED_IN_USER_UID", user.getUid() + " " + user.getDisplayName());
+            startActivity(intent);
+            finish();
+        }
+    }
+
     private void initView() {
         userEmail = findViewById(R.id.et_login_email);
         userPassword = findViewById(R.id.et_login_password);
         createAccount = findViewById(R.id.btn_login_signup);
         loginToApp = findViewById(R.id.btn_login_to_account);
         forgotPassword = findViewById(R.id.btn_login_forgot_password);
-
-        //For testing
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        //For testing
     }
 
     private void loginUserToApp() {
