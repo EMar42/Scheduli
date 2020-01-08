@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/background_light"
-    tools:context=".SearchProviderActivity">
+    tools:context=".ui.SearchProvider.SearchProviderActivity">
 
     <TextView
         android:id="@+id/header_book_appointment"
@@ -96,10 +96,7 @@
         android:layout_height="347dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:backgroundTint="@color/colorPrimary"
-        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/searchProviderButton_search_act"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
