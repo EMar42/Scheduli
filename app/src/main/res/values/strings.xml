@@ -10,6 +10,12 @@
     <string name="forgot_pass_title">Recover Password</string>
     <string name="forgot_pass_subTitle">Let\'s get your password back</string>
 
+    //Adapter Strings
+    <string name="adapter_date_icon_desc">Provide Date of appointment</string>
+    <string name="adapter_time_icon_desc">Provide Time of appointment</string>
+    <string name="adapter_phone_icon_desc">Provide Phone of provider in appointment</string>
+    <string name="no_appointment_found">No appointments found</string>
+    <string name="appointment_item_title">You have appointment with %1$s for %2$s</string>
 
     //Sign-up Strings
     <string name="sign_up_title">Create Account</string>
@@ -36,6 +42,7 @@
     </string>
     <string name="new_user_channel">added new user</string>
     <string name="channel_description">notification sent for new users added to the app</string>
+    <string name="reschedule">Reschedule</string>
 
 
 </resources>

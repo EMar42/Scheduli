@@ -8,8 +8,15 @@ public class Provider extends User {
     String uid;
     String companyName;
     String profession;
+    String phoneNumber;
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     ArrayList<Service> services;
 
