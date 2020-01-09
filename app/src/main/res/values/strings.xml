@@ -15,6 +15,7 @@
     <string name="adapter_time_icon_desc">Provide Time of appointment</string>
     <string name="adapter_phone_icon_desc">Provide Phone of provider in appointment</string>
     <string name="no_appointment_found">No appointments found</string>
+    <string name="appointment_item_title">You have appointment with %1$s for %2$s</string>
 
     //Sign-up Strings
     <string name="sign_up_title">Create Account</string>
