@@ -1,7 +1,5 @@
 package com.example.scheduli.data;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +17,6 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
 
     private List<Provider> providerList;
 
-
-//    public ImageView imageView;
-//    private Context mCtx;
-//    public TextView companyName;
-//    public TextView profession;
-
     public ProvidersAdapter( List<Provider> providerList) {
         this.providerList = providerList;
     }
@@ -41,9 +33,8 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
         Provider provider = providerList.get(position);
 
         holder.profileImg.setImageResource(provider.getImageResource());
-        holder.textViewName.setText(provider.getCompanyName());
+        holder.textViewCompanyName.setText(provider.getCompanyName());
         holder.textViewProfession.setText("profession: " + provider.getProfession());
-        holder.textViewId.setText("id: " + provider.uid);
     }
 
     @Override
@@ -56,16 +47,17 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
 
     public static class ProviderViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textViewName, textViewProfession, textViewId;
+        TextView textViewCompanyName, textViewProfession;
         ImageView profileImg;
+        View view;
 
         public ProviderViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            view = itemView;
             profileImg = itemView.findViewById(R.id.provider_profile_img);
-            textViewName = itemView.findViewById(R.id.text_view_name);
+            textViewCompanyName = itemView.findViewById(R.id.text_view_companyName);
             textViewProfession = itemView.findViewById(R.id.text_view_profession);
-            textViewId = itemView.findViewById(R.id.text_view_id);
         }
     }
 

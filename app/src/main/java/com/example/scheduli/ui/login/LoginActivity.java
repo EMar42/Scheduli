@@ -41,6 +41,10 @@ public class LoginActivity extends AppCompatActivity {
 
         initView();
 
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//        intent.putExtra("LOGGED_IN_USER_UID", uid);
+        startActivity(intent);
+
 
         //add login button action
         loginToApp.setOnClickListener(new View.OnClickListener() {

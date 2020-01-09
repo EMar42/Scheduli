@@ -6,19 +6,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.scheduli.R;
 import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.ProvidersAdapter;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -31,27 +37,26 @@ public class SearchProviderActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayout;
-
     private List<Provider> providersList;
-
     ProvidersAdapter adapter;
-
      DatabaseReference ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_provider);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
 
         providersList = new ArrayList<>();
-        providersList.add(new Provider(R.drawable.ic_list_icon,"Bar","sdf"));
-        providersList.add(new Provider(R.drawable.ic_list_icon,"Shuster","sdf"));
-        providersList.add(new Provider(R.drawable.ic_list_icon,"Evgeny","sdf"));
+//        providersList.add(new Provider(R.drawable.ic_person, "Bar", "sdf"));
+//        providersList.add(new Provider(R.drawable.ic_person, "Shuster", "sdf"));
+//        providersList.add(new Provider(R.drawable.ic_person, "Evgeny", "sdf"));
 
-        searchField = (EditText)findViewById(R.id.editText_search_field);
-        searchBtn = (ImageButton)findViewById(R.id.search_provider_button);
-
+        searchField = (EditText) findViewById(R.id.editText_search_field);
+        searchBtn = (ImageButton) findViewById(R.id.search_provider_button);
         recyclerView = (RecyclerView) findViewById(R.id.search_results_list);
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -62,27 +67,49 @@ public class SearchProviderActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mLayout);
         recyclerView.setAdapter(mAdapter);
 
-//        adapter = new ProvidersAdapter(this, providersList);
-
+        ref = FirebaseDatabase.getInstance().getReference().child("providers");
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAll();
+                String search = searchField.getText().toString();
+                if(!TextUtils.isEmpty(search)) {
+                    ref = FirebaseDatabase.getInstance().getReference().child("providers");
+                    firebaseProviderSearchByCompany(search);
 
+                    if (providersList.size() < 1) {
+                        ref = FirebaseDatabase.getInstance().getReference().child("providers");
+
+                        firebaseProviderSearchByProfession(search);
+                    }
+                }
+                else {
+              Toast.makeText(SearchProviderActivity.this, "Empty search...", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
+        showAll();
 
-//        showAll();
+    }
 
+    private void firebaseProviderSearchByProfession(String profession) {
+
+        Query query = ref.orderByChild("profession").equalTo(profession);
+        query.addListenerForSingleValueEvent(valueEventListener);
 
     }
 
 
 
+    private void firebaseProviderSearchByCompany(String company){
+
+        Query query = ref.orderByChild("companyName").equalTo(company);
+        query.addListenerForSingleValueEvent(valueEventListener);
+}
+
     //select * from providers
     private void showAll() {
-        ref = FirebaseDatabase.getInstance().getReference("providers");
         ref.addListenerForSingleValueEvent(valueEventListener);
 
     }
@@ -92,27 +119,27 @@ public class SearchProviderActivity extends AppCompatActivity {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             providersList.clear();
+//            Toast.makeText(SearchProviderActivity.this, "change called", Toast.LENGTH_SHORT).show();
+
             if(dataSnapshot.exists()){
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+//                Toast.makeText(SearchProviderActivity.this, "enter for", Toast.LENGTH_SHORT).show();
                     Provider provider = snapshot.getValue(Provider.class);
                     providersList.add(provider);
                 }
-
+                if(!providersList.isEmpty()) {
+                    adapter = new ProvidersAdapter(providersList);
+                    recyclerView.setAdapter(adapter);
+                }
             }
         }
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            Toast.makeText(SearchProviderActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
         }
     };
 
-    private void addProvider(){
 
-//        Provider provider = new Provider("company","pro");
-
-//        ref.child("providers").setValue(provider);
-
-
-    }
 }
