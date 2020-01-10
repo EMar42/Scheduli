@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.scheduli.ui.login.LoginActivity;
+import com.example.scheduli.ui.settings.SettingsActivity;
 import com.example.scheduli.utils.UsersUtils;
 
 public class BaseMenuActivity extends AppCompatActivity {
@@ -49,6 +50,6 @@ public class BaseMenuActivity extends AppCompatActivity {
     }
 
     private void startAppSettings() {
-        //TODO add settings activity for the app
+        startActivity(new Intent(this, SettingsActivity.class));
     }
 }

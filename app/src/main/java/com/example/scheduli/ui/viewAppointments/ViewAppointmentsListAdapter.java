@@ -39,7 +39,7 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         AppointmentViewHolder appointmentViewHolder = (AppointmentViewHolder) holder;
 
-        if (appointmentList != null) {
+        if (appointmentList != null) { //TODO Check if works with data
             Appointment current = appointmentList.get(position);
             int serviceIndex = current.getProvider().getServices().indexOf(current.getService());
             Service service = current.getProvider().getServices().get(serviceIndex);

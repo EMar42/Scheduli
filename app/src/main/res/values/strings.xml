@@ -45,4 +45,15 @@
     <string name="reschedule">Reschedule</string>
 
 
+    //Settings
+    <string name="settings_title">Scheduli Settings</string>
+    <string name="language_select_summary">Select what language you want your app to show</string>
+    <string name="language_select_title">Language of the app</string>
+    <string-array name="language_options_select">
+        <item>English</item>
+        <item>Hebrew</item>
+        <item>Russian</item>
+        <item>Portuguese</item>
+    </string-array>
+
 </resources>
