@@ -37,6 +37,11 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         usersUtils = UsersUtils.getInstance();
 
+        //************************FOR TESTING************************//
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        //***********************************************************//
+
         checkLoginStatus();
 
         initView();

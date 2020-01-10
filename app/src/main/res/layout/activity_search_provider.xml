@@ -50,7 +50,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView_bottom"
+        android:id="@+id/textview_chosen_company"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -76,7 +76,7 @@
         android:textSize="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_bottom" />
+        app:layout_constraintTop_toBottomOf="@+id/textview_chosen_company" />
 
     <ImageButton
         android:id="@+id/search_provider_button"
@@ -86,8 +86,13 @@
         android:layout_marginEnd="48dp"
         android:padding="100dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_bottom"
-        app:srcCompat="@drawable/ic_search_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/textview_chosen_company"
+        app:srcCompat="@drawable/ic_search_btn"/>
+<!--        app:showAsAction="always|collapseActionView"-->
+<!--        app:actionViewClass="androidx.appcompat.widget.SearchView"-->
+        />
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_results_list"

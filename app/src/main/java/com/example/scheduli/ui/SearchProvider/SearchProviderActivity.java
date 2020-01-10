@@ -1,7 +1,11 @@
 package com.example.scheduli.ui.SearchProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -10,12 +14,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.scheduli.R;
 import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.ProvidersAdapter;
+import com.example.scheduli.ui.BookingAppointment.BookingAppointmentActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,8 +33,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchProviderActivity extends AppCompatActivity {
+public class SearchProviderActivity extends AppCompatActivity implements ProvidersAdapter.OnProviderListener{
 
+    private static final String TAG = "SearchProviderActivity";
     private EditText searchField;
     private ImageButton searchBtn;
     private RecyclerView recyclerView;
@@ -36,6 +44,7 @@ public class SearchProviderActivity extends AppCompatActivity {
     private List<Provider> providersList;
     ProvidersAdapter adapter;
      DatabaseReference ref;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,21 +58,8 @@ public class SearchProviderActivity extends AppCompatActivity {
 //        providersList.add(new Provider(R.drawable.ic_person, "Shuster", "sdf"));
 //        providersList.add(new Provider(R.drawable.ic_person, "Evgeny", "sdf"));
 
-        searchField = (EditText) findViewById(R.id.editText_search_field);
-        searchBtn = (ImageButton) findViewById(R.id.search_provider_button);
-        recyclerView = (RecyclerView) findViewById(R.id.search_results_list);
+        init();
 
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        mLayout = new LinearLayoutManager(this);
-        mAdapter = new ProvidersAdapter(providersList);
-
-
-        recyclerView.setLayoutManager(mLayout);
-        recyclerView.setAdapter(mAdapter);
-
-        ref = FirebaseDatabase.getInstance().getReference().child("providers");
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,8 +81,26 @@ public class SearchProviderActivity extends AppCompatActivity {
                 }
             }
         });
-        showAll();
+        getAllProviders();
 
+    }
+
+    private void init() {
+        searchField = (EditText) findViewById(R.id.editText_search_field);
+        searchBtn = (ImageButton) findViewById(R.id.search_provider_button);
+        recyclerView = (RecyclerView) findViewById(R.id.search_results_list);
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        ref = FirebaseDatabase.getInstance().getReference().child("providers");
+
+        mLayout = new LinearLayoutManager(this);
+        getAllProviders();
+        adapter = new ProvidersAdapter(providersList, this);
+
+        recyclerView.setLayoutManager(mLayout);
+        recyclerView.setAdapter(adapter);
     }
 
     private void firebaseProviderSearchByProfession(String profession) {
@@ -105,7 +119,7 @@ public class SearchProviderActivity extends AppCompatActivity {
 }
 
     //select * from providers
-    private void showAll() {
+    private void getAllProviders() {
         ref.addListenerForSingleValueEvent(valueEventListener);
 
     }
@@ -125,7 +139,7 @@ public class SearchProviderActivity extends AppCompatActivity {
                     providersList.add(provider);
                 }
                 if(!providersList.isEmpty()) {
-                    adapter = new ProvidersAdapter(providersList);
+                    //adapter = new ProvidersAdapter(providersList);
                     recyclerView.setAdapter(adapter);
                 }
             }
@@ -138,4 +152,51 @@ public class SearchProviderActivity extends AppCompatActivity {
     };
 
 
+    /*
+    TODO: complete dynamic search
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        Menu item = (Menu) menu.findItem(R.id.action_search);
+
+        SearchView searchView = (SearchView) item;
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+
+
+        return super.onCreateOptionsMenu(menu);
+    }
+    /*
+    ********
+     */
+
+    @Override
+    public void onProviderClick(int position) {
+
+//        String TAG = "msg: ";
+
+        String company = providersList.get(position).getCompanyName();
+        String profession = providersList.get(position).getProfession();
+
+        Log.d(TAG,"onProviderClick: clicked");
+        Provider provider = providersList.get(position);
+        Intent intent = new Intent(this, BookingAppointmentActivity.class);
+        intent.putExtra("companyName",company);
+        intent.putExtra("ptofession", profession);
+        intent.putExtra("provider", provider);
+
+        startActivity(intent);
+    }
 }
