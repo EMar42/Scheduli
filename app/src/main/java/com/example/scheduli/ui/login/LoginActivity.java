@@ -38,9 +38,9 @@ public class LoginActivity extends AppCompatActivity {
         usersUtils = UsersUtils.getInstance();
 
         //************************FOR TESTING************************//
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        //***********************************************************//
+//        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//        startActivity(intent);
+        //************************FOR TESTING************************//
 
         checkLoginStatus();
 
