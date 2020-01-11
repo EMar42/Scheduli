@@ -31,9 +31,7 @@ public class UserDataRepository {
     }
 
     private UserDataRepository() {
-        String uid = UsersUtils.getInstance().getCurrentUserUid();
         this.dataBaseReference = FirebaseDatabase.getInstance().getReference("users");
-
     }
 
     public void createNewUserInApp(String uid, User user) {

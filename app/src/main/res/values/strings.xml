@@ -56,6 +56,8 @@
     <string name="appointment_fragment_title">Your Appointments</string>
     <string name="future">Future</string>
     <string name="past">Past</string>
+    <string name="get_current_phone_number">Get current Phone Number</string>
+    <string name="phone_number">Phone Number</string>
     <string-array name="language_options_select">
         <item>English</item>
         <item>Hebrew</item>

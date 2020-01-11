@@ -28,5 +28,9 @@
         <item name="android:textSize">16dp</item>
     </style>
 
+    <style name="imageButtonStyle" parent="Widget.AppCompat.ImageButton">
+        <item name="android:background">@color/colorPrimaryDark</item>
+    </style>
+
     <color name="white">#fff</color>
 </resources>

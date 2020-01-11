@@ -1,18 +1,23 @@
 package com.example.scheduli.ui.signup;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.telephony.PhoneNumberUtils;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.scheduli.R;
-import com.example.scheduli.data.ProviderDataRepository;
 import com.example.scheduli.data.User;
 import com.example.scheduli.data.UserDataRepository;
 import com.example.scheduli.utils.SignUpNotification;
@@ -25,10 +30,10 @@ public class SignupActivity extends AppCompatActivity {
     private static final String TAG_SIGN_UP = "Sign-up Activity";
 
     private UsersUtils usersUtils;
-    private EditText userEmail, userName, userPassword, userFullName;
+    private EditText userEmail, userName, userPassword, userFullName, userPhoneNumber;
     private Button signUpToApp, returnToLogin;
     private UserDataRepository userDataRepository;
-    private ProviderDataRepository providerRepository; // TEST
+    private ImageButton getCurrentPhoneButton;
 
 
     @Override
@@ -55,6 +60,24 @@ public class SignupActivity extends AppCompatActivity {
                 createNewAccount();
             }
         });
+
+        getCurrentPhoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setPhoneNumberOnCurrent();
+            }
+        });
+
+
+    }
+
+    private void setPhoneNumberOnCurrent() {
+        TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        if (checkSelfPermission(Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            userPhoneNumber.setError("No premissions to get phone number");
+            return;
+        }
+        userPhoneNumber.setText(tMgr.getLine1Number());
     }
 
     private void createNewAccount() {
@@ -64,6 +87,7 @@ public class SignupActivity extends AppCompatActivity {
             final String email = userEmail.getText().toString();
             final String userNameString = userName.getText().toString();
             final String fullName = userFullName.getText().toString();
+            final String phoneNumber = userPhoneNumber.getText().toString();
 
             usersUtils.getFireBaseAuth().createUserWithEmailAndPassword(email, userPassword.getText().toString()).addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
                 @Override
@@ -74,9 +98,8 @@ public class SignupActivity extends AppCompatActivity {
                     } else {
                         AuthResult result = task.getResult();
                         String uid = result.getUser().getUid();
-                        writeNewUserToDataBase(uid, email, userNameString, fullName);
+                        writeNewUserToDataBase(uid, email, userNameString, fullName, phoneNumber);
                         SignUpNotification.notify(getApplicationContext(), fullName, 1);
-                        //TODO add notification for new account creation
                         finish();
                     }
                 }
@@ -86,13 +109,14 @@ public class SignupActivity extends AppCompatActivity {
 
     }
 
-    private void writeNewUserToDataBase(String uid, String email, String userName, String fullName) {
-        User user = new User(userName, fullName, email, null, null);
+    private void writeNewUserToDataBase(String uid, String email, String userName, String fullName, String phoneNumber) {
+        User user = new User(userName, fullName, email, phoneNumber);
         userDataRepository.createNewUserInApp(uid, user);
     }
 
     private boolean isFormValid() {
-        return !checkIfEmpty(userEmail) && isEmailValid(userEmail.getText().toString()) && !checkIfEmpty(userPassword) && !checkIfEmpty(userName) && !checkIfEmpty(userFullName) && userPassword.getText().toString().length() >= 6;
+        return !checkIfEmpty(userEmail) && isEmailValid(userEmail.getText().toString()) && !checkIfEmpty(userPassword) && !checkIfEmpty(userName) && !checkIfEmpty(userFullName) && userPassword.getText().toString().length() >= 6
+                && !checkIfEmpty(userPhoneNumber) && isPhoneValid(userPhoneNumber.getText().toString());
     }
 
     private void raiseErrorsOnMissingOrIncorrectInput() {
@@ -101,22 +125,33 @@ public class SignupActivity extends AppCompatActivity {
         else if (!isEmailValid(userEmail.getText().toString()))
             userEmail.setError("Email format is incorrect");
         if (checkIfEmpty(userPassword))
-            userPassword.setError("Must fill password");
+            userPassword.setError("You must fill password");
         if (userPassword.getText().toString().length() < 6)
             userPassword.setError("Password need to be at least 6 characters");
         if (checkIfEmpty(userFullName))
-            userFullName.setError("Need to give full name");
+            userFullName.setError("You need to give full name");
         if (checkIfEmpty(userName))
-            userName.setError("Need to give user name");
+            userName.setError("You need to give user name");
+        if (checkIfEmpty(userPhoneNumber))
+            userPhoneNumber.setError("You need to give phone number");
+        else if (!isPhoneValid(userPhoneNumber.getText().toString())) {
+            userPhoneNumber.setError("Phone number provided is invalid");
+        }
+    }
+
+    private boolean isPhoneValid(String phoneNumber) {
+        return PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber) || Patterns.PHONE.matcher(phoneNumber).matches();
     }
 
     private void initView() {
         signUpToApp = findViewById(R.id.btn_sign_up_create);
         returnToLogin = findViewById(R.id.btn_sign_up_return);
+        getCurrentPhoneButton = findViewById(R.id.btn_sign_up_getCurrentPhoneNumber);
         userEmail = findViewById(R.id.et_sign_up_email);
         userFullName = findViewById(R.id.et_sign_up_full_name);
         userName = findViewById(R.id.et_sign_up_user_name);
         userPassword = findViewById(R.id.et_sign_up_password);
+        userPhoneNumber = findViewById(R.id.et_sign_up_phone_number);
     }
 
     private boolean isEmailValid(String email) {
