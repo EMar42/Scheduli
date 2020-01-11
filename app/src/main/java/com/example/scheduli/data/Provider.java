@@ -3,58 +3,75 @@ package com.example.scheduli.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 
-public class Provider extends User implements Parcelable {
+@IgnoreExtraProperties
 
-    int imageResource, mData;
-//    String uid;
-    String companyName;
-    String profession;
-    String phoneNumber;
-    ArrayList<Service> services;
+public class Provider {
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
+    //Provider details
+    private String id;
+    private String imageUrl;
+    private String companyName;
+    private String profession;
+    private String phoneNumber;
+    private ArrayList<Service> services;
 
-    public void setPhoneNumber(String phoneNumber) {
+    public Provider(String imageUrl, String companyName, String profession, String phoneNumber) {
+        this.imageUrl = imageUrl;
+        this.companyName = companyName;
+        this.profession = profession;
         this.phoneNumber = phoneNumber;
+        this.services = new ArrayList<>();
+        this.id = UUID.randomUUID().toString();
     }
 
+    public Provider(String id, String imageUrl, String companyName, String profession, String phoneNumber) {
+        this.id = id;
+        this.imageUrl = imageUrl;
+        this.companyName = companyName;
+        this.profession = profession;
+        this.phoneNumber = phoneNumber;
+        this.services = new ArrayList<>();
+    }
 
-    public Provider(String userName, String fullName, String email, String companyName, String profession) {
-        super(userName, fullName, email);
-        // TODO: get user Uid
-        //  this.uid = super.getUserId;
+    public Provider(String companyName, String profession) {
+
         this.companyName = companyName;
         this.profession = profession;
         this.services = new ArrayList<Service>();
+        this.id = UUID.randomUUID().toString();
+
     }
 
-    public Provider(int imageResource, String companyName, String profession) {
-        // TODO: get user Uid
-        //  this.uid = super.getUserId;
-
-        this.imageResource=imageResource;
+    public Provider(String companyName, String profession, String phoneNumber) {
         this.companyName = companyName;
         this.profession = profession;
-        this.services = new ArrayList<Service>();
-    }
-
-    public Provider(){
+        this.phoneNumber = phoneNumber;
+        this.id = UUID.randomUUID().toString();
 
     }
 
-    public Provider(Provider provider){
+    public Provider() {
+
+    }
+
+    public Provider(Provider provider) {
+
         this.companyName = provider.companyName;
         this.profession = provider.profession;
-        this.imageResource = provider.getImageResource();
+        this.imageUrl = provider.getImageUrl();
         this.phoneNumber = provider.phoneNumber;
         this.services = provider.services;
+        this.id = provider.id;
     }
 
+    public String getId() {
+        return id;
+    }
 
 
     public String getCompanyName() {
@@ -69,6 +86,21 @@ public class Provider extends User implements Parcelable {
         return services;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
@@ -82,55 +114,4 @@ public class Provider extends User implements Parcelable {
         this.services = services;
     }
 
-    public int getImageResource() {
-        return imageResource;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    //Constructor for sending objects between activities
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-        out.writeString(companyName);
-        out.writeString(profession);
-        out.writeInt(imageResource );
-        out.writeString(phoneNumber);
-
-        //TODO:write a List
-//        List<Service> serviceList = new ArrayList<>();
-//        out.readList(serviceList,List.class.getClassLoader());
-//        out.writeList(services);
-//        out.writeTypedList(services);
-
-        out.writeInt(mData);
-    }
-
-    public static final Parcelable.Creator<Provider> CREATOR = new Parcelable.Creator<Provider>(){
-
-        @Override
-        public Provider createFromParcel(Parcel in) {
-
-            return new Provider(in);
-        }
-
-        @Override
-        public Provider[] newArray(int size) {
-            return new Provider[size];
-        }
-    };
-
-    private Provider(Parcel in){
-
-        companyName = in.readString();
-        profession = in.readString();
-        imageResource = in.readInt();
-        phoneNumber = in.readString();
-        //TODO: read a List
-        //in.readList(services,List.class.getClassLoader());
-
-        mData = in.readInt();
-    }
 }

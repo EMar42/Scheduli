@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.ProviderViewHolder> implements Filterable {
+public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.ProviderViewHolder>{// implements Filterable {
 
     private  List<Provider> providerList;
     private  List<Provider> providerListAll; // for dynamic search
@@ -47,7 +47,7 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
     public void onBindViewHolder(@NonNull ProviderViewHolder holder, int position) {
         Provider provider = providerList.get(position);
 
-        holder.profileImg.setImageResource(provider.getImageResource());
+        holder.profileImg.setImageResource(R.drawable.ic_person);
         holder.textViewCompanyName.setText(provider.getCompanyName());
         holder.textViewProfession.setText("profession: " + provider.getProfession());
     }
@@ -58,10 +58,10 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
     }
 
     // for dynamic search
-    @Override
-    public Filter getFilter() {
-        return filter;
-    }
+//    @Override
+//    public Filter getFilter() {
+//        return filter;
+//    }
 
 
     public static class ProviderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -102,40 +102,40 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
     //TODO: immplement dynamic search
     // *********************** Dynamic search *************************
 
-    Filter filter = new Filter() {
-
-        // Run on background thread
-        @Override
-        protected FilterResults performFiltering(CharSequence charSequence) {
-
-            List<Provider> filteredList = new ArrayList<>();
-
-            if(charSequence.toString().isEmpty()){
-                filteredList.addAll(providerListAll);
-            }else {
-                for(Provider provider : providerList){
-                    if(provider.companyName.contains(charSequence.toString())){
-                        filteredList.add(provider);
-                    }
-                }
-            }
-
-            FilterResults filterResults = new FilterResults();
-            filterResults.values = filteredList;
-
-
-            return filterResults;
-        }
-
-        //Run on ui thread
-        @Override
-        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            providerList.clear();
-            providerList.addAll((Collection<? extends Provider>) filterResults);
-            notifyDataSetChanged();
-
-        }
-    };
+//    Filter filter = new Filter() {
+//
+//        // Run on background thread
+//        @Override
+//        protected FilterResults performFiltering(CharSequence charSequence) {
+//
+//            List<Provider> filteredList = new ArrayList<>();
+//
+//            if(charSequence.toString().isEmpty()){
+//                filteredList.addAll(providerListAll);
+//            }else {
+//                for(Provider provider : providerList){
+//                    if(provider.companyName.contains(charSequence.toString())){
+//                        filteredList.add(provider);
+//                    }
+//                }
+//            }
+//
+//            FilterResults filterResults = new FilterResults();
+//            filterResults.values = filteredList;
+//
+//
+//            return filterResults;
+//        }
+//
+//        //Run on ui thread
+//        @Override
+//        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+//            providerList.clear();
+//            providerList.addAll((Collection<? extends Provider>) filterResults);
+//            notifyDataSetChanged();
+//
+//        }
+//    };
     // *********************** Dynamic search *************************
 
 
