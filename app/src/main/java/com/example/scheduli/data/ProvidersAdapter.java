@@ -3,6 +3,8 @@ package com.example.scheduli.data;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -10,22 +12,35 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.scheduli.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.ProviderViewHolder> {
+public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.ProviderViewHolder> implements Filterable {
 
-    private List<Provider> providerList;
+    private  List<Provider> providerList;
+    private  List<Provider> providerListAll; // for dynamic search
+    private OnProviderListener onProviderListener;
 
-    public ProvidersAdapter( List<Provider> providerList) {
+
+    public ProvidersAdapter(List<Provider> providerList, OnProviderListener onProviderListener) {
         this.providerList = providerList;
+        this.providerListAll = providerList;
+        this.onProviderListener = onProviderListener;
     }
+
 
     @NonNull
     @Override
     public ProviderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item, parent, false);
-        return new ProviderViewHolder(view);
+        return new ProviderViewHolder(view, onProviderListener);
     }
 
     @Override
@@ -42,24 +57,86 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
         return providerList.size();
     }
 
+    // for dynamic search
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
 
 
-
-    public static class ProviderViewHolder extends RecyclerView.ViewHolder {
+    public static class ProviderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView textViewCompanyName, textViewProfession;
         ImageView profileImg;
         View view;
 
-        public ProviderViewHolder(@NonNull View itemView) {
+        OnProviderListener onProviderListener;//
+
+//..
+        public ProviderViewHolder(@NonNull View itemView, OnProviderListener onProviderListener) {
             super(itemView);
 
             view = itemView;
             profileImg = itemView.findViewById(R.id.provider_profile_img);
             textViewCompanyName = itemView.findViewById(R.id.text_view_companyName);
             textViewProfession = itemView.findViewById(R.id.text_view_profession);
+            this.onProviderListener = onProviderListener;
+
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            onProviderListener.onProviderClick(getAdapterPosition());
+        }
+        //..
     }
+
+    /**
+     * on click recycle view listener
+     */
+    public interface OnProviderListener{
+        void onProviderClick(int position);
+    }
+
+    //TODO: immplement dynamic search
+    // *********************** Dynamic search *************************
+
+    Filter filter = new Filter() {
+
+        // Run on background thread
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+
+            List<Provider> filteredList = new ArrayList<>();
+
+            if(charSequence.toString().isEmpty()){
+                filteredList.addAll(providerListAll);
+            }else {
+                for(Provider provider : providerList){
+                    if(provider.companyName.contains(charSequence.toString())){
+                        filteredList.add(provider);
+                    }
+                }
+            }
+
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredList;
+
+
+            return filterResults;
+        }
+
+        //Run on ui thread
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            providerList.clear();
+            providerList.addAll((Collection<? extends Provider>) filterResults);
+            notifyDataSetChanged();
+
+        }
+    };
+    // *********************** Dynamic search *************************
 
 
 }

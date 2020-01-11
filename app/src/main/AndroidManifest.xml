@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.settings.SettingsActivity"></activity>
+        <activity android:name=".ui.BookingAppointment.BookingAppointmentActivity"></activity>
+        <activity android:name=".ui.settings.SettingsActivity" />
         <activity android:name=".BaseMenuActivity" />
         <activity android:name=".ui.SearchProvider.SearchProviderActivity" />
         <activity android:name=".ui.SearchProviderActivity" />
