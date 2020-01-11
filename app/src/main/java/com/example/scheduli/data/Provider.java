@@ -15,13 +15,25 @@ public class Provider {
     private String address;
     private ArrayList<Service> services;
 
-    public Provider(String imageUrl, String companyName, String profession, String phoneNumber, String address) {
+    public Provider(String imageUrl, String companyName, String profession, String phoneNumber, String address, ArrayList<Service> servicesList) {
         this.imageUrl = imageUrl;
         this.companyName = companyName;
         this.profession = profession;
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.services = new ArrayList<>();
+
+        //TODO: get a services list
+
+    }
+
+    public Provider(String imageUrl, String companyName, String profession, String phoneNumber, String address) {
+        this.imageUrl = imageUrl;
+        this.companyName = companyName;
+        this.profession = profession;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+
     }
 
     public Provider(String companyName, String profession) {
