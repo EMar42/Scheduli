@@ -37,11 +37,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         usersUtils = UsersUtils.getInstance();
 
-        //************************FOR TESTING************************//
-//        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//        startActivity(intent);
-        //************************FOR TESTING************************//
-
         checkLoginStatus();
 
         initView();
@@ -133,7 +128,6 @@ public class LoginActivity extends AppCompatActivity {
                         FirebaseUser user = usersUtils.getFireBaseAuth().getCurrentUser();
                         String uid = user.getUid();
                         //TODO add sound on login
-                        //TODO once added main activity point to there
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra("LOGGED_IN_USER_UID", uid);
                         startActivity(intent);

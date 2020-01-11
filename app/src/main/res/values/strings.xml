@@ -53,6 +53,9 @@
     <string name="language_select_summary">Select what language you want your app to show</string>
     <string name="language_select_title">Language of the app</string>
     <string name="settings_category_language">Language Selection</string>
+    <string name="appointment_fragment_title">Your Appointments</string>
+    <string name="future">Future</string>
+    <string name="past">Past</string>
     <string-array name="language_options_select">
         <item>English</item>
         <item>Hebrew</item>

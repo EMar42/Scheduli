@@ -12,9 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.scheduli.R;
 import com.example.scheduli.data.Appointment;
-import com.example.scheduli.data.Service;
+import com.google.firebase.database.DataSnapshot;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -41,14 +42,14 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter {
 
         if (appointmentList != null) { //TODO Check if works with data
             Appointment current = appointmentList.get(position);
-            int serviceIndex = current.getProvider().getServices().indexOf(current.getService());
-            Service service = current.getProvider().getServices().get(serviceIndex);
+            //int serviceIndex = current.getProvider().getServices().indexOf(current.getService());
+            //Service service = current.getProvider().getServices().get(serviceIndex);
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
-            appointmentViewHolder.appointmentTitle.setText(context.getString(R.string.appointment_item_title, current.getProvider().getCompanyName(), service.getName()));
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+            //appointmentViewHolder.appointmentTitle.setText(context.getString(R.string.appointment_item_title, current.getProvider().getCompanyName(), service.getName()));
             appointmentViewHolder.appointmentDate.setText(dateFormat.format(new Date(current.getScheduledTo())));
             appointmentViewHolder.appointmentTime.setText((timeFormat.format(new Date(current.getScheduledTo()))));
-            appointmentViewHolder.appointmentPhone.setText(current.getProvider().getPhoneNumber());
+            //appointmentViewHolder.appointmentPhone.setText(current.getProvider().getPhoneNumber());
         } else {
             appointmentViewHolder.appointmentTitle.setText(R.string.no_appointment_found);
             appointmentViewHolder.appointmentPhone.setText("");
@@ -68,10 +69,18 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter {
         return 0;
     }
 
-    public void setAppointmentList(List<Appointment> appointmentList) {
-        this.appointmentList = appointmentList;
-        notifyDataSetChanged();
+    public void setAppointmentList(DataSnapshot dataSnapshot) {
+        if (dataSnapshot != null) {
+            ArrayList<Appointment> appointments = new ArrayList<>();
+            for (DataSnapshot readData : dataSnapshot.getChildren()) {
+                Appointment appointment = readData.getValue(Appointment.class);
+                appointments.add(appointment);
+            }
+            this.appointmentList = appointments;
+            notifyDataSetChanged();
+        }
     }
+
 
     public class AppointmentViewHolder extends RecyclerView.ViewHolder {
         TextView appointmentTitle;
