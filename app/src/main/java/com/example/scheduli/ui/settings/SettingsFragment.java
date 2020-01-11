@@ -1,18 +1,16 @@
 package com.example.scheduli.ui.settings;
 
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 
-import androidx.annotation.Nullable;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.example.scheduli.R;
 
-public class SettingsFragment extends PreferenceFragment {
+public class SettingsFragment extends PreferenceFragmentCompat {
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        addPreferencesFromResource(R.xml.scheduli_preferences);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.scheduli_preferences, rootKey);
     }
+
 }

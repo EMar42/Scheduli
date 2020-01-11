@@ -49,11 +49,20 @@
     <string name="settings_title">Scheduli Settings</string>
     <string name="language_select_summary">Select what language you want your app to show</string>
     <string name="language_select_title">Language of the app</string>
+    <string name="settings_category_language">Language Selection</string>
     <string-array name="language_options_select">
         <item>English</item>
         <item>Hebrew</item>
         <item>Russian</item>
         <item>Portuguese</item>
     </string-array>
+
+    <string-array name="language_options_codes">
+        <item>en_US</item>
+        <item>iw_IL</item>
+        <item>ru_</item>
+        <item>pt_BR</item>
+    </string-array>
+
 
 </resources>
