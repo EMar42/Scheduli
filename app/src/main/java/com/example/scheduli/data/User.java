@@ -7,15 +7,23 @@ public class User {
     private String userName;
     private String fullName;
     private String email;
-    //TODO Might need to add appointments to here in the future.
+    private Provider provider;
+    private Appointment[] appointments;
 
     public User() {
     }
 
-    public User(String userName, String fullName, String email) {
+
+    public User(String userName, String fullName, String email, Provider provider, Appointment[] appointments) {
         this.userName = userName;
         this.fullName = fullName;
         this.email = email;
+        this.provider = provider;
+        this.appointments = appointments;
+    }
+
+    public User(String userName, String fullName, String email) {
+        this(userName, fullName, email, null, null);
     }
 
     public String getUserName() {
@@ -40,5 +48,21 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Provider getProvider() {
+        return provider;
+    }
+
+    public void setProvider(Provider provider) {
+        this.provider = provider;
+    }
+
+    public Appointment[] getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(Appointment[] appointments) {
+        this.appointments = appointments;
     }
 }

@@ -34,6 +34,10 @@ public class UsersUtils {
         return firebaseAuth.getCurrentUser();
     }
 
+    public String getCurrentUserUid() {
+        return firebaseAuth.getCurrentUser().getUid();
+    }
+
     public void logout(){
         firebaseAuth.signOut();
     }

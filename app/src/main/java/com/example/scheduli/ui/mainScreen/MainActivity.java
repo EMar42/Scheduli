@@ -24,6 +24,7 @@ public class MainActivity extends BaseMenuActivity {
         Toolbar mainToolbar = findViewById(R.id.app_main_toolbar);
         setSupportActionBar(mainToolbar);
 
+
         searchProviderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

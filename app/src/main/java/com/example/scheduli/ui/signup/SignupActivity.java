@@ -87,11 +87,8 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void writeNewUserToDataBase(String uid, String email, String userName, String fullName) {
-        User user = new User(userName, fullName, email);
-//        Provider provider = new Provider(userName,fullName,email,"company","profession"); // TEST
+        User user = new User(userName, fullName, email, null, null);
         userDataRepository.createNewUserInApp(uid, user);
-//        providerRepository.createNewProviderInApp(uid, provider);  // TEST
-
     }
 
     private boolean isFormValid() {
