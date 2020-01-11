@@ -9,7 +9,7 @@ public class User {
     private String userName;
     private String fullName;
     private String email;
-    private Provider provider;
+    private Provider provider; //TODO remove
     private ArrayList<Appointment> appointments;
 
     public User() {

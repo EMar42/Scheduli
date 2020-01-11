@@ -5,17 +5,18 @@ import com.google.firebase.database.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class Appointment {
     private String userUid;
-    private Service service;
-    private Provider provider;
-    private long scheduledTo; // using long for date object since it the best option to store and work with
+    private String providerUid;
+
+    private String serviceName;
+    private long scheduledTo;
 
     public Appointment() {
     }
 
-    public Appointment(String userUid, Service service, Provider provider, long scheduledTo) {
+    public Appointment(String userUid, String service, String provider, long scheduledTo) {
         this.userUid = userUid;
-        this.service = service;
-        this.provider = provider;
+        this.serviceName = service;
+        this.providerUid = provider;
         this.scheduledTo = scheduledTo;
     }
 
@@ -27,20 +28,20 @@ public class Appointment {
         this.userUid = userUid;
     }
 
-    public Service getService() {
-        return service;
+    public String getService() {
+        return serviceName;
     }
 
-    public void setService(Service service) {
-        this.service = service;
+    public void setService(String service) {
+        this.serviceName = service;
     }
 
-    public Provider getProvider() {
-        return provider;
+    public String getProvider() {
+        return providerUid;
     }
 
-    public void setProvider(Provider provider) {
-        this.provider = provider;
+    public void setProvider(String provider) {
+        this.providerUid = provider;
     }
 
     public long getScheduledTo() {
@@ -50,4 +51,5 @@ public class Appointment {
     public void setScheduledTo(long scheduledTo) {
         this.scheduledTo = scheduledTo;
     }
+
 }
