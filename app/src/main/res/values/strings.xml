@@ -10,6 +10,9 @@
     <string name="forgot_pass_title">Recover Password</string>
     <string name="forgot_pass_subTitle">Let\'s get your password back</string>
 
+    <string name="appointment_nav_title">Appointments</string>
+    <string name="profile_nav_title">Profile</string>
+
     //Adapter Strings
     <string name="adapter_date_icon_desc">Provide Date of appointment</string>
     <string name="adapter_time_icon_desc">Provide Time of appointment</string>
