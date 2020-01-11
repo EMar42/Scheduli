@@ -17,7 +17,7 @@ public class UserDataRepository {
     private static final String TAG_USER_REPOSITORY = "User repository";
     private static UserDataRepository instance;
     private final DatabaseReference dataBaseReference;
-    private final FirebaseQueryLiveData userAppointmentsLiveData;
+    private FirebaseQueryLiveData userAppointmentsLiveData;
 
     public static UserDataRepository getInstance() {
         if (instance == null) {
@@ -33,7 +33,7 @@ public class UserDataRepository {
     private UserDataRepository() {
         String uid = UsersUtils.getInstance().getCurrentUserUid();
         this.dataBaseReference = FirebaseDatabase.getInstance().getReference("users");
-        userAppointmentsLiveData = new FirebaseQueryLiveData(dataBaseReference.child(uid).child("appointments"));
+
     }
 
     public void createNewUserInApp(String uid, User user) {
@@ -42,6 +42,7 @@ public class UserDataRepository {
     }
 
     public LiveData<DataSnapshot> getUserAppointmentsSnapshot() {
+        userAppointmentsLiveData = new FirebaseQueryLiveData(dataBaseReference.child(UsersUtils.getInstance().getCurrentUserUid()).child("appointments"));
         return userAppointmentsLiveData;
     }
 
