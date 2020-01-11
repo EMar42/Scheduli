@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.scheduli.R;
-import com.example.scheduli.data.Provider;
-import com.example.scheduli.data.ProviderDataRepository;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
@@ -20,6 +18,7 @@ public class BookingAppointmentActivity extends AppCompatActivity {
     DatabaseReference databaseReference ;
 
     TextView company_txt;
+    TextView serviceName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +26,17 @@ public class BookingAppointmentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_booking_appointment);
 
         Intent intent = getIntent();
+
         //TODO: get Provider Object through Firebase: users -> provider
-        company_txt = (TextView) findViewById(R.id.textview_chosen_company);
+        company_txt = (TextView) findViewById(R.id.booking_act_chosen_company);
+        serviceName = (TextView) findViewById(R.id.service_name) ;
         company_txt.setText(intent.getStringExtra("companyName"));
+        serviceName.setText(intent.getStringExtra("pid"));
+
+
 
         String pid = intent.getStringExtra("pid");
-//        databaseReference = FirebaseDatabase.getInstance().getReference("users").child("provider");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("providers");
 //        databaseReference.orderByKey().equalTo(pid);
 //        company_txt.setText(databaseReference.getKey());
 

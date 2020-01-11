@@ -87,7 +87,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void writeNewUserToDataBase(String uid, String email, String userName, String fullName) {
-        User user = new User(userName, fullName, email, null, null);
+        User user = new User(userName, fullName, email,null);
         userDataRepository.createNewUserInApp(uid, user);
     }
 

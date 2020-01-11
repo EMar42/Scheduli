@@ -43,6 +43,7 @@ public class SearchProviderActivity extends AppCompatActivity implements Provide
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayout;
     private List<Provider> providersList;
+    UsersUtils usersUtils;
     ProvidersAdapter adapter;
      DatabaseReference ref;
 
@@ -91,7 +92,7 @@ public class SearchProviderActivity extends AppCompatActivity implements Provide
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        ref = FirebaseDatabase.getInstance().getReference().child("provider").child("provider");
+        ref = FirebaseDatabase.getInstance().getReference().child("providers");
 
         mLayout = new LinearLayoutManager(this);
         getAllProviders();
@@ -133,8 +134,18 @@ public class SearchProviderActivity extends AppCompatActivity implements Provide
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                 Toast.makeText(SearchProviderActivity.this, "OnDataChange: called", Toast.LENGTH_SHORT).show();
+
+
+                //TODO: App crashed because services list isn't loaded properly (try catch is temporary solution)
+                    // Exception catch: 'Expected a List while deserializing, but got a class java.util.HashMap'
+
+                try {
                     Provider provider = snapshot.getValue(Provider.class);
                     providersList.add(provider);
+                }catch (Exception e){
+                    Toast.makeText(SearchProviderActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                }
 
 //                    Provider provider = new Provider();
 //                    String id = UsersUtils.getInstance().getCurrentUserUid();
@@ -193,10 +204,14 @@ public class SearchProviderActivity extends AppCompatActivity implements Provide
         String company = providersList.get(position).getCompanyName();
         String profession = providersList.get(position).getProfession();
 
+
+        //TODO: Get Provider UID
+        String pid = "what is my id ?!?!";
+
         Log.d(TAG,"onProviderClick: clicked");
-        Intent intent = new Intent(this, BookingAppointmentActivity.class);
+        Intent intent = new Intent(SearchProviderActivity.this, BookingAppointmentActivity.class);
         intent.putExtra("companyName",company);
-        intent.putExtra("pid", provider.getId());
+        intent.putExtra("pid", pid);
 
         startActivity(intent);
     }
