@@ -2,30 +2,21 @@ package com.example.scheduli.data;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
-import java.util.ArrayList;
-
 @IgnoreExtraProperties
 public class User {
     private String userName;
     private String fullName;
+    private String phoneNumber;
     private String email;
-    private Provider provider; //TODO remove
-    private ArrayList<Appointment> appointments;
 
     public User() {
     }
 
 
-    public User(String userName, String fullName, String email, Provider provider, ArrayList<Appointment> appointments) {
+    public User(String userName, String fullName, String email, String phoneNumber) {
         this.userName = userName;
         this.fullName = fullName;
         this.email = email;
-        this.provider = provider;
-        this.appointments = appointments;
-    }
-
-    public User(String userName, String fullName, String email) {
-        this(userName, fullName, email, null, new ArrayList<Appointment>());
     }
 
     public String getUserName() {
@@ -52,27 +43,12 @@ public class User {
         this.email = email;
     }
 
-    public Provider getProvider() {
-        return provider;
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setProvider(Provider provider) {
-        this.provider = provider;
-    }
-
-    public ArrayList<Appointment> getAppointments() {
-        return appointments;
-    }
-
-    public void setAppointments(ArrayList<Appointment> appointments) {
-        this.appointments = appointments;
-    }
-
-    public void addAppointmentToUser(Appointment appointment) {
-        this.appointments.add(appointment);
-    }
-
-    public void removeAppointmentFromUser(Appointment appointment) {
-        this.appointments.remove(appointment);
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

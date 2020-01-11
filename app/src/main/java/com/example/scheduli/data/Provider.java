@@ -1,40 +1,26 @@
 package com.example.scheduli.data;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 @IgnoreExtraProperties
-
 public class Provider {
 
     //Provider details
-    private String id;
     private String imageUrl;
     private String companyName;
     private String profession;
     private String phoneNumber;
+    private String address;
     private ArrayList<Service> services;
 
-    public Provider(String imageUrl, String companyName, String profession, String phoneNumber) {
+    public Provider(String imageUrl, String companyName, String profession, String phoneNumber, String address) {
         this.imageUrl = imageUrl;
         this.companyName = companyName;
         this.profession = profession;
         this.phoneNumber = phoneNumber;
-        this.services = new ArrayList<>();
-        this.id = UUID.randomUUID().toString();
-    }
-
-    public Provider(String id, String imageUrl, String companyName, String profession, String phoneNumber) {
-        this.id = id;
-        this.imageUrl = imageUrl;
-        this.companyName = companyName;
-        this.profession = profession;
-        this.phoneNumber = phoneNumber;
+        this.address = address;
         this.services = new ArrayList<>();
     }
 
@@ -43,7 +29,6 @@ public class Provider {
         this.companyName = companyName;
         this.profession = profession;
         this.services = new ArrayList<Service>();
-        this.id = UUID.randomUUID().toString();
 
     }
 
@@ -51,7 +36,6 @@ public class Provider {
         this.companyName = companyName;
         this.profession = profession;
         this.phoneNumber = phoneNumber;
-        this.id = UUID.randomUUID().toString();
 
     }
 
@@ -66,11 +50,6 @@ public class Provider {
         this.imageUrl = provider.getImageUrl();
         this.phoneNumber = provider.phoneNumber;
         this.services = provider.services;
-        this.id = provider.id;
-    }
-
-    public String getId() {
-        return id;
     }
 
 
@@ -114,4 +93,11 @@ public class Provider {
         this.services = services;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }
