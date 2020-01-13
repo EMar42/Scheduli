@@ -10,6 +10,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 /**
  * Use this class for actions with the database that concern users.
  */
@@ -40,9 +42,15 @@ public class UserDataRepository {
     }
 
     public LiveData<DataSnapshot> getUserAppointmentsSnapshot() {
+        Log.i(TAG_USER_REPOSITORY, "Retrieving User appointments");
         userAppointmentsLiveData = new FirebaseQueryLiveData(dataBaseReference.child(UsersUtils.getInstance().getCurrentUserUid()).child("appointments"));
         return userAppointmentsLiveData;
     }
+
+    public void addAppointmentToUser(String uid, ArrayList<Appointment> appointments) {
+        dataBaseReference.child(uid).child("appointments").setValue(appointments);
+    }
+
 
 
 }

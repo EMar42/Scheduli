@@ -2,20 +2,18 @@ package com.example.scheduli.data;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
-import java.time.Instant;
-
 
 @IgnoreExtraProperties
 public class Appointment {
     private String providerUid;
     private String serviceName;
-    private Instant start;
-    private Instant end;
+    private long start;
+    private long end;
 
     public Appointment() {
     }
 
-    public Appointment(String providerUid, String serviceName, Instant start, Instant end) {
+    public Appointment(String providerUid, String serviceName, long start, long end) {
         this.providerUid = providerUid;
         this.serviceName = serviceName;
         this.start = start;
@@ -38,19 +36,19 @@ public class Appointment {
         this.serviceName = serviceName;
     }
 
-    public Instant getStart() {
+    public long getStart() {
         return start;
     }
 
-    public void setStart(Instant start) {
+    public void setStart(long start) {
         this.start = start;
     }
 
-    public Instant getEnd() {
+    public long getEnd() {
         return end;
     }
 
-    public void setEnd(Instant end) {
+    public void setEnd(long end) {
         this.end = end;
     }
 }

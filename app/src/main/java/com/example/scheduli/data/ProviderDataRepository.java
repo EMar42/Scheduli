@@ -2,10 +2,15 @@ package com.example.scheduli.data;
 
 import android.util.Log;
 
-import com.example.scheduli.utils.UsersUtils;
+import androidx.annotation.NonNull;
+
+import com.example.scheduli.data.fireBase.ProviderDataBaseCallback;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.database.ValueEventListener;
 
 @IgnoreExtraProperties
 
@@ -31,11 +36,27 @@ public class ProviderDataRepository {
 
     public void createNewProviderInApp(String uid, Provider provider) {
         Log.i(TAG_PROVIDER_REPOSITORY, "Created new Provider " + provider);
-        uid = UsersUtils.getInstance().getCurrentUserUid();
         //TODO: check if the provider is exist
         dataBaseReference.child(uid).setValue(provider);
     }
 
+    public void getProviderByUid(final String uid, final ProviderDataBaseCallback callback) {
+        ValueEventListener providerListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.i(TAG_PROVIDER_REPOSITORY, "Getting data from database on " + uid);
+                Provider provider = dataSnapshot.child(uid).getValue(Provider.class);
+                callback.onCallBack(provider);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG_PROVIDER_REPOSITORY, databaseError.getMessage());
+            }
+        };
+
+        this.dataBaseReference.addListenerForSingleValueEvent(providerListener);
+    }
 
 
 }

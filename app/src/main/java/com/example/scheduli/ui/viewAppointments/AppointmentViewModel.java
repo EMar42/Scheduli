@@ -13,10 +13,12 @@ public class AppointmentViewModel extends ViewModel {
 
     private LiveData<DataSnapshot> allAppointments;
     private List<Appointment> allAppointmentsForUser;
+    private boolean presentationMode;
 
 
     public AppointmentViewModel() {
         super();
+        presentationMode = true;
         allAppointments = UserDataRepository.getInstance().getUserAppointmentsSnapshot();
     }
 

@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,19 +14,62 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.scheduli.R;
 import com.example.scheduli.data.Appointment;
+import com.example.scheduli.data.Provider;
+import com.example.scheduli.data.ProviderDataRepository;
+import com.example.scheduli.data.fireBase.ProviderDataBaseCallback;
 import com.google.firebase.database.DataSnapshot;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class ViewAppointmentsListAdapter extends RecyclerView.Adapter {
+public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements Filterable {
     private final LayoutInflater inflater;
     private final Context context;
+    private final ProviderDataRepository providerRepository;
+
     private List<Appointment> appointmentList;
+    private List<Appointment> shownAppointments;
+
+    //setup filter for appointments
+    private Filter timeFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Appointment> filteredList = new ArrayList<>();
+
+            if (constraint.equals("future")) {
+                //TODO implement timed filtering
+
+            } else if (constraint.equals("past")) {
+                //TODO implement timed filtering
+
+            } else {
+                filteredList.addAll(appointmentList);
+            }
+
+            //end of filtering
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            shownAppointments.clear();
+            shownAppointments.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
+    public Filter getTimeFilter() {
+        return timeFilter;
+    }
 
     public ViewAppointmentsListAdapter(Context context) {
         this.context = context;
+        providerRepository = ProviderDataRepository.getInstance();
         inflater = LayoutInflater.from(context);
     }
 
@@ -37,33 +82,43 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        AppointmentViewHolder appointmentViewHolder = (AppointmentViewHolder) holder;
+        final AppointmentViewHolder appointmentViewHolder = (AppointmentViewHolder) holder;
 
-        if (appointmentList != null) {
-            //TODO fix current Array adapter for appointments
-            Appointment current = appointmentList.get(position);
-            //int serviceIndex = current.getProvider().getServices().indexOf(current.getService());
-            //Service service = current.getProvider().getServices().get(serviceIndex);
+        if (shownAppointments != null) {
+            final Appointment current = shownAppointments.get(position);
+
+            //set title for appointment
+            ProviderDataRepository.getInstance().getProviderByUid(current.getProviderUid(), new ProviderDataBaseCallback() {
+                @Override
+                public void onCallBack(Provider provider) {
+                    String titleString = context.getString(R.string.appointment_item_title, provider.getCompanyName(), current.getServiceName());
+
+                    appointmentViewHolder.appointmentTitle.setText(titleString);
+                    appointmentViewHolder.appointmentAddress.setText(provider.getAddress());
+                    appointmentViewHolder.appointmentPhone.setText(provider.getPhoneNumber());
+                }
+            });
+
+
+            //set date of appointment
+            Date date = new Date(current.getStart());
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-            //appointmentViewHolder.appointmentTitle.setText(context.getString(R.string.appointment_item_title, current.getProvider().getCompanyName(), service.getName()));
-            //appointmentViewHolder.appointmentDate.setText(dateFormat.format(new Date(current.getScheduledTo())));
-            //appointmentViewHolder.appointmentTime.setText((timeFormat.format(new Date(current.getScheduledTo()))));
-            //appointmentViewHolder.appointmentPhone.setText(current.getProvider().getPhoneNumber());
-        } else {
-            appointmentViewHolder.appointmentTitle.setText(R.string.no_appointment_found);
-            appointmentViewHolder.appointmentPhone.setText("");
-            appointmentViewHolder.appointmentDate.setText("");
-            appointmentViewHolder.appointmentTime.setText("");
-            appointmentViewHolder.rescheduleButton.setVisibility(View.INVISIBLE);
+            appointmentViewHolder.appointmentDate.setText(dateFormat.format(date));
+
+            //set time of appointment
+            Date start = new Date(current.getStart());
+            Date end = new Date(current.getEnd());
+            DateFormat timeFormatter = new SimpleDateFormat("HH:mm");
+            String timeString = timeFormatter.format(start) + " - " + timeFormatter.format(end);
+            appointmentViewHolder.appointmentTime.setText(timeString);
 
         }
     }
 
     @Override
     public int getItemCount() {
-        if (appointmentList != null) {
-            return appointmentList.size();
+        if (shownAppointments != null) {
+            return shownAppointments.size();
         }
 
         return 0;
@@ -72,14 +127,30 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter {
     public void setAppointmentList(DataSnapshot dataSnapshot) {
         if (dataSnapshot != null) {
             ArrayList<Appointment> appointments = new ArrayList<>();
-            /*
-            for (DataSnapshot readData : dataSnapshot.getChildren()) {
-                Appointment appointment = readData.getValue(Appointment.class);
+            Iterable<DataSnapshot> appoinmentIndex = dataSnapshot.getChildren();
+            for (DataSnapshot appointmentData : appoinmentIndex) {
+                String key = appointmentData.getKey();
+                Appointment appointment = appointmentData.getValue(Appointment.class);
                 appointments.add(appointment);
-            }*/
+            }
+
             this.appointmentList = appointments;
+            this.shownAppointments = new ArrayList<>(this.appointmentList);
             notifyDataSetChanged();
         }
+    }
+
+
+    @Override
+    public Filter getFilter() {
+        return timeFilter;
+    }
+
+    public int getAppointemntsCount() {
+        if (appointmentList != null)
+            return this.appointmentList.size();
+
+        return 0;
     }
 
 
@@ -88,6 +159,7 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter {
         TextView appointmentDate;
         TextView appointmentTime;
         TextView appointmentPhone;
+        TextView appointmentAddress;
         Button rescheduleButton;
 
         public AppointmentViewHolder(@NonNull View itemView) {
@@ -97,6 +169,7 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter {
             appointmentDate = itemView.findViewById(R.id.tv_item_appointmentDate);
             appointmentTime = itemView.findViewById(R.id.tv_item_appointmentTime);
             appointmentPhone = itemView.findViewById(R.id.tv_item_appointmentContact);
+            appointmentAddress = itemView.findViewById(R.id.tv_item_appointment_address);
             rescheduleButton = itemView.findViewById(R.id.btn_item_rescheduleAppoitment);
         }
     }

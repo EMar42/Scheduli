@@ -23,7 +23,7 @@ public class Provider {
         this.profession = profession;
         this.phoneNumber = phoneNumber;
         this.address = address;
-        this.services = new ArrayList<>();
+        this.services = servicesList;
 
         //TODO: get a services list
 

@@ -32,5 +32,5 @@
         <item name="android:background">@color/colorPrimaryDark</item>
     </style>
 
-    <color name="white">#fff</color>
+
 </resources>
