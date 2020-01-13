@@ -183,7 +183,8 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
                 public void onClick(View v) {
                     if (!checkIfEmpty(appointmentTitle) && !checkIfEmpty(appointmentDate) && !checkIfEmpty(appointmentTime) && !checkIfEmpty(appointmentPhone) && !checkIfEmpty(appointmentAddress)) {
                         Intent detailsIntent = new Intent(context, AppointmentDetailsActivity.class);
-                        //detailsIntent.putExtra(AppointmentDetailsActivity.APPOINTMENT_DETAILS, new Appointment(appointmentList.get(currentPosition)));
+                        detailsIntent.putExtra(AppointmentDetailsActivity.APPOINTMENT_DETAILS, appointmentList.get(currentPosition));
+                        context.startActivity(detailsIntent);
                     }
                 }
             });

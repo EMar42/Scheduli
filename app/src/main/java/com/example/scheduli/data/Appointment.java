@@ -1,5 +1,8 @@
 package com.example.scheduli.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.Comparator;
@@ -7,7 +10,7 @@ import java.util.Date;
 
 
 @IgnoreExtraProperties
-public class Appointment {
+public class Appointment implements Parcelable {
     private String providerUid;
     private String serviceName;
     private long start;
@@ -26,6 +29,25 @@ public class Appointment {
     public Appointment(Appointment other) {
         this(other.providerUid, other.serviceName, other.start, other.end);
     }
+
+    protected Appointment(Parcel in) {
+        providerUid = in.readString();
+        serviceName = in.readString();
+        start = in.readLong();
+        end = in.readLong();
+    }
+
+    public static final Creator<Appointment> CREATOR = new Creator<Appointment>() {
+        @Override
+        public Appointment createFromParcel(Parcel in) {
+            return new Appointment(in);
+        }
+
+        @Override
+        public Appointment[] newArray(int size) {
+            return new Appointment[size];
+        }
+    };
 
     public String getProviderUid() {
         return providerUid;
@@ -69,4 +91,16 @@ public class Appointment {
         }
     };
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(providerUid);
+        dest.writeString(serviceName);
+        dest.writeLong(start);
+        dest.writeLong(end);
+    }
 }
