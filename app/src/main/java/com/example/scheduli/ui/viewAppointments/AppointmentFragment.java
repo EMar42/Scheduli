@@ -69,7 +69,6 @@ public class AppointmentFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         initFragmentView(view);
 
         adapter = new ViewAppointmentsListAdapter(view.getContext());
@@ -85,6 +84,7 @@ public class AppointmentFragment extends Fragment {
                         break;
                     case R.id.appointment_radio_filter_past:
                         adapter.getFilter().filter("past");
+                        break;
                     case R.id.appointment_radio_filter_all:
                     default:
                         adapter.getFilter().filter("");
