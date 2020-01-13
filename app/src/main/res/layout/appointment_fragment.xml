@@ -20,31 +20,52 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ToggleButton
-        android:id="@+id/tb_change_appointment_time"
-        style="@style/appCompactButtons"
+    <RadioGroup
+        android:id="@+id/appointment_filter_radio_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="161dp"
-        android:layout_marginTop="17dp"
-        android:layout_marginEnd="161dp"
-        android:textAppearance="@style/adapterTextStyle"
-        android:textOff="@string/future_appointments"
-        android:textOn="@string/past_appointments"
+        android:layout_marginTop="16dp"
+        android:checkedButton="@id/appointment_radio_filter_all"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <RadioButton
+            android:id="@+id/appointment_radio_filter_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorPrimary"
+            android:text="@string/all"
+            android:textAppearance="@style/adapterTextStyle" />
+
+        <RadioButton
+            android:id="@+id/appointment_radio_filter_future"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorPrimary"
+            android:text="@string/future"
+            android:textAppearance="@style/adapterTextStyle" />
+
+        <RadioButton
+            android:id="@+id/appointment_radio_filter_past"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorPrimary"
+            android:text="@string/past"
+            android:textAppearance="@style/adapterTextStyle" />
+    </RadioGroup>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/appointments_recycler_main"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:layout_marginBottom="64dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tb_change_appointment_time"
+        app:layout_constraintTop_toBottomOf="@+id/appointment_filter_radio_group"
         tools:itemCount="5"
         tools:listitem="@layout/apointment_view_items"
         tools:visibility="visible" />
@@ -54,14 +75,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="86dp"
         android:layout_marginEnd="32dp"
         android:text="@string/no_appointments_to_show"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tb_change_appointment_time" />
+        app:layout_constraintTop_toBottomOf="@+id/appointment_filter_radio_group" />
 
     <TextView
         android:id="@+id/tv_appointment_no_show_description"

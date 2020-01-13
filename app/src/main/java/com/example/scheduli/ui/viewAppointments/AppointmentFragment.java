@@ -4,9 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,11 +23,15 @@ import com.google.firebase.database.DataSnapshot;
 public class AppointmentFragment extends Fragment {
 
     private AppointmentViewModel mViewModel;
-    private ToggleButton modeButton;
     private ViewAppointmentsListAdapter adapter;
-    private TextView noAppontmentsTextView;
+    private TextView noAppointmentsTextView;
     private RecyclerView appointmentRecyclerView;
-    private TextView noAppointemtsTextViewDescription;
+    private TextView noAppointeesTextViewDescription;
+    private RadioButton filterAllButton;
+    private RadioButton filterFutureButton;
+    private RadioButton filterPastButton;
+    private RadioGroup filterGroup;
+
 
     public static AppointmentFragment newInstance() {
         return new AppointmentFragment();
@@ -49,14 +53,14 @@ public class AppointmentFragment extends Fragment {
             @Override
             public void onChanged(DataSnapshot dataSnapshot) {
                 adapter.setAppointmentList(dataSnapshot);
-                if (adapter.getAppointemntsCount() > 0) {
+                if (adapter.getItemCount() > 0) {
                     appointmentRecyclerView.setVisibility(View.VISIBLE);
-                    noAppontmentsTextView.setVisibility(View.GONE);
-                    noAppointemtsTextViewDescription.setVisibility(View.GONE);
+                    noAppointmentsTextView.setVisibility(View.GONE);
+                    noAppointeesTextViewDescription.setVisibility(View.GONE);
                 } else {
                     appointmentRecyclerView.setVisibility(View.GONE);
-                    noAppontmentsTextView.setVisibility(View.VISIBLE);
-                    noAppointemtsTextViewDescription.setVisibility(View.VISIBLE);
+                    noAppointmentsTextView.setVisibility(View.VISIBLE);
+                    noAppointeesTextViewDescription.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -72,24 +76,30 @@ public class AppointmentFragment extends Fragment {
         appointmentRecyclerView.setAdapter(adapter);
         appointmentRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        modeButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        filterGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    adapter.getFilter().filter("future");
-                } else {
-                    adapter.getFilter().filter("past");
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.appointment_radio_filter_future:
+                        adapter.getFilter().filter("future");
+                        break;
+                    case R.id.appointment_radio_filter_past:
+                        adapter.getFilter().filter("past");
+                    case R.id.appointment_radio_filter_all:
+                    default:
+                        adapter.getFilter().filter("");
                 }
             }
         });
+
     }
 
 
     private void initFragmentView(@NonNull View view) {
-        modeButton = view.findViewById(R.id.tb_change_appointment_time);
-        noAppontmentsTextView = view.findViewById(R.id.tv_appointment_no_show);
-        noAppointemtsTextViewDescription = view.findViewById(R.id.tv_appointment_no_show_description);
+        noAppointmentsTextView = view.findViewById(R.id.tv_appointment_no_show);
+        noAppointeesTextViewDescription = view.findViewById(R.id.tv_appointment_no_show_description);
         appointmentRecyclerView = view.findViewById(R.id.appointments_recycler_main);
+        filterGroup = view.findViewById(R.id.appointment_filter_radio_group);
     }
 
 

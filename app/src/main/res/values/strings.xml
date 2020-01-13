@@ -61,6 +61,9 @@
     <string name="thank_you">Thank you for joining us</string>
     <string name="no_appointments_to_show">No appointments to show</string>
     <string name="appointment_no_show_description">To add appointments click on the looking glass button at the bottom of the screen</string>
+    <string name="all">All</string>
+    <string name="future">Future</string>
+    <string name="past">Past</string>
     <string-array name="language_options_select">
         <item>English</item>
         <item>Hebrew</item>

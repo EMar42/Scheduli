@@ -2,6 +2,9 @@ package com.example.scheduli.data;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.Comparator;
+import java.util.Date;
+
 
 @IgnoreExtraProperties
 public class Appointment {
@@ -51,4 +54,15 @@ public class Appointment {
     public void setEnd(long end) {
         this.end = end;
     }
+
+    public static final Comparator<Appointment> BY_DATETIME_DESCENDING = new Comparator<Appointment>() {
+        @Override
+        public int compare(Appointment o1, Appointment o2) {
+            Date first = new Date(o1.getStart());
+            Date second = new Date(o2.getStart());
+
+            return second.compareTo(first);
+        }
+    };
+
 }
