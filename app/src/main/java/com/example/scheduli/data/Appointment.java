@@ -23,6 +23,10 @@ public class Appointment {
         this.end = end;
     }
 
+    public Appointment(Appointment other) {
+        this(other.providerUid, other.serviceName, other.start, other.end);
+    }
+
     public String getProviderUid() {
         return providerUid;
     }

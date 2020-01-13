@@ -1,10 +1,10 @@
 package com.example.scheduli.ui.viewAppointments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -17,6 +17,7 @@ import com.example.scheduli.data.Appointment;
 import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.ProviderDataRepository;
 import com.example.scheduli.data.fireBase.ProviderDataBaseCallback;
+import com.example.scheduli.ui.appointmentDetails.AppointmentDetailsActivity;
 import com.google.firebase.database.DataSnapshot;
 
 import java.text.DateFormat;
@@ -81,7 +82,7 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
             DateFormat timeFormatter = new SimpleDateFormat("HH:mm");
             String timeString = timeFormatter.format(start) + " - " + timeFormatter.format(end);
             appointmentViewHolder.appointmentTime.setText(timeString);
-
+            appointmentViewHolder.currentPosition = position;
         }
     }
 
@@ -165,9 +166,9 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
         TextView appointmentTime;
         TextView appointmentPhone;
         TextView appointmentAddress;
-        Button rescheduleButton;
+        int currentPosition;
 
-        public AppointmentViewHolder(@NonNull View itemView) {
+        public AppointmentViewHolder(@NonNull final View itemView) {
             super(itemView);
 
             appointmentTitle = itemView.findViewById(R.id.tv_item_appointmentTitle);
@@ -175,7 +176,22 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
             appointmentTime = itemView.findViewById(R.id.tv_item_appointmentTime);
             appointmentPhone = itemView.findViewById(R.id.tv_item_appointmentContact);
             appointmentAddress = itemView.findViewById(R.id.tv_item_appointment_address);
-            rescheduleButton = itemView.findViewById(R.id.btn_item_rescheduleAppoitment);
+
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!checkIfEmpty(appointmentTitle) && !checkIfEmpty(appointmentDate) && !checkIfEmpty(appointmentTime) && !checkIfEmpty(appointmentPhone) && !checkIfEmpty(appointmentAddress)) {
+                        Intent detailsIntent = new Intent(context, AppointmentDetailsActivity.class);
+                        //detailsIntent.putExtra(AppointmentDetailsActivity.APPOINTMENT_DETAILS, new Appointment(appointmentList.get(currentPosition)));
+                    }
+                }
+            });
+        }
+
+
+        private boolean checkIfEmpty(TextView textView) {
+            return textView.getText().toString().isEmpty();
         }
     }
 }

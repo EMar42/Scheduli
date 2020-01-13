@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.scheduli.R;
+import com.example.scheduli.data.UserDataRepository;
 import com.example.scheduli.ui.forgotPassowrd.ForgotPasswordActivity;
 import com.example.scheduli.ui.mainScreen.MainActivity;
 import com.example.scheduli.ui.signup.SignupActivity;
@@ -75,16 +76,21 @@ public class LoginActivity extends AppCompatActivity {
                 FirebaseUser user = UsersUtils.getInstance().getCurrentUser();
                 if (user != null) {
                     Log.i(LOGIN_TAG, "Got user form sign up activity logging in");
-                    String uid = user.getUid();
-                    //TODO add sound on login
-                    //TODO implemennt intent change once user logged in to the app from sign-up.
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.putExtra("LOGGED_IN_USER_UID", uid);
-                    startActivity(intent);
-                    finish();
+                    loginToMainActivity(user);
                 }
             }
         };
+    }
+
+    private void loginToMainActivity(FirebaseUser user) {
+        String uid = user.getUid();
+        //TODO add sound on login
+        //TODO implemennt intent change once user logged in to the app from sign-up.
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("LOGGED_IN_USER_UID", uid);
+        UserDataRepository.getInstance().keepInSync(uid);
+        startActivity(intent);
+        finish();
     }
 
     private void checkLoginStatus() {
@@ -93,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.i(LOGIN_TAG, "Entering app user already logged in");
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.putExtra("LOGGED_IN_USER_UID", user.getUid() + " " + user.getDisplayName());
+            loginToMainActivity(user);
             startActivity(intent);
             finish();
         }
@@ -126,12 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         Log.i(LOGIN_TAG, "Succesful login to the application using " + userEmail.getText().toString());
                         FirebaseUser user = usersUtils.getFireBaseAuth().getCurrentUser();
-                        String uid = user.getUid();
-                        //TODO add sound on login
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        intent.putExtra("LOGGED_IN_USER_UID", uid);
-                        startActivity(intent);
-                        finish();
+                        loginToMainActivity(user);
                     }
                 }
             });

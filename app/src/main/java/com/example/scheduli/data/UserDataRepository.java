@@ -5,7 +5,6 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 
 import com.example.scheduli.data.fireBase.FirebaseQueryLiveData;
-import com.example.scheduli.utils.UsersUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,6 +18,7 @@ public class UserDataRepository {
     private static final String TAG_USER_REPOSITORY = "User repository";
     private static UserDataRepository instance;
     private final DatabaseReference dataBaseReference;
+    private DatabaseReference userReference;
     private FirebaseQueryLiveData userAppointmentsLiveData;
 
     public static UserDataRepository getInstance() {
@@ -36,6 +36,11 @@ public class UserDataRepository {
         this.dataBaseReference = FirebaseDatabase.getInstance().getReference("users");
     }
 
+    public void keepInSync(String uid) {
+        userReference = this.dataBaseReference.child(uid);
+        userReference.keepSynced(true);
+    }
+
     public void createNewUserInApp(String uid, User user) {
         Log.i(TAG_USER_REPOSITORY, "Created new User " + user);
         dataBaseReference.child(uid).setValue(user);
@@ -43,7 +48,7 @@ public class UserDataRepository {
 
     public LiveData<DataSnapshot> getUserAppointmentsSnapshot() {
         Log.i(TAG_USER_REPOSITORY, "Retrieving User appointments");
-        userAppointmentsLiveData = new FirebaseQueryLiveData(dataBaseReference.child(UsersUtils.getInstance().getCurrentUserUid()).child("appointments"));
+        userAppointmentsLiveData = new FirebaseQueryLiveData(userReference.child("appointments"));
         return userAppointmentsLiveData;
     }
 
