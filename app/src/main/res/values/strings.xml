@@ -65,6 +65,8 @@
     <string name="future">Future</string>
     <string name="past">Past</string>
     <string name="appointment_details">Appointment Details</string>
+    <string name="cancel_appointment">Cancel Appointment</string>
+    <string name="set_reminder">Set Reminder</string>
     <string-array name="language_options_select">
         <item>English</item>
         <item>Hebrew</item>
