@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -57,6 +58,17 @@ public class AppointmentFragment extends Fragment {
         adapter = new ViewAppointmentsListAdapter(view.getContext());
         appointmentRecyclerView.setAdapter(adapter);
         appointmentRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+        modeButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    //TODO implement filter on appointments from the past
+                } else {
+                    //TODO impelemt filter on future appointments
+                }
+            }
+        });
 
 
     }

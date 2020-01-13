@@ -36,6 +36,7 @@ public class SignUpNotification {
                 R.string.login_title);
         final String text = res.getString(
                 R.string.sign_up_notification_placeholder_text_template, userFullName);
+        final String contentText = res.getString(R.string.thank_you);
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_SIGN_IN_CHANNEL_ID)
 
@@ -47,10 +48,11 @@ public class SignUpNotification {
                 // notification title, and text.
                 .setSmallIcon(R.drawable.ic_stat_sign_up)
                 .setContentTitle(title)
-                .setContentText(text)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setLargeIcon(picture)
                 .setNumber(number)
+                .setContentText(text)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
                 .setAutoCancel(true);
 
         notify(context, builder.build());

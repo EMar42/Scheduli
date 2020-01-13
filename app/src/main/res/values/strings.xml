@@ -58,6 +58,7 @@
     <string name="past">Past</string>
     <string name="get_current_phone_number">Get current Phone Number</string>
     <string name="phone_number">Phone Number</string>
+    <string name="thank_you">Thank you for joining us</string>
     <string-array name="language_options_select">
         <item>English</item>
         <item>Hebrew</item>
@@ -67,7 +68,7 @@
 
     <string-array name="language_options_codes">
         <item>en_US</item>
-        <item>iw_IL</item>
+        <item>iw_rIL</item>
         <item>ru_</item>
         <item>pt_BR</item>
     </string-array>

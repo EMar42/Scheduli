@@ -7,6 +7,8 @@ import java.util.ArrayList;
 @IgnoreExtraProperties
 public class Provider {
 
+    //TODO fix class
+
     //Provider details
     private String imageUrl;
     private String companyName;
