@@ -28,6 +28,7 @@ import com.google.firebase.auth.AuthResult;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG_SIGN_UP = "Sign-up Activity";
+    private static final int PERMISSION_REQUEST_PHONE = 0;
 
     private UsersUtils usersUtils;
     private EditText userEmail, userName, userPassword, userFullName, userPhoneNumber;
@@ -72,12 +73,16 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void setPhoneNumberOnCurrent() {
+        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE,}, PERMISSION_REQUEST_PHONE); //request permission to read phone number
+
         TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         if (checkSelfPermission(Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             userPhoneNumber.setError("No premissions to get phone number");
             return;
+        } else {
+            userPhoneNumber.setText(tMgr.getLine1Number());
         }
-        userPhoneNumber.setText(tMgr.getLine1Number());
+
     }
 
     private void createNewAccount() {
