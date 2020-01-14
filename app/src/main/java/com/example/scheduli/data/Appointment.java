@@ -3,7 +3,11 @@ package com.example.scheduli.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 @IgnoreExtraProperties
@@ -101,5 +105,16 @@ public class Appointment implements Parcelable {
         dest.writeString(serviceCost);
         dest.writeLong(start);
         dest.writeLong(end);
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("providerUid", providerUid);
+        map.put("serviceName", serviceName);
+        map.put("serviceCost", serviceCost);
+        map.put("start", start);
+        map.put("end", end);
+        return map;
     }
 }

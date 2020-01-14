@@ -59,6 +59,9 @@ public class UserDataRepository {
         dataBaseReference.child(uid).child("appointments").setValue(appointments);
     }
 
+    /**
+     * Call this to get a user from the database
+     */
     public void getUserFromUid(final String uid, final UserDataCallBack callBack) {
         ValueEventListener userEventListener = new ValueEventListener() {
             @Override
@@ -77,9 +80,15 @@ public class UserDataRepository {
         this.dataBaseReference.addListenerForSingleValueEvent(userEventListener);
     }
 
+    /**
+     * Call this to update a user in the database
+     */
     public void updateUserProfile(String uid, User user) {
         Map<String, Object> userValues = user.toMap();
         this.dataBaseReference.child(uid).updateChildren(userValues);
     }
 
+    public void updateUserAppointments(String uid, Appointment appointments) {
+
+    }
 }
