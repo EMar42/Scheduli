@@ -18,6 +18,14 @@ public class Service {
     public Service() {
     }
 
+    public Service(String name, float cost, int singleSessionInMinutes, Map<String, WorkDay> workingDays, Map<String, ArrayList<Sessions>> dailySessions) {
+        this.name = name;
+        this.cost = cost;
+        this.singleSessionInMinutes = singleSessionInMinutes;
+        this.workingDays = workingDays;
+        this.dailySessions = dailySessions;
+    }
+
     public String getName() {
         return name;
     }
