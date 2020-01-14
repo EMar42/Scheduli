@@ -21,6 +21,12 @@ public class Sessions {
         this.isAvailable = isAvailable;
     }
 
+    public Sessions(long start, long end, boolean isAvailable) {
+        this.start = start;
+        this.end = end;
+        this.isAvailable = isAvailable;
+    }
+
     public long getStart() {
         return start;
     }

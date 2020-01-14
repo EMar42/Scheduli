@@ -57,6 +57,10 @@ public class AppointmentFragment extends Fragment {
         mViewModel = ViewModelProviders.of(this).get(AppointmentViewModel.class);
 
         LiveData<DataSnapshot> liveData = mViewModel.getAllAppointments();
+        observeAppointments(liveData);
+    }
+
+    private void observeAppointments(LiveData<DataSnapshot> liveData) {
         liveData.observe(this.getViewLifecycleOwner(), new Observer<DataSnapshot>() {
             @Override
             public void onChanged(DataSnapshot dataSnapshot) {
@@ -95,7 +99,6 @@ public class AppointmentFragment extends Fragment {
                 filterGroup.setVisibility(View.VISIBLE);
                 noAppointmentsTextView.setVisibility(View.GONE);
                 noAppointeesTextViewDescription.setVisibility(View.GONE);
-
             }
         });
         if (adapter.getItemCount() > 0) {

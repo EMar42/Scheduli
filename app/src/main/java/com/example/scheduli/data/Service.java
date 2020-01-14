@@ -11,10 +11,18 @@ public class Service {
     private String name;
     private float cost;
     private int singleSessionInMinutes;
-    private Map<String, Long> workingDays; // key is of type DayOfWeek enum
+    private Map<String, WorkDay> workingDays; // key is of type DayOfWeek enum
     private Map<String, ArrayList<Sessions>> dailySessions; // key is a date (day/month/year).
 
     public Service() {
+    }
+
+    public Service(String name, float cost, int singleSessionInMinutes, Map<String, WorkDay> workingDays, Map<String, ArrayList<Sessions>> dailySessions) {
+        this.name = name;
+        this.cost = cost;
+        this.singleSessionInMinutes = singleSessionInMinutes;
+        this.workingDays = workingDays;
+        this.dailySessions = dailySessions;
     }
 
     public String getName() {
@@ -41,11 +49,11 @@ public class Service {
         this.singleSessionInMinutes = singleSessionInMinutes;
     }
 
-    public Map<String, Long> getWorkingDays() {
+    public Map<String, WorkDay> getWorkingDays() {
         return workingDays;
     }
 
-    public void setWorkingDays(Map<String, Long> workingDays) {
+    public void setWorkingDays(Map<String, WorkDay> workingDays) {
         this.workingDays = workingDays;
     }
 
