@@ -13,12 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.scheduli.R;
-import com.example.scheduli.data.Appointment;
-import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.ProviderDataRepository;
-import com.example.scheduli.data.fireBase.ProviderDataBaseCallback;
+import com.example.scheduli.data.joined.JoinedAppointment;
 import com.example.scheduli.ui.appointmentDetails.AppointmentDetailsActivity;
-import com.google.firebase.database.DataSnapshot;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -32,17 +29,17 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
     private final Context context;
     private final ProviderDataRepository providerRepository;
 
-    private List<Appointment> appointmentList; //complete data list
-    private List<Appointment> shownAppointments; // filtered list
+    private List<JoinedAppointment> joinedAppointments;
+    private List<JoinedAppointment> shownJoinedAppointments;
+    private final TriggerCallback callback;
 
-    public Filter getTimeFilter() {
-        return timeFilter;
-    }
 
-    public ViewAppointmentsListAdapter(Context context) {
+    public ViewAppointmentsListAdapter(Context context, TriggerCallback triggerCallback) {
+        callback = triggerCallback;
         this.context = context;
         providerRepository = ProviderDataRepository.getInstance();
         inflater = LayoutInflater.from(context);
+        joinedAppointments = new ArrayList<>();
     }
 
     @NonNull
@@ -56,29 +53,24 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         final AppointmentViewHolder appointmentViewHolder = (AppointmentViewHolder) holder;
 
-        if (shownAppointments != null && shownAppointments.size() > 0) {
-            final Appointment current = shownAppointments.get(position);
+        if (shownJoinedAppointments != null && shownJoinedAppointments.size() > 0) {
+            final JoinedAppointment current = shownJoinedAppointments.get(position);
 
             //set title for appointment
-            ProviderDataRepository.getInstance().getProviderByUid(current.getProviderUid(), new ProviderDataBaseCallback() {
-                @Override
-                public void onCallBack(Provider provider) {
-                    String titleString = context.getString(R.string.appointment_item_title, provider.getCompanyName(), current.getServiceName());
+            String titleString = context.getString(R.string.appointment_item_title, current.getProviderCompanyName(), current.getAppointment().getServiceName());
 
-                    appointmentViewHolder.appointmentTitle.setText(titleString);
-                    appointmentViewHolder.appointmentAddress.setText(provider.getAddress());
-                    appointmentViewHolder.appointmentPhone.setText(provider.getPhoneNumber());
-                }
-            });
+            appointmentViewHolder.appointmentTitle.setText(titleString);
+            appointmentViewHolder.appointmentAddress.setText(current.getProviderAddress());
+            appointmentViewHolder.appointmentPhone.setText(current.getProviderPhoneNumber());
 
             //set date of appointment
-            Date date = new Date(current.getStart());
+            Date date = new Date(current.getAppointment().getStart());
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             appointmentViewHolder.appointmentDate.setText(dateFormat.format(date));
 
             //set time of appointment
-            Date start = new Date(current.getStart());
-            Date end = new Date(current.getEnd());
+            Date start = new Date(current.getAppointment().getStart());
+            Date end = new Date(current.getAppointment().getEnd());
             DateFormat timeFormatter = new SimpleDateFormat("HH:mm");
             String timeString = timeFormatter.format(start) + " - " + timeFormatter.format(end);
             appointmentViewHolder.appointmentTime.setText(timeString);
@@ -88,29 +80,11 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
 
     @Override
     public int getItemCount() {
-        if (shownAppointments != null) {
-            return shownAppointments.size();
+        if (shownJoinedAppointments != null) {
+            return shownJoinedAppointments.size();
         }
         return 0;
     }
-
-    public void setAppointmentList(DataSnapshot dataSnapshot) {
-        if (dataSnapshot != null) {
-            ArrayList<Appointment> appointments = new ArrayList<>();
-            Iterable<DataSnapshot> appoinmentIndex = dataSnapshot.getChildren();
-            for (DataSnapshot appointmentData : appoinmentIndex) {
-                String key = appointmentData.getKey();
-                Appointment appointment = appointmentData.getValue(Appointment.class);
-                appointments.add(appointment);
-            }
-
-            this.shownAppointments = appointments;
-            this.appointmentList = new ArrayList<>(this.shownAppointments);
-            Collections.sort(shownAppointments, Appointment.BY_DATETIME_DESCENDING);
-            notifyDataSetChanged();
-        }
-    }
-
 
     @Override
     public Filter getFilter() {
@@ -122,28 +96,28 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
     private Filter timeFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            List<Appointment> filteredList = new ArrayList<>();
+            List<JoinedAppointment> filteredList = new ArrayList<>();
 
             if (constraint.equals("future")) {
                 Date currentTime = android.icu.util.Calendar.getInstance().getTime();
-                for (Appointment appointment : appointmentList) {
-                    Date appointmentStartTime = new Date(appointment.getStart());
+                for (JoinedAppointment appointment : joinedAppointments) {
+                    Date appointmentStartTime = new Date(appointment.getAppointment().getStart());
                     if (currentTime.before(appointmentStartTime))
                         filteredList.add(appointment);
                 }
             } else if (constraint.equals("past")) {
                 Date currentTime = android.icu.util.Calendar.getInstance().getTime();
-                for (Appointment appointment : appointmentList) {
-                    Date appointmentStartTime = new Date(appointment.getStart());
+                for (JoinedAppointment appointment : joinedAppointments) {
+                    Date appointmentStartTime = new Date(appointment.getAppointment().getStart());
                     if (currentTime.after(appointmentStartTime))
                         filteredList.add(appointment);
                 }
             } else {
-                filteredList.addAll(appointmentList);
+                filteredList.addAll(joinedAppointments);
             }
 
             //end of filtering
-            Collections.sort(filteredList, Appointment.BY_DATETIME_DESCENDING);
+            Collections.sort(filteredList, JoinedAppointment.BY_DATETIME_DESCENDING);
             FilterResults results = new FilterResults();
             results.values = filteredList;
             return results;
@@ -151,13 +125,20 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            if (shownAppointments != null) {
-                shownAppointments.clear();
-                shownAppointments.addAll((List) results.values);
+            if (shownJoinedAppointments != null) {
+                shownJoinedAppointments.clear();
+                shownJoinedAppointments.addAll((List) results.values);
                 notifyDataSetChanged();
             }
         }
     };
+
+    public void addJoinedAppointment(JoinedAppointment joinedAppointment) {
+        this.joinedAppointments.add(joinedAppointment);
+        this.shownJoinedAppointments = new ArrayList<>(joinedAppointments);
+        notifyDataSetChanged();
+        callback.onCallback();
+    }
 
 
     public class AppointmentViewHolder extends RecyclerView.ViewHolder {
@@ -181,18 +162,12 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!checkIfEmpty(appointmentTitle) && !checkIfEmpty(appointmentDate) && !checkIfEmpty(appointmentTime) && !checkIfEmpty(appointmentPhone) && !checkIfEmpty(appointmentAddress)) {
-                        Intent detailsIntent = new Intent(context, AppointmentDetailsActivity.class);
-                        detailsIntent.putExtra(AppointmentDetailsActivity.APPOINTMENT_DETAILS, appointmentList.get(currentPosition));
-                        context.startActivity(detailsIntent);
-                    }
+                    Intent detailsIntent = new Intent(context, AppointmentDetailsActivity.class);
+                    detailsIntent.putExtra(AppointmentDetailsActivity.APPOINTMENT_DETAILS, joinedAppointments.get(currentPosition));
+                    context.startActivity(detailsIntent);
                 }
             });
         }
 
-
-        private boolean checkIfEmpty(TextView textView) {
-            return textView.getText().toString().isEmpty();
-        }
     }
 }

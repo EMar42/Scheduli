@@ -18,7 +18,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.scheduli.R;
+import com.example.scheduli.data.Appointment;
+import com.example.scheduli.data.Provider;
+import com.example.scheduli.data.ProviderDataRepository;
+import com.example.scheduli.data.fireBase.ProviderDataBaseCallback;
+import com.example.scheduli.data.joined.JoinedAppointment;
 import com.google.firebase.database.DataSnapshot;
+
+import java.util.ArrayList;
 
 public class AppointmentFragment extends Fragment {
 
@@ -52,16 +59,25 @@ public class AppointmentFragment extends Fragment {
         liveData.observe(this.getViewLifecycleOwner(), new Observer<DataSnapshot>() {
             @Override
             public void onChanged(DataSnapshot dataSnapshot) {
-                adapter.setAppointmentList(dataSnapshot);
-                if (adapter.getItemCount() > 0) {
-                    appointmentRecyclerView.setVisibility(View.VISIBLE);
-                    noAppointmentsTextView.setVisibility(View.GONE);
-                    noAppointeesTextViewDescription.setVisibility(View.GONE);
-                } else {
-                    appointmentRecyclerView.setVisibility(View.GONE);
-                    noAppointmentsTextView.setVisibility(View.VISIBLE);
-                    noAppointeesTextViewDescription.setVisibility(View.VISIBLE);
+                ArrayList<Appointment> appointments = new ArrayList<>();
+                Iterable<DataSnapshot> appoinmentIndex = dataSnapshot.getChildren();
+                for (DataSnapshot appointmentData : appoinmentIndex) {
+                    Appointment appointment = appointmentData.getValue(Appointment.class);
+                    appointments.add(appointment);
                 }
+
+                for (final Appointment appointment : appointments) {
+                    ProviderDataRepository.getInstance().getProviderByUid(appointment.getProviderUid(), new ProviderDataBaseCallback() {
+                        @Override
+                        public void onCallBack(Provider provider) {
+                            JoinedAppointment joinedAppointment = new JoinedAppointment(appointment, provider.getImageUrl(), provider.getCompanyName()
+                                    , provider.getProfession(), provider.getPhoneNumber(), provider.getAddress());
+                            adapter.addJoinedAppointment(joinedAppointment);
+                        }
+                    });
+                }
+
+
             }
         });
     }
@@ -71,7 +87,22 @@ public class AppointmentFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initFragmentView(view);
 
-        adapter = new ViewAppointmentsListAdapter(view.getContext());
+        adapter = new ViewAppointmentsListAdapter(view.getContext(), new TriggerCallback() {
+            @Override
+            public void onCallback() {
+                if (adapter.getItemCount() > 0) {
+                    appointmentRecyclerView.setVisibility(View.VISIBLE);
+                    filterGroup.setVisibility(View.VISIBLE);
+                    noAppointmentsTextView.setVisibility(View.GONE);
+                    noAppointeesTextViewDescription.setVisibility(View.GONE);
+                } else {
+                    appointmentRecyclerView.setVisibility(View.GONE);
+                    filterGroup.setVisibility(View.INVISIBLE);
+                    noAppointmentsTextView.setVisibility(View.VISIBLE);
+                    noAppointeesTextViewDescription.setVisibility(View.VISIBLE);
+                }
+            }
+        });
         appointmentRecyclerView.setAdapter(adapter);
         appointmentRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
