@@ -1,13 +1,24 @@
 package com.example.scheduli.data;
 
+import android.util.Log;
+import android.widget.Toast;
+
+import androidx.appcompat.widget.DialogTitle;
+
+import com.example.scheduli.ui.login.LoginActivity;
+import com.example.scheduli.ui.mainScreen.MainActivity;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 @IgnoreExtraProperties
 public class Provider {
 
-    //TODO fix class
+     private static final String SERVICE_TAG = "Provider activity";
 
     //Provider details
     private String imageUrl;
@@ -17,41 +28,30 @@ public class Provider {
     private String address;
     private ArrayList<Service> services;
 
+
+    //Constructor without initializing of services List (for existed list)
     public Provider(String imageUrl, String companyName, String profession, String phoneNumber, String address, ArrayList<Service> servicesList) {
         this.imageUrl = imageUrl;
         this.companyName = companyName;
         this.profession = profession;
         this.phoneNumber = phoneNumber;
         this.address = address;
-        this.services = servicesList;
-
-        //TODO: get a services list
+        this.services = servicesList; //get initialized services list
 
     }
 
+
+    //This constructor should be used for creating new Provider:
     public Provider(String imageUrl, String companyName, String profession, String phoneNumber, String address) {
         this.imageUrl = imageUrl;
         this.companyName = companyName;
         this.profession = profession;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.services = new ArrayList<>();
 
     }
 
-    public Provider(String companyName, String profession) {
-
-        this.companyName = companyName;
-        this.profession = profession;
-        this.services = new ArrayList<Service>();
-
-    }
-
-    public Provider(String companyName, String profession, String phoneNumber) {
-        this.companyName = companyName;
-        this.profession = profession;
-        this.phoneNumber = phoneNumber;
-
-    }
 
     public Provider() {
 
@@ -61,6 +61,7 @@ public class Provider {
 
         this.companyName = provider.companyName;
         this.profession = provider.profession;
+        this.address = provider.address;
         this.imageUrl = provider.getImageUrl();
         this.phoneNumber = provider.phoneNumber;
         this.services = provider.services;
@@ -87,7 +88,7 @@ public class Provider {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getImageUrl() {
+    public String getImageUrl() { // TODO: get Image from DB
         return imageUrl;
     }
 
@@ -114,4 +115,41 @@ public class Provider {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public Boolean addService(String name, float cost, int singleSessionInMinutes, final String dayOfWeek, final String date, final Long time, long start, long end, String userUid, boolean isAvailable) { //define time
+
+        int day = Integer.valueOf(dayOfWeek);
+        if(day < 0 || day >= 7) {
+
+            //Create a new working days map:
+            Map<String, Long> tempWorkingDayMap = new HashMap<String, Long>() {{ // work
+                put(dayOfWeek, time);
+            }};
+
+
+            //Create a new dailySessions map:
+            //  new Array<Sessions>:
+            final ArrayList<Sessions> tempSessionsArray = new ArrayList<>();
+            tempSessionsArray.add(new Sessions(start, end, userUid, isAvailable));
+
+            Map<String, ArrayList<Sessions>> tempDailySessionsMap = new HashMap<String, ArrayList<Sessions>>() {{
+                put(date, tempSessionsArray);
+            }};
+
+
+            //Create a new Service:
+            Service service = new Service(name, cost, singleSessionInMinutes, tempWorkingDayMap, tempDailySessionsMap);
+
+            this.services.add(service);
+            Log.d(SERVICE_TAG, "Service Added: " + name);
+            return true; //Service Added Succesfully
+
+        }
+        else {
+            Log.e(SERVICE_TAG,"Failed to add a new service");
+            return false;
+        }
+
+    }
+
 }
