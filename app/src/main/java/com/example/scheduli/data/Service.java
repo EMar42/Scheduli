@@ -4,6 +4,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 @IgnoreExtraProperties
 public class Service {
@@ -11,7 +12,7 @@ public class Service {
     private String name;
     private float cost;
     private int singleSessionInMinutes;
-    private Map<String, Long> workingDays; // key is of type DayOfWeek enum
+    private Map<String, WorkDay> workingDays; // key is of type DayOfWeek enum
     private Map<String, ArrayList<Sessions>> dailySessions; // key is a date (day/month/year).
 
     public Service() {
@@ -41,11 +42,11 @@ public class Service {
         this.singleSessionInMinutes = singleSessionInMinutes;
     }
 
-    public Map<String, Long> getWorkingDays() {
+    public Map<String, WorkDay> getWorkingDays() {
         return workingDays;
     }
 
-    public void setWorkingDays(Map<String, Long> workingDays) {
+    public void setWorkingDays(Map<String, WorkDay> workingDays) {
         this.workingDays = workingDays;
     }
 
@@ -55,5 +56,24 @@ public class Service {
 
     public void setDailySessions(Map<String, ArrayList<Sessions>> dailySessions) {
         this.dailySessions = dailySessions;
+    }
+
+    //Getting map values:
+    public Set getSetOfMap(){
+
+        Set set = this.workingDays.entrySet();
+
+        //************************ use to print Map values: ****************************//
+//        Iterator itr=set.iterator();
+//        while(itr.hasNext()){
+//            //Converting to Map.Entry so that we can get key and value separately
+//            Map.Entry entry=(Map.Entry)itr.next();
+//            System.out.println("key:" entry.getKey()+" value: "+entry.getValue());
+//        }
+        //****************************************************************************//
+
+
+        return set;
+
     }
 }

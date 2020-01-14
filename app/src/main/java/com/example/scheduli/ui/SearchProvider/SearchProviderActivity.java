@@ -21,7 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.scheduli.R;
 import com.example.scheduli.data.Provider;
+import com.example.scheduli.data.ProviderDataRepository;
 import com.example.scheduli.data.ProvidersAdapter;
+import com.example.scheduli.data.User;
 import com.example.scheduli.ui.BookingAppointment.BookingAppointmentActivity;
 import com.example.scheduli.utils.UsersUtils;
 import com.google.firebase.database.DataSnapshot;
@@ -133,7 +135,7 @@ public class SearchProviderActivity extends AppCompatActivity implements Provide
             if(dataSnapshot.exists()){
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                Toast.makeText(SearchProviderActivity.this, "OnDataChange: called", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(SearchProviderActivity.this, "OnDataChange: called", Toast.LENGTH_SHORT).show();
 
 
                 //TODO: App crashed because services list isn't loaded properly (try catch is temporary solution)
@@ -206,13 +208,32 @@ public class SearchProviderActivity extends AppCompatActivity implements Provide
 
 
         //TODO: Get Provider UID
+        final DatabaseReference providersRef = FirebaseDatabase.getInstance().getReference().child("providers");
+
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String uid = ds.getKey();
+//                    Toast.makeText(SearchProviderActivity.this, uid, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+
         String pid = "what is my id ?!?!";
 
-        Log.d(TAG,"onProviderClick: clicked");
+        Log.d(TAG, "onProviderClick: clicked");
         Intent intent = new Intent(SearchProviderActivity.this, BookingAppointmentActivity.class);
-        intent.putExtra("companyName",company);
+        intent.putExtra("companyName", company);
         intent.putExtra("pid", pid);
 
         startActivity(intent);
     }
 }
+

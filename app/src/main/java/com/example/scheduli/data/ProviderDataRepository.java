@@ -3,7 +3,9 @@ package com.example.scheduli.data;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 
+import com.example.scheduli.data.fireBase.FirebaseQueryLiveData;
 import com.example.scheduli.data.fireBase.ProviderDataBaseCallback;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,6 +20,7 @@ public class ProviderDataRepository {
     private static final String TAG_PROVIDER_REPOSITORY = "Provider repository";
     private static ProviderDataRepository instance;
     private final DatabaseReference dataBaseReference;
+    private FirebaseQueryLiveData providersLiveData;
 
     public static ProviderDataRepository getInstance() {
         if (instance == null) {
@@ -36,10 +39,14 @@ public class ProviderDataRepository {
 
     public void createNewProviderInApp(String uid, Provider provider) {
         Log.i(TAG_PROVIDER_REPOSITORY, "Created new Provider " + provider);
-        //TODO: check if the provider is exist
+        //TODO: check if the provider exists
         dataBaseReference.child(uid).setValue(provider);
     }
 
+    /*
+     * Use this if you want to retrive a single provider from the database without any more updates.
+     * Provide Uid and a callback interface to receive the values in your caller.
+     * */
     public void getProviderByUid(final String uid, final ProviderDataBaseCallback callback) {
         ValueEventListener providerListener = new ValueEventListener() {
             @Override
@@ -56,6 +63,15 @@ public class ProviderDataRepository {
         };
 
         this.dataBaseReference.addListenerForSingleValueEvent(providerListener);
+    }
+
+    /**
+     * Gets you the datasnapshot of providers table, use observe on the returned value
+     * and in it do the required data manipulation to get the list of providers
+     */
+    public LiveData<DataSnapshot> getAllProviders() {
+        this.providersLiveData = new FirebaseQueryLiveData(this.dataBaseReference);
+        return providersLiveData;
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.scheduli.ui.viewAppointments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -13,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.scheduli.R;
-import com.example.scheduli.data.ProviderDataRepository;
 import com.example.scheduli.data.joined.JoinedAppointment;
 import com.example.scheduli.ui.appointmentDetails.AppointmentDetailsActivity;
 import com.example.scheduli.utils.TriggerCallback;
@@ -28,17 +28,15 @@ import java.util.List;
 public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements Filterable {
     private final LayoutInflater inflater;
     private final Context context;
-    private final ProviderDataRepository providerRepository;
 
     private List<JoinedAppointment> joinedAppointments;
     private List<JoinedAppointment> shownJoinedAppointments;
     private final TriggerCallback callback;
 
 
-    public ViewAppointmentsListAdapter(Context context, TriggerCallback triggerCallback) {
+    ViewAppointmentsListAdapter(Context context, TriggerCallback triggerCallback) {
         callback = triggerCallback;
         this.context = context;
-        providerRepository = ProviderDataRepository.getInstance();
         inflater = LayoutInflater.from(context);
         joinedAppointments = new ArrayList<>();
     }
@@ -66,13 +64,13 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
 
             //set date of appointment
             Date date = new Date(current.getAppointment().getStart());
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             appointmentViewHolder.appointmentDate.setText(dateFormat.format(date));
 
             //set time of appointment
             Date start = new Date(current.getAppointment().getStart());
             Date end = new Date(current.getAppointment().getEnd());
-            DateFormat timeFormatter = new SimpleDateFormat("HH:mm");
+            @SuppressLint("SimpleDateFormat") DateFormat timeFormatter = new SimpleDateFormat("HH:mm");
             String timeString = timeFormatter.format(start) + " - " + timeFormatter.format(end);
             appointmentViewHolder.appointmentTime.setText(timeString);
             appointmentViewHolder.currentPosition = position;
@@ -134,20 +132,25 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
         }
     };
 
-    public void addJoinedAppointment(JoinedAppointment joinedAppointment) {
+    void addJoinedAppointment(JoinedAppointment joinedAppointment) {
         this.joinedAppointments.add(joinedAppointment);
         this.shownJoinedAppointments = new ArrayList<>(joinedAppointments);
         notifyDataSetChanged();
         callback.onCallback();
     }
 
-    public void clearJoinedList() {
+    void clearJoinedList() {
         if (joinedAppointments != null && shownJoinedAppointments != null) {
             joinedAppointments.clear();
             shownJoinedAppointments.clear();
         }
     }
 
+    void triggerSorting() {
+        if (shownJoinedAppointments != null) {
+            Collections.sort(shownJoinedAppointments, JoinedAppointment.BY_DATETIME_DESCENDING);
+        }
+    }
 
     public class AppointmentViewHolder extends RecyclerView.ViewHolder {
         TextView appointmentTitle;
@@ -157,7 +160,7 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
         TextView appointmentAddress;
         int currentPosition;
 
-        public AppointmentViewHolder(@NonNull final View itemView) {
+        AppointmentViewHolder(@NonNull final View itemView) {
             super(itemView);
 
             appointmentTitle = itemView.findViewById(R.id.tv_item_appointmentTitle);
