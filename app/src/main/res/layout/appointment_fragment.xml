@@ -8,6 +8,7 @@
 
     <TextView
         android:id="@+id/textView"
+        style="@style/headLine"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -72,6 +73,7 @@
 
     <TextView
         android:id="@+id/tv_appointment_no_show"
+        style="@style/headLine"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -86,6 +88,7 @@
 
     <TextView
         android:id="@+id/tv_appointment_no_show_description"
+        style="@style/baseicTextFont"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"

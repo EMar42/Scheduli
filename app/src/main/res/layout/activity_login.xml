@@ -35,6 +35,7 @@
 
     <TextView
         android:id="@+id/tv_login_title"
+        style="@style/headLine"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -48,6 +49,7 @@
 
     <TextView
         android:id="@+id/tv_login_subTitle"
+        style="@style/baseicTextFont"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
