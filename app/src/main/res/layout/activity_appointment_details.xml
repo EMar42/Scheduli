@@ -66,7 +66,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/imageView4"
@@ -82,12 +82,13 @@
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/textView14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="TextView"
+                android:text="@string/company_name"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
@@ -98,10 +99,10 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="TextView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView3"
-                app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+                app:layout_constraintStart_toEndOf="@+id/textView14"
+                app:layout_constraintTop_toBottomOf="@+id/imageView4"
+                tools:text="Sample Text" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -109,21 +110,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="TextView"
+                android:text="@string/profession"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
             <TextView
                 android:id="@+id/tv_appDetails_providerProffesion"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="52dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="TextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView4"
-                app:layout_constraintTop_toBottomOf="@+id/tv_appDetails_providerCompany" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_appDetails_providerCompany"
+                tools:text="Sample Text" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -131,7 +133,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="TextView"
+                android:text="@string/service_name"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -139,13 +142,13 @@
                 android:id="@+id/tv_appDetails_serviceName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="TextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView5"
-                app:layout_constraintTop_toBottomOf="@+id/tv_appDetails_providerProffesion" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_appDetails_providerProffesion"
+                tools:text="Sample Text" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -153,7 +156,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="TextView"
+                android:text="@string/service_cost"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -161,13 +165,13 @@
                 android:id="@+id/tv_appDetails_serviceCost"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="40dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="TextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView6"
-                app:layout_constraintTop_toBottomOf="@+id/tv_appDetails_serviceName" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_appDetails_serviceName"
+                tools:text="Sample Text" />
 
             <TextView
                 android:id="@+id/textView8"
@@ -175,7 +179,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="TextView"
+                android:text="@string/happens_on"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
@@ -183,13 +188,13 @@
                 android:id="@+id/tv_appDetails_appointmentDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="43dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="TextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView8"
-                app:layout_constraintTop_toBottomOf="@+id/tv_appDetails_serviceCost" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_appDetails_serviceCost"
+                tools:text="Sample Text" />
 
             <TextView
                 android:id="@+id/textView9"
@@ -197,7 +202,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="TextView"
+                android:text="@string/between"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
@@ -205,14 +211,14 @@
                 android:id="@+id/tv_appDetails_appointmentTimes"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="65dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="TextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/textView9"
-                app:layout_constraintTop_toBottomOf="@+id/tv_appDetails_appointmentDate" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_appDetails_appointmentDate"
+                tools:text="SampleText" />
 
             <TextView
                 android:id="@+id/textView10"
@@ -220,7 +226,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="TextView"
+                android:text="@string/address"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
@@ -228,25 +235,25 @@
                 android:id="@+id/tv_appDetails_providerAddress"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="68dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="TextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView10"
-                app:layout_constraintTop_toBottomOf="@+id/tv_appDetails_appointmentTimes" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_appDetails_appointmentTimes"
+                tools:text="Sample Text" />
 
             <TextView
                 android:id="@+id/tv_appDetails_providerPhone"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="25dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="TextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView11"
-                app:layout_constraintTop_toBottomOf="@+id/tv_appDetails_providerAddress" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_appDetails_providerAddress"
+                tools:text="Sample Text" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -254,22 +261,36 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="TextView"
+                android:text="@string/phone_number"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_appointment_details_call"
-                style="@style/appCompactButtons"
+                style="@style/imageButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="Call Buisnes"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginBottom="16dp"
+                android:minWidth="64dp"
+                android:minHeight="32dp"
+                android:scaleType="center"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:drawableStart="@drawable/ic_local_phone_white"
+                app:layout_constraintTop_toBottomOf="@+id/textView11"
+                app:srcCompat="@drawable/ic_local_phone_white" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/call_business"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btn_appointment_details_call"
                 app:layout_constraintTop_toBottomOf="@+id/tv_appDetails_providerPhone" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

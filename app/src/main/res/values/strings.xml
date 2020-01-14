@@ -67,6 +67,14 @@
     <string name="appointment_details">Appointment Details</string>
     <string name="cancel_appointment">Cancel Appointment</string>
     <string name="set_reminder">Set Reminder</string>
+    <string name="company_name">Company Name</string>
+    <string name="profession">Profession</string>
+    <string name="service_name">Service Name</string>
+    <string name="service_cost">Service Cost</string>
+    <string name="happens_on">Happens On</string>
+    <string name="between">Between</string>
+    <string name="address">Address</string>
+    <string name="call_business">Call Business</string>
     <string-array name="language_options_select">
         <item>English</item>
         <item>Hebrew</item>
