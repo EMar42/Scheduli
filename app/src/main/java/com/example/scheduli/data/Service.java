@@ -4,6 +4,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 @IgnoreExtraProperties
 public class Service {
@@ -15,14 +16,6 @@ public class Service {
     private Map<String, ArrayList<Sessions>> dailySessions; // key is a date (day/month/year).
 
     public Service() {
-    }
-
-    public Service(String name, float cost, int singleSessionInMinutes, Map<String, WorkDay> workingDays, Map<String, ArrayList<Sessions>> dailySessions) {
-        this.name = name;
-        this.cost = cost;
-        this.singleSessionInMinutes = singleSessionInMinutes;
-        this.workingDays = workingDays;
-        this.dailySessions = dailySessions;
     }
 
     public String getName() {
@@ -63,5 +56,24 @@ public class Service {
 
     public void setDailySessions(Map<String, ArrayList<Sessions>> dailySessions) {
         this.dailySessions = dailySessions;
+    }
+
+    //Getting map values:
+    public Set getSetOfMap(){
+
+        Set set = this.workingDays.entrySet();
+
+        //************************ use to print Map values: ****************************//
+//        Iterator itr=set.iterator();
+//        while(itr.hasNext()){
+//            //Converting to Map.Entry so that we can get key and value separately
+//            Map.Entry entry=(Map.Entry)itr.next();
+//            System.out.println("key:" entry.getKey()+" value: "+entry.getValue());
+//        }
+        //****************************************************************************//
+
+
+        return set;
+
     }
 }
