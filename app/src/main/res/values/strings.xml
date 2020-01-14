@@ -76,6 +76,7 @@
     <string name="address">Address</string>
     <string name="call_business">Call Business</string>
     <string name="provider_profile_picture">provider profile picture</string>
+    <string name="provider_missing_phone_error_message">Provider doesn\'t have phone number provided</string>
     <string-array name="language_options_select">
         <item>English</item>
         <item>Hebrew</item>

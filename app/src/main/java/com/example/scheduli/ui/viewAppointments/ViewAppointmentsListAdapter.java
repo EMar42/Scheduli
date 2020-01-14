@@ -141,6 +141,13 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
         callback.onCallback();
     }
 
+    public void clearJoinedList() {
+        if (joinedAppointments != null && shownJoinedAppointments != null) {
+            joinedAppointments.clear();
+            shownJoinedAppointments.clear();
+        }
+    }
+
 
     public class AppointmentViewHolder extends RecyclerView.ViewHolder {
         TextView appointmentTitle;

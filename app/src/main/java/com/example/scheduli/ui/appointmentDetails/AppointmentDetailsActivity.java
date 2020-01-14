@@ -1,10 +1,14 @@
 package com.example.scheduli.ui.appointmentDetails;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
@@ -19,7 +23,7 @@ import java.util.Date;
 
 public class AppointmentDetailsActivity extends BaseMenuActivity {
     public static final String APPOINTMENT_DETAILS = "AppointmentDetailsActivityPassedClass";
-    public static final String DETAIILS_TAG = "Appointment Details Activity";
+    public static final String DETAILS_TAG = "Appointment Details Activity";
 
     private ImageView profileImage;
     private ImageButton callProviderBtn;
@@ -41,10 +45,26 @@ public class AppointmentDetailsActivity extends BaseMenuActivity {
 
         fillAppointmentFields();
 
+        callProviderBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!checkIfEmpty(providerPhoneTv)) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + providerPhoneTv.getText().toString()));
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(AppointmentDetailsActivity.this, getString(R.string.provider_missing_phone_error_message), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
     }
 
+    private boolean checkIfEmpty(TextView textView) {
+        return textView.getText().toString().isEmpty();
+    }
+
     private void fillAppointmentFields() {
+        Log.i(DETAILS_TAG, "Getting information from intent to display in the activity");
         Intent intent = getIntent();
         joinedAppointment = intent.getParcelableExtra(APPOINTMENT_DETAILS);
 

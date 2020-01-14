@@ -91,19 +91,19 @@ public class AppointmentFragment extends Fragment {
         adapter = new ViewAppointmentsListAdapter(view.getContext(), new TriggerCallback() {
             @Override
             public void onCallback() {
-                if (adapter.getItemCount() > 0) {
-                    appointmentRecyclerView.setVisibility(View.VISIBLE);
-                    filterGroup.setVisibility(View.VISIBLE);
-                    noAppointmentsTextView.setVisibility(View.GONE);
-                    noAppointeesTextViewDescription.setVisibility(View.GONE);
-                } else {
-                    appointmentRecyclerView.setVisibility(View.GONE);
-                    filterGroup.setVisibility(View.INVISIBLE);
-                    noAppointmentsTextView.setVisibility(View.VISIBLE);
-                    noAppointeesTextViewDescription.setVisibility(View.VISIBLE);
-                }
+                appointmentRecyclerView.setVisibility(View.VISIBLE);
+                filterGroup.setVisibility(View.VISIBLE);
+                noAppointmentsTextView.setVisibility(View.GONE);
+                noAppointeesTextViewDescription.setVisibility(View.GONE);
+
             }
         });
+        if (adapter.getItemCount() > 0) {
+            appointmentRecyclerView.setVisibility(View.GONE);
+            filterGroup.setVisibility(View.INVISIBLE);
+            noAppointmentsTextView.setVisibility(View.VISIBLE);
+            noAppointeesTextViewDescription.setVisibility(View.VISIBLE);
+        }
         appointmentRecyclerView.setAdapter(adapter);
         appointmentRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
@@ -126,6 +126,12 @@ public class AppointmentFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.clearJoinedList();
+        filterGroup.check(R.id.appointment_radio_filter_all);
+    }
 
     private void initFragmentView(@NonNull View view) {
         noAppointmentsTextView = view.findViewById(R.id.tv_appointment_no_show);
