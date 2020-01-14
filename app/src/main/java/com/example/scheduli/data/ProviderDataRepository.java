@@ -14,6 +14,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 @IgnoreExtraProperties
 
 public class ProviderDataRepository {
@@ -75,4 +79,18 @@ public class ProviderDataRepository {
     }
 
 
+
+    public void setServices(String uid, Service service){
+
+        dataBaseReference.child(uid).child("services").setValue(service);
+        Log.d(TAG_PROVIDER_REPOSITORY, "Services updated. " + service.getName());
+
+
+    }
+
+
+
 }
+
+
+

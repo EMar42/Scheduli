@@ -67,9 +67,9 @@ public class Service {
     }
 
     //Getting map values:
-    public Set getSetOfMap(){
+//    public Set getSetOfMap(){
 
-        Set set = this.workingDays.entrySet();
+//        Set set = this.workingDays.entrySet();
 
         //************************ use to print Map values: ****************************//
 //        Iterator itr=set.iterator();
@@ -81,7 +81,7 @@ public class Service {
         //****************************************************************************//
 
 
-        return set;
+//        return set;
 
-    }
+//    }
 }
