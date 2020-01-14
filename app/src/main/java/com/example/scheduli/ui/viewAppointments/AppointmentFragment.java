@@ -23,6 +23,7 @@ import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.ProviderDataRepository;
 import com.example.scheduli.data.fireBase.ProviderDataBaseCallback;
 import com.example.scheduli.data.joined.JoinedAppointment;
+import com.example.scheduli.utils.TriggerCallback;
 import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;

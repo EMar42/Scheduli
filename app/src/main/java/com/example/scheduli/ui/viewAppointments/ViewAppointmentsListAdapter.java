@@ -16,6 +16,7 @@ import com.example.scheduli.R;
 import com.example.scheduli.data.ProviderDataRepository;
 import com.example.scheduli.data.joined.JoinedAppointment;
 import com.example.scheduli.ui.appointmentDetails.AppointmentDetailsActivity;
+import com.example.scheduli.utils.TriggerCallback;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
