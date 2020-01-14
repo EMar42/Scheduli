@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Use this class for actions with the database that concern users.
@@ -76,5 +77,9 @@ public class UserDataRepository {
         this.dataBaseReference.addListenerForSingleValueEvent(userEventListener);
     }
 
+    public void updateUserProfile(String uid, User user) {
+        Map<String, Object> userValues = user.toMap();
+        this.dataBaseReference.child(uid).updateChildren(userValues);
+    }
 
 }

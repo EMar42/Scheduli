@@ -1,8 +1,11 @@
 package com.example.scheduli.data;
 
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @IgnoreExtraProperties
 public class User {
@@ -47,12 +50,23 @@ public class User {
         this.email = email;
     }
 
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("userName", userName);
+        map.put("fullName", fullName);
+        map.put("email", email);
+        map.put("phoneNumber", phoneNumber);
+        map.put("appointments", appointments);
+
+        return map;
     }
 }
