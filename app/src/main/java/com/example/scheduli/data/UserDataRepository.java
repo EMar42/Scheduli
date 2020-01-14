@@ -23,7 +23,6 @@ public class UserDataRepository {
     private static UserDataRepository instance;
     private final DatabaseReference dataBaseReference;
     private DatabaseReference userReference;
-    private FirebaseQueryLiveData userAppointmentsLiveData;
 
     public static UserDataRepository getInstance() {
         if (instance == null) {
@@ -52,8 +51,7 @@ public class UserDataRepository {
 
     public LiveData<DataSnapshot> getUserAppointmentsSnapshot() {
         Log.i(TAG_USER_REPOSITORY, "Retrieving User appointments");
-        userAppointmentsLiveData = new FirebaseQueryLiveData(userReference.child("appointments"));
-        return userAppointmentsLiveData;
+        return new FirebaseQueryLiveData(userReference.child("appointments"));
     }
 
     public void addAppointmentToUser(String uid, ArrayList<Appointment> appointments) {

@@ -99,6 +99,7 @@ public class AppointmentFragment extends Fragment {
                 filterGroup.setVisibility(View.VISIBLE);
                 noAppointmentsTextView.setVisibility(View.GONE);
                 noAppointeesTextViewDescription.setVisibility(View.GONE);
+                adapter.triggerSorting();
             }
         });
         if (adapter.getItemCount() > 0) {
@@ -133,6 +134,7 @@ public class AppointmentFragment extends Fragment {
     public void onResume() {
         super.onResume();
         adapter.clearJoinedList();
+        adapter.triggerSorting();
         filterGroup.check(R.id.appointment_radio_filter_all);
     }
 
