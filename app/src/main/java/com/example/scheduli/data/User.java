@@ -65,7 +65,12 @@ public class User {
         map.put("fullName", fullName);
         map.put("email", email);
         map.put("phoneNumber", phoneNumber);
-        map.put("appointments", appointments);
+        HashMap<String, Appointment> appointmentHashMap = new HashMap<>();
+        for (int i = 0; i < appointments.size(); i++) {
+            appointmentHashMap.put(Integer.toString(i), appointments.get(i));
+        }
+
+        map.put("appointments", appointmentHashMap);
 
         return map;
     }

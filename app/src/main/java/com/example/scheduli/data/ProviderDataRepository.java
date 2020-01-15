@@ -5,18 +5,14 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
+import com.example.scheduli.data.fireBase.DataBaseCallBackOperation;
 import com.example.scheduli.data.fireBase.FirebaseQueryLiveData;
-import com.example.scheduli.data.fireBase.ProviderDataBaseCallback;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 @IgnoreExtraProperties
 
@@ -51,13 +47,13 @@ public class ProviderDataRepository {
      * Use this if you want to retrive a single provider from the database without any more updates.
      * Provide Uid and a callback interface to receive the values in your caller.
      * */
-    public void getProviderByUid(final String uid, final ProviderDataBaseCallback callback) {
+    public void getProviderByUid(final String uid, final DataBaseCallBackOperation callback) {
         ValueEventListener providerListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.i(TAG_PROVIDER_REPOSITORY, "Getting data from database on " + uid);
                 Provider provider = dataSnapshot.child(uid).getValue(Provider.class);
-                callback.onCallBack(provider);
+                callback.callBack(provider);
             }
 
             @Override
