@@ -18,7 +18,7 @@ import java.util.Set;
 @IgnoreExtraProperties
 public class Provider {
 
-     private static final String TAG_PROVIDER = "Provider activity";
+     private static final String SERVICE_TAG = "Provider activity";
 
     //Provider details
     private String imageUrl;
@@ -139,16 +139,17 @@ public class Provider {
             }};
 
 
-            //Create a new Service:
-            Service service = new Service(name, cost, singleSessionInMinutes, tempWorkingDayMap, tempDailySessionsMap);
 
-            this.services.add(service);
-            Log.d(TAG_PROVIDER, "Service Added: " + name);
+            //Create a new Service:
+            //Service service = new Service(name, cost, singleSessionInMinutes, tempWorkingDayMap, tempDailySessionsMap);
+
+            //this.services.add(service);
+            Log.d(SERVICE_TAG, "Service Added: " + name);
             return true; //Service Added Succesfully
 
         }
         else {
-            Log.e(TAG_PROVIDER,"Failed to add a new service");
+            Log.e(SERVICE_TAG,"Failed to add a new service");
             return false;
         }
 
