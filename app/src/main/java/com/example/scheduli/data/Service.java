@@ -66,22 +66,4 @@ public class Service {
         this.dailySessions = dailySessions;
     }
 
-    //Getting map values:
-//    public Set getSetOfMap(){
-
-//        Set set = this.workingDays.entrySet();
-
-        //************************ use to print Map values: ****************************//
-//        Iterator itr=set.iterator();
-//        while(itr.hasNext()){
-//            //Converting to Map.Entry so that we can get key and value separately
-//            Map.Entry entry=(Map.Entry)itr.next();
-//            System.out.println("key:" entry.getKey()+" value: "+entry.getValue());
-//        }
-        //****************************************************************************//
-
-
-//        return set;
-
-//    }
 }

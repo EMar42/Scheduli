@@ -1,6 +1,7 @@
 package com.example.scheduli.ui.SearchProvider;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
@@ -26,6 +27,9 @@ import com.example.scheduli.data.ProvidersAdapter;
 import com.example.scheduli.data.User;
 import com.example.scheduli.ui.BookingAppointment.BookingAppointmentActivity;
 import com.example.scheduli.utils.UsersUtils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,7 +42,7 @@ import java.util.List;
 
 public class SearchProviderActivity extends AppCompatActivity implements ProvidersAdapter.OnProviderListener{
 
-    private static final String TAG = "SearchProviderActivity";
+    private static final String TAG_SEARCH_ACT = "SearchProviderActivity";
     private EditText searchField;
     private ImageButton searchBtn;
     private RecyclerView recyclerView;
@@ -48,6 +52,7 @@ public class SearchProviderActivity extends AppCompatActivity implements Provide
     UsersUtils usersUtils;
     ProvidersAdapter adapter;
      DatabaseReference ref;
+     private static String PID = null;
 
 
     @Override
@@ -77,6 +82,7 @@ public class SearchProviderActivity extends AppCompatActivity implements Provide
                     }
                 }
                 else {
+                    getAllProviders();
               Toast.makeText(SearchProviderActivity.this, "Empty search...", Toast.LENGTH_SHORT).show();
 
                 }
@@ -129,33 +135,23 @@ public class SearchProviderActivity extends AppCompatActivity implements Provide
     ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
             providersList.clear();
-//            Toast.makeText(SearchProviderActivity.this, "change called", Toast.LENGTH_SHORT).show();
 
             if(dataSnapshot.exists()){
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-//                Toast.makeText(SearchProviderActivity.this, "OnDataChange: called", Toast.LENGTH_SHORT).show();
 
-
-                //TODO: App crashed because services list isn't loaded properly (try catch is temporary solution)
-                    // Exception catch: 'Expected a List while deserializing, but got a class java.util.HashMap'
-
-                try {
                     Provider provider = snapshot.getValue(Provider.class);
                     providersList.add(provider);
-                }catch (Exception e){
-                    Toast.makeText(SearchProviderActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-
-                }
-
 //                    Provider provider = new Provider();
 //                    String id = UsersUtils.getInstance().getCurrentUserUid();
 //                    provider.setCompanyName(snapshot.child(id).getValue(Provider.class).getCompanyName());
 
                 }
+
                 if(!providersList.isEmpty()) {
-                    //adapter = new ProvidersAdapter(providersList);
+//                    adapter = new ProvidersAdapter(providersList);
                     recyclerView.setAdapter(adapter);
                 }
             }
@@ -202,38 +198,39 @@ public class SearchProviderActivity extends AppCompatActivity implements Provide
     @Override
     public void onProviderClick(int position) {
 
-        Provider provider = providersList.get(position);
-        String company = providersList.get(position).getCompanyName();
-        String profession = providersList.get(position).getProfession();
+        Log.d(TAG_SEARCH_ACT, "onProviderClick: clicked");
 
+        final Provider provider = providersList.get(position);
+        final String[] uid = new String[1];
 
-        //TODO: Get Provider UID
-        final DatabaseReference providersRef = FirebaseDatabase.getInstance().getReference().child("providers");
-
-        ValueEventListener eventListener = new ValueEventListener() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        myRef.child("providers").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String uid = ds.getKey();
-//                    Toast.makeText(SearchProviderActivity.this, uid, Toast.LENGTH_SHORT).show();
+
+                for(DataSnapshot item_snapshot:dataSnapshot.getChildren()) {
+
+                    if(provider.getCompanyName().contains(item_snapshot.child("companyName").getValue().toString())) {
+
+                    Log.d( TAG_SEARCH_ACT, "User Choose: " + item_snapshot.toString());
+                        uid[0] = item_snapshot.getKey();
+                        System.out.println("ID: " + uid[0]); //TEST
+
+                        Intent intent = new Intent(SearchProviderActivity.this, BookingAppointmentActivity.class);
+                        intent.putExtra("companyName", provider.getCompanyName());
+                        intent.putExtra("pid", uid[0]);
+                        startActivity(intent);
+                    }
+
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.e(TAG_SEARCH_ACT, "onProviderClick: onCancelled called ");
             }
-        };
-
-
-        String pid = "what is my id ?!?!";
-
-        Log.d(TAG, "onProviderClick: clicked");
-        Intent intent = new Intent(SearchProviderActivity.this, BookingAppointmentActivity.class);
-        intent.putExtra("companyName", company);
-        intent.putExtra("pid", pid);
-
-        startActivity(intent);
+        });
     }
 }
 
