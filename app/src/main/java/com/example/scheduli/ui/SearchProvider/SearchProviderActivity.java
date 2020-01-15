@@ -2,10 +2,8 @@ package com.example.scheduli.ui.SearchProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -14,16 +12,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.scheduli.R;
 import com.example.scheduli.data.Provider;
-import com.example.scheduli.data.ProviderDataRepository;
 import com.example.scheduli.data.ProvidersAdapter;
-import com.example.scheduli.data.User;
 import com.example.scheduli.ui.BookingAppointment.BookingAppointmentActivity;
 import com.example.scheduli.utils.UsersUtils;
 import com.google.firebase.database.DataSnapshot;

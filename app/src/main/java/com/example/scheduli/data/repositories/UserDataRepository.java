@@ -1,10 +1,12 @@
-package com.example.scheduli.data;
+package com.example.scheduli.data.repositories;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
+import com.example.scheduli.data.Appointment;
+import com.example.scheduli.data.User;
 import com.example.scheduli.data.fireBase.DataBaseCallBackOperation;
 import com.example.scheduli.data.fireBase.FirebaseQueryLiveData;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +27,7 @@ public class UserDataRepository {
     private static UserDataRepository instance;
     private final DatabaseReference dataBaseReference;
     private DatabaseReference userReference;
+    private ValueEventListener appointmentListener;
 
     public static UserDataRepository getInstance() {
         if (instance == null) {
@@ -54,6 +57,33 @@ public class UserDataRepository {
     public LiveData<DataSnapshot> getUserAppointmentsSnapshot() {
         Log.i(TAG_USER_REPOSITORY, "Retrieving User appointments");
         return new FirebaseQueryLiveData(userReference.child("appointments"));
+    }
+
+    public void getUserAppointments(final DataBaseCallBackOperation callBack) {
+        appointmentListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.i(TAG_USER_REPOSITORY, "Reading appointment data");
+                ArrayList<Appointment> appointments = new ArrayList<>();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    appointments.add(snapshot.getValue(Appointment.class));
+                }
+
+                callBack.callBack(appointments);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG_USER_REPOSITORY, "Failed to read data of appointment");
+            }
+        };
+
+        userReference.child("appointments").addValueEventListener(appointmentListener);
+    }
+
+    public void detachAppointmentListener() {
+        userReference.removeEventListener(appointmentListener);
     }
 
     public void addAppointmentsListToUser(String uid, ArrayList<Appointment> appointments) {
@@ -122,4 +152,6 @@ public class UserDataRepository {
     public void updateUserAppointments(String uid, Appointment appointments) {
 
     }
+
+
 }

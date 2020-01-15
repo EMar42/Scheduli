@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.scheduli.data.Appointment;
-import com.example.scheduli.data.UserDataRepository;
+import com.example.scheduli.data.repositories.UserDataRepository;
 import com.google.firebase.database.DataSnapshot;
 
 import java.util.List;

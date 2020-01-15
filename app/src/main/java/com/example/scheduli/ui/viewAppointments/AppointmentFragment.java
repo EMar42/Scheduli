@@ -20,9 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.scheduli.R;
 import com.example.scheduli.data.Appointment;
 import com.example.scheduli.data.Provider;
-import com.example.scheduli.data.ProviderDataRepository;
-import com.example.scheduli.data.fireBase.ProviderDataBaseCallback;
+import com.example.scheduli.data.fireBase.DataBaseCallBackOperation;
 import com.example.scheduli.data.joined.JoinedAppointment;
+import com.example.scheduli.data.repositories.ProviderDataRepository;
 import com.example.scheduli.utils.TriggerCallback;
 import com.google.firebase.database.DataSnapshot;
 
@@ -72,9 +72,11 @@ public class AppointmentFragment extends Fragment {
                 }
 
                 for (final Appointment appointment : appointments) {
-                    ProviderDataRepository.getInstance().getProviderByUid(appointment.getProviderUid(), new ProviderDataBaseCallback() {
+                    ProviderDataRepository.getInstance().getProviderByUid(appointment.getProviderUid(), new DataBaseCallBackOperation() {
                         @Override
-                        public void onCallBack(Provider provider) {
+                        public void callBack(Object object) {
+                            Provider provider = (Provider) object;
+
                             JoinedAppointment joinedAppointment = new JoinedAppointment(appointment, provider.getImageUrl(), provider.getCompanyName()
                                     , provider.getProfession(), provider.getPhoneNumber(), provider.getAddress());
                             adapter.addJoinedAppointment(joinedAppointment);

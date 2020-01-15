@@ -1,10 +1,12 @@
-package com.example.scheduli.data;
+package com.example.scheduli.data.repositories;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
+import com.example.scheduli.data.Provider;
+import com.example.scheduli.data.Service;
 import com.example.scheduli.data.fireBase.DataBaseCallBackOperation;
 import com.example.scheduli.data.fireBase.FirebaseQueryLiveData;
 import com.google.firebase.database.DataSnapshot;

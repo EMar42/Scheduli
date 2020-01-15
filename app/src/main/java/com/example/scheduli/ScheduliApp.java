@@ -3,6 +3,7 @@ package com.example.scheduli;
 import android.app.Application;
 
 import com.example.scheduli.data.fireBase.DataBaseSetup;
+import com.example.scheduli.utils.UpcomingAppointmentNotification;
 
 /***
  * Override class for the application startup actions.
@@ -14,5 +15,6 @@ public class ScheduliApp extends Application {
     public void onCreate() {
         super.onCreate();
         DataBaseSetup.setDatabasePersistentOn();
+        UpcomingAppointmentNotification.createNotificationChannel(this);
     }
 }

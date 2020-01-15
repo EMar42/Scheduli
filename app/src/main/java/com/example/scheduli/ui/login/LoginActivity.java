@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.scheduli.R;
-import com.example.scheduli.data.UserDataRepository;
+import com.example.scheduli.data.repositories.UserDataRepository;
 import com.example.scheduli.ui.forgotPassowrd.ForgotPasswordActivity;
 import com.example.scheduli.ui.mainScreen.MainActivity;
 import com.example.scheduli.ui.signup.SignupActivity;

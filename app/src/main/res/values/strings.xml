@@ -39,12 +39,13 @@
     <string name="app_settings">App Settings</string>
     <string name="logout">Logout</string>
 
+    //Sign-up notification
     <string name="sign_up_notification_placeholder_text_template">
         We want to welcome you to our app %1$s.
         Thank you…
     </string>
     <string name="new_user_channel">added new user</string>
-    <string name="channel_description">notification sent for new users added to the app</string>
+    <string name="signup_notification_channel_description">notification sent for new users added to the app</string>
     <string name="reschedule">Reschedule</string>
 
 
@@ -94,6 +95,18 @@
         <item>ru_</item>
         <item>pt_BR</item>
     </string-array>
+
+    //upcoming notifications
+    <string name="upcoming_appointment_notification_title">Upcoming appointment
+    </string>
+    <string name="upcoming_appointment_notification_main_text">
+        You have upcoming appointment with %1$s at %2$s
+    </string>
+    <string name="upcoming_notification_channel">upcoming channel</string>
+    <string name="upcoming_notification_channel_description">Used for reminding user about upcoming appointment</string>
+
+    <string name="action_share">Share</string>
+    <string name="action_reply">Reply</string>
 
 
 </resources>

@@ -27,8 +27,6 @@ public class SignUpNotification {
                               final int number) {
         final Resources res = context.getResources();
 
-        // This image is used as the notification's large icon (thumbnail).
-        // TODO: Remove this if your notification has no relevant thumbnail.
         final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.ic_scheduli_app_icon);
 
 
@@ -39,13 +37,7 @@ public class SignUpNotification {
         final String contentText = res.getString(R.string.thank_you);
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_SIGN_IN_CHANNEL_ID)
-
-                // Set appropriate defaults for the notification light, sound,
-                // and vibration.
                 .setDefaults(Notification.DEFAULT_ALL)
-
-                // Set required fields, including the small icon, the
-                // notification title, and text.
                 .setSmallIcon(R.drawable.ic_stat_sign_up)
                 .setContentTitle(title)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -64,7 +56,7 @@ public class SignUpNotification {
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
         CharSequence name = context.getString(R.string.new_user_channel);
-        String description = context.getString(R.string.channel_description);
+        String description = context.getString(R.string.signup_notification_channel_description);
         int importance = NotificationManager.IMPORTANCE_DEFAULT;
         NotificationChannel channel = new NotificationChannel(NOTIFICATION_SIGN_IN_CHANNEL_ID, name, importance);
         channel.setDescription(description);

@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.scheduli.R;
 import com.example.scheduli.data.User;
-import com.example.scheduli.data.UserDataRepository;
+import com.example.scheduli.data.repositories.UserDataRepository;
 import com.example.scheduli.utils.SignUpNotification;
 import com.example.scheduli.utils.UsersUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
