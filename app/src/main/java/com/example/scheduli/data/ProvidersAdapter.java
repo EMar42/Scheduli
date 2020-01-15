@@ -99,7 +99,7 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
         void onProviderClick(int position);
     }
 
-    //TODO: immplement dynamic search
+    //TODO: immplement dynamic search (OPT)
     // *********************** Dynamic search *************************
 
 //    Filter filter = new Filter() {

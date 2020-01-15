@@ -4,6 +4,6 @@
     <color name="colorPrimaryDark">#3232AF</color>
     <color name="colorAccent">#D81B60</color>
     <color name="white">#fff</color>
-    <color name="black">#000</color>
+    <color name="black">#000000</color>
     <color name="warning_red">#CA1616</color>
 </resources>
