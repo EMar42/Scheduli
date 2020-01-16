@@ -77,7 +77,7 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
 
             if (current.getAppointment().getAlarmReminderTime() != 0 || new Date(Calendar.getInstance().getTimeInMillis()).before(new Date(current.getAppointment().getAlarmReminderTime()))) {
                 @SuppressLint("SimpleDateFormat") DateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                appointmentViewHolder.appointmentAlarm.setText(simpleDateFormat.format(new Date(current.getAppointment().getAlarmReminderTime())));
+                appointmentViewHolder.appointmentAlarm.setText(context.getString(R.string.alarm_reminder_text, simpleDateFormat.format(new Date(current.getAppointment().getAlarmReminderTime()))));
             }
             appointmentViewHolder.currentPosition = position;
         }

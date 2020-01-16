@@ -167,7 +167,6 @@ public class AppointmentDetailsActivity extends BaseMenuActivity {
             beforeAppointment.add(Calendar.MINUTE, -1 * delayInMinutes);
             Log.i("TEST TIME", beforeAppointment.getTime().toString());
 
-
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, beforeAppointment.getTimeInMillis(), pendingIntent);
         }

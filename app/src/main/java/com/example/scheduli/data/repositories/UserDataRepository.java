@@ -131,7 +131,7 @@ public class UserDataRepository {
                     Appointment current = snapshot.getValue(Appointment.class);
                     if (current.equals(appointment)) {
                         Log.i(TAG_USER_REPOSITORY, "Updating user appointment " + snapshot.getKey());
-                        userReference.updateChildren(appointment.toMap());
+                        userReference.child("appointments").child(snapshot.getKey()).updateChildren(appointment.toMap());
                     }
                 }
             }

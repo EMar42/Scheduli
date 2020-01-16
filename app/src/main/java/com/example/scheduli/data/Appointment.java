@@ -144,8 +144,7 @@ public class Appointment implements Parcelable {
         return getStart() == that.getStart() &&
                 getEnd() == that.getEnd() &&
                 getProviderUid().equals(that.getProviderUid()) &&
-                getServiceName().equals(that.getServiceName()) &&
-                getServiceCost().equals(that.getServiceCost());
+                getServiceName().equals(that.getServiceName());
     }
 
     @Override
