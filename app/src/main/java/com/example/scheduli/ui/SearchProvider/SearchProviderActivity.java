@@ -199,18 +199,17 @@ public class SearchProviderActivity extends AppCompatActivity implements Provide
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
+
         myRef.child("providers").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                for(DataSnapshot item_snapshot:dataSnapshot.getChildren()) {
+                for (DataSnapshot item_snapshot : dataSnapshot.getChildren()) {
 
-                    if(provider.getCompanyName().contains(item_snapshot.child("companyName").getValue().toString())) {
-
-                    Log.d( TAG_SEARCH_ACT, "User Choose: " + item_snapshot.toString());
+                    //The key is by company name.
+                    if (provider.getCompanyName().contains(item_snapshot.child("companyName").getValue().toString())) {
+                        Log.d(TAG_SEARCH_ACT, "User Choose: " + item_snapshot.toString());
                         uid[0] = item_snapshot.getKey();
-                        System.out.println("ID: " + uid[0]); //TEST
-
                         Intent intent = new Intent(SearchProviderActivity.this, BookingAppointmentActivity.class);
                         intent.putExtra("companyName", provider.getCompanyName());
                         intent.putExtra("pid", uid[0]);

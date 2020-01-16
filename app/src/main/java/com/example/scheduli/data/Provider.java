@@ -128,6 +128,7 @@ public class Provider {
             }};
 
 
+
             //Create a new dailySessions map:
             //  new Array<Sessions>:
             final ArrayList<Sessions> tempSessionsArray = new ArrayList<>();
