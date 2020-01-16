@@ -18,7 +18,7 @@ import java.util.Set;
 @IgnoreExtraProperties
 public class Provider {
 
-     private static final String TAG_PROVIDER = "Provider activity";
+     private static final String SERVICE_TAG = "Provider activity";
 
     //Provider details
     private String imageUrl;
@@ -116,23 +116,21 @@ public class Provider {
         this.address = address;
     }
 
-    public Boolean addService(String name, float cost, int singleSessionInMinutes, final String dayOfWeek, final String date, long workStart, long workEnd , long serviceStart, long serviceEnd, String userUid, boolean isAvailable) { //define time
+    public Boolean addService(String name, float cost, int singleSessionInMinutes, final String dayOfWeek, final String date, final Long time, long start, long end, String userUid, boolean isAvailable) { //define time
 
         int day = Integer.valueOf(dayOfWeek);
         if(day < 0 || day >= 7) {
 
             //Create a new working days map:
-//            long start, long end
-            final WorkDay workDay = new WorkDay(workStart,workEnd);
-            Map<String, WorkDay> tempWorkingDayMap = new HashMap<String, WorkDay>() {{ // work
-                put(dayOfWeek, workDay);
+            Map<String, Long> tempWorkingDayMap = new HashMap<String, Long>() {{ // work
+                put(dayOfWeek, time);
             }};
 
 
             //Create a new dailySessions map:
             //  new Array<Sessions>:
             final ArrayList<Sessions> tempSessionsArray = new ArrayList<>();
-            tempSessionsArray.add(new Sessions(serviceStart, serviceEnd, userUid, isAvailable));
+            tempSessionsArray.add(new Sessions(start, end, userUid, isAvailable));
 
             Map<String, ArrayList<Sessions>> tempDailySessionsMap = new HashMap<String, ArrayList<Sessions>>() {{
                 put(date, tempSessionsArray);
@@ -143,12 +141,12 @@ public class Provider {
             Service service = new Service(name, cost, singleSessionInMinutes, tempWorkingDayMap, tempDailySessionsMap);
 
             this.services.add(service);
-            Log.d(TAG_PROVIDER, "Service Added: " + name);
+            Log.d(SERVICE_TAG, "Service Added: " + name);
             return true; //Service Added Succesfully
 
         }
         else {
-            Log.e(TAG_PROVIDER,"Failed to add a new service");
+            Log.e(SERVICE_TAG,"Failed to add a new service");
             return false;
         }
 

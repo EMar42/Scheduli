@@ -34,5 +34,4 @@ public class ProfileFragment extends Fragment {
         mViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
         // TODO: Use the ViewModel
     }
-
 }
