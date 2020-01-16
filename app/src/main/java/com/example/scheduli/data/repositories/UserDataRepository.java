@@ -47,6 +47,32 @@ public class UserDataRepository {
     public void keepInSync(String uid) {
         userReference = this.dataBaseReference.child(uid);
         userReference.keepSynced(true);
+
+    }
+
+    public void getUserAppointments(final DataBaseCallBackOperation callBackOperation) {
+        if (appointmentListener == null) {
+            appointmentListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    ArrayList<Appointment> appointments = new ArrayList<>();
+                    Iterable<DataSnapshot> appoinmentIndex = dataSnapshot.getChildren();
+                    for (DataSnapshot appointmentData : appoinmentIndex) {
+                        Appointment appointment = appointmentData.getValue(Appointment.class);
+                        appointments.add(appointment);
+                    }
+
+                    callBackOperation.callBack(appointments);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e(TAG_USER_REPOSITORY, "Error cannot get data " + databaseError.getMessage());
+                }
+            };
+
+            userReference.child("appointments").addValueEventListener(appointmentListener);
+        }
     }
 
     public void createNewUserInApp(String uid, User user) {
@@ -143,5 +169,7 @@ public class UserDataRepository {
         });
     }
 
-
+    public void clearEventsOfAppointments() {
+        userReference.child("appointments").removeEventListener(this.appointmentListener);
+    }
 }

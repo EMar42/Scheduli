@@ -75,7 +75,7 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
             String timeString = timeFormatter.format(start) + " - " + timeFormatter.format(end);
             appointmentViewHolder.appointmentTime.setText(timeString);
 
-            if (current.getAppointment().getAlarmReminderTime() != 0 || new Date(Calendar.getInstance().getTimeInMillis()).before(new Date(current.getAppointment().getAlarmReminderTime()))) {
+            if (current.getAppointment().getAlarmReminderTime() != 0 && new Date(Calendar.getInstance().getTimeInMillis()).after(new Date(current.getAppointment().getAlarmReminderTime()))) {
                 @SuppressLint("SimpleDateFormat") DateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 appointmentViewHolder.appointmentAlarm.setText(context.getString(R.string.alarm_reminder_text, simpleDateFormat.format(new Date(current.getAppointment().getAlarmReminderTime()))));
             }
@@ -138,24 +138,19 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
         }
     };
 
-    void addJoinedAppointment(JoinedAppointment joinedAppointment) {
-        this.joinedAppointments.add(joinedAppointment);
-        this.shownJoinedAppointments = new ArrayList<>(joinedAppointments);
-        notifyDataSetChanged();
-        callback.onCallback();
-    }
 
-    void clearJoinedList() {
-        if (joinedAppointments != null && shownJoinedAppointments != null) {
-            joinedAppointments.clear();
-            shownJoinedAppointments.clear();
-        }
-    }
 
     void triggerSorting() {
         if (shownJoinedAppointments != null) {
             Collections.sort(shownJoinedAppointments, JoinedAppointment.BY_DATETIME_DESCENDING);
         }
+    }
+
+    void setJoinedAppointments(ArrayList<JoinedAppointment> joinedAppointments) {
+        this.joinedAppointments = joinedAppointments;
+        this.shownJoinedAppointments = new ArrayList<>(joinedAppointments);
+        callback.onCallback();
+        notifyDataSetChanged();
     }
 
     public class AppointmentViewHolder extends RecyclerView.ViewHolder {
@@ -180,9 +175,11 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent detailsIntent = new Intent(context, AppointmentDetailsActivity.class);
-                    detailsIntent.putExtra(AppointmentDetailsActivity.APPOINTMENT_DETAILS, shownJoinedAppointments.get(currentPosition));
-                    context.startActivity(detailsIntent);
+                    if (shownJoinedAppointments.size() > 0) {
+                        Intent detailsIntent = new Intent(context, AppointmentDetailsActivity.class);
+                        detailsIntent.putExtra(AppointmentDetailsActivity.APPOINTMENT_DETAILS, shownJoinedAppointments.get(currentPosition));
+                        context.startActivity(detailsIntent);
+                    }
                 }
             });
         }

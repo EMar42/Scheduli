@@ -10,20 +10,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.scheduli.R;
-import com.example.scheduli.data.Appointment;
-import com.example.scheduli.data.Provider;
-import com.example.scheduli.data.fireBase.DataBaseCallBackOperation;
 import com.example.scheduli.data.joined.JoinedAppointment;
-import com.example.scheduli.data.repositories.ProviderDataRepository;
 import com.example.scheduli.utils.TriggerCallback;
-import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
 
@@ -52,36 +46,17 @@ public class AppointmentFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(AppointmentViewModel.class);
 
-        LiveData<DataSnapshot> liveData = mViewModel.getAllAppointments();
-        observeAppointments(liveData);
-    }
-
-    private void observeAppointments(LiveData<DataSnapshot> liveData) {
-        liveData.observe(this.getViewLifecycleOwner(), new Observer<DataSnapshot>() {
+        //fill appointment data later
+        mViewModel.getAllJoinedAppointments().observe(this, new Observer<ArrayList<JoinedAppointment>>() {
             @Override
-            public void onChanged(DataSnapshot dataSnapshot) {
-                ArrayList<Appointment> appointments = new ArrayList<>();
-                Iterable<DataSnapshot> appoinmentIndex = dataSnapshot.getChildren();
-                for (DataSnapshot appointmentData : appoinmentIndex) {
-                    Appointment appointment = appointmentData.getValue(Appointment.class);
-                    appointments.add(appointment);
-                }
+            public void onChanged(ArrayList<JoinedAppointment> joinedAppointments) {
+                adapter.setJoinedAppointments(joinedAppointments);
 
-                for (final Appointment appointment : appointments) {
-                    ProviderDataRepository.getInstance().getProviderByUid(appointment.getProviderUid(), new DataBaseCallBackOperation() {
-                        @Override
-                        public void callBack(Object object) {
-                            Provider provider = (Provider) object;
-
-                            JoinedAppointment joinedAppointment = new JoinedAppointment(appointment, provider.getImageUrl(), provider.getCompanyName()
-                                    , provider.getProfession(), provider.getPhoneNumber(), provider.getAddress());
-                            adapter.addJoinedAppointment(joinedAppointment);
-                        }
-                    });
-                }
             }
         });
     }
+
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -129,8 +104,6 @@ public class AppointmentFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        adapter.clearJoinedList();
-        adapter.triggerSorting();
         filterGroup.check(R.id.appointment_radio_filter_all);
     }
 
@@ -141,5 +114,9 @@ public class AppointmentFragment extends Fragment {
         filterGroup = view.findViewById(R.id.appointment_filter_radio_group);
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mViewModel.clearListeners();
+    }
 }
