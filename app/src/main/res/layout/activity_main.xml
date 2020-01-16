@@ -38,20 +38,6 @@
             app:itemTextColor="@color/white"
             app:menu="@menu/main_bottom_navigation_menu" />
 
-        <Button
-            android:id="@+id/addProvider_test"
-            android:layout_width="301dp"
-            android:layout_height="238dp"
-            android:text="add bigaibga Provider" />
-
-        <Button
-            android:id="@+id/addNewService_test"
-            android:layout_width="174dp"
-            android:layout_height="76dp"
-            android:background="@color/design_default_color_secondary"
-            android:text="add new service"
-            android:textStyle="bold" />
-
     </FrameLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -108,6 +108,8 @@
 
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
+    <string name="set_alarm_time">Set Alarm Time</string>
+    <string name="set_alarm_date">Set alarm date</string>
 
 
 </resources>
