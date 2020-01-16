@@ -1,6 +1,5 @@
 package com.example.scheduli.data;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,8 +52,8 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
 
         public ServiceViewHolder(@NonNull View itemView) {
             super(itemView);
-            serviceIcon = itemView.findViewById(R.id.service_icon);
-            serviceName = itemView.findViewById(R.id.service1_name);
+            serviceIcon = itemView.findViewById(R.id.slot_frame);
+            serviceName = itemView.findViewById(R.id.slot_time);
 
 
         }
