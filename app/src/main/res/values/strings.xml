@@ -104,10 +104,13 @@
     </string>
     <string name="upcoming_notification_channel">upcoming channel</string>
     <string name="upcoming_notification_channel_description">Used for reminding user about upcoming appointment</string>
+    <string name="alarm_reminder_text">Alarm set for %1$s</string>
 
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
     <string name="sample">Sample Here</string>
+    <string name="set_alarm_time">Set Alarm Time</string>
+    <string name="set_alarm_date">Set alarm date</string>
 
 
 </resources>

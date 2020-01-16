@@ -4,27 +4,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.scheduli.R;
-import com.example.scheduli.data.Appointment;
-import com.example.scheduli.data.Provider;
-import com.example.scheduli.data.fireBase.DataBaseCallBackOperation;
 import com.example.scheduli.data.joined.JoinedAppointment;
-import com.example.scheduli.data.repositories.ProviderDataRepository;
 import com.example.scheduli.utils.TriggerCallback;
-import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
 
@@ -35,9 +28,6 @@ public class AppointmentFragment extends Fragment {
     private TextView noAppointmentsTextView;
     private RecyclerView appointmentRecyclerView;
     private TextView noAppointeesTextViewDescription;
-    private RadioButton filterAllButton;
-    private RadioButton filterFutureButton;
-    private RadioButton filterPastButton;
     private RadioGroup filterGroup;
 
 
@@ -56,62 +46,44 @@ public class AppointmentFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(AppointmentViewModel.class);
 
-        LiveData<DataSnapshot> liveData = mViewModel.getAllAppointments();
-        observeAppointments(liveData);
-    }
-
-    private void observeAppointments(LiveData<DataSnapshot> liveData) {
-        liveData.observe(this.getViewLifecycleOwner(), new Observer<DataSnapshot>() {
+        //fill appointment data later
+        mViewModel.getAllJoinedAppointments().observe(this, new Observer<ArrayList<JoinedAppointment>>() {
             @Override
-            public void onChanged(DataSnapshot dataSnapshot) {
-                ArrayList<Appointment> appointments = new ArrayList<>();
-                Iterable<DataSnapshot> appoinmentIndex = dataSnapshot.getChildren();
-                for (DataSnapshot appointmentData : appoinmentIndex) {
-                    Appointment appointment = appointmentData.getValue(Appointment.class);
-                    appointments.add(appointment);
-                }
-
-                for (final Appointment appointment : appointments) {
-                    ProviderDataRepository.getInstance().getProviderByUid(appointment.getProviderUid(), new DataBaseCallBackOperation() {
-                        @Override
-                        public void callBack(Object object) {
-                            Provider provider = (Provider) object;
-
-                            JoinedAppointment joinedAppointment = new JoinedAppointment(appointment, provider.getImageUrl(), provider.getCompanyName()
-                                    , provider.getProfession(), provider.getPhoneNumber(), provider.getAddress());
-                            adapter.addJoinedAppointment(joinedAppointment);
-                        }
-                    });
-                }
-
+            public void onChanged(ArrayList<JoinedAppointment> joinedAppointments) {
+                adapter.setJoinedAppointments(joinedAppointments);
 
             }
         });
+
     }
+
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initFragmentView(view);
 
-        adapter = new ViewAppointmentsListAdapter(view.getContext(), new TriggerCallback() {
-            @Override
-            public void onCallback() {
-                appointmentRecyclerView.setVisibility(View.VISIBLE);
-                filterGroup.setVisibility(View.VISIBLE);
-                noAppointmentsTextView.setVisibility(View.GONE);
-                noAppointeesTextViewDescription.setVisibility(View.GONE);
-                adapter.triggerSorting();
+        if (adapter == null) {
+            adapter = new ViewAppointmentsListAdapter(view.getContext(), new TriggerCallback() {
+                @Override
+                public void onCallback() {
+                    appointmentRecyclerView.setVisibility(View.VISIBLE);
+                    filterGroup.setVisibility(View.VISIBLE);
+                    noAppointmentsTextView.setVisibility(View.GONE);
+                    noAppointeesTextViewDescription.setVisibility(View.GONE);
+                    adapter.triggerSorting();
+                }
+            });
+            if (adapter.getItemCount() > 0) {
+                appointmentRecyclerView.setVisibility(View.GONE);
+                filterGroup.setVisibility(View.INVISIBLE);
+                noAppointmentsTextView.setVisibility(View.VISIBLE);
+                noAppointeesTextViewDescription.setVisibility(View.VISIBLE);
             }
-        });
-        if (adapter.getItemCount() > 0) {
-            appointmentRecyclerView.setVisibility(View.GONE);
-            filterGroup.setVisibility(View.INVISIBLE);
-            noAppointmentsTextView.setVisibility(View.VISIBLE);
-            noAppointeesTextViewDescription.setVisibility(View.VISIBLE);
+            appointmentRecyclerView.setAdapter(adapter);
+            appointmentRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         }
-        appointmentRecyclerView.setAdapter(adapter);
-        appointmentRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         filterGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -135,8 +107,6 @@ public class AppointmentFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        adapter.clearJoinedList();
-        adapter.triggerSorting();
         filterGroup.check(R.id.appointment_radio_filter_all);
     }
 
@@ -147,5 +117,15 @@ public class AppointmentFragment extends Fragment {
         filterGroup = view.findViewById(R.id.appointment_filter_radio_group);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mViewModel.clearListeners();
+    }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mViewModel.clearListeners(); // TODO find out how to save the data
+    }
 }

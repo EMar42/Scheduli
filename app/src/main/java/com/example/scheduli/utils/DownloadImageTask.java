@@ -23,19 +23,25 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
     @Override
     protected Bitmap doInBackground(String... urls) {
-        String urlOfImage = urls[0];
-        Bitmap image = null;
-        try {
-            InputStream is = new URL(urlOfImage).openStream();
-            image = BitmapFactory.decodeStream(is);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("Download Task", "Failed to download image " + e.getMessage());
+        if (!urls[0].isEmpty()) {
+            String urlOfImage = urls[0];
+            Bitmap image = null;
+            try {
+                InputStream is = new URL(urlOfImage).openStream();
+                image = BitmapFactory.decodeStream(is);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("Download Task", "Failed to download image " + e.getMessage());
+            }
+            return image;
         }
-        return image;
+
+        return null;
     }
 
     protected void onPostExecute(Bitmap result) {
-        imageView.setImageBitmap(result);
+        if (result != null) {
+            imageView.setImageBitmap(result);
+        }
     }
 }
