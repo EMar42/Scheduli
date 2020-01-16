@@ -3,12 +3,10 @@ package com.example.scheduli.data.repositories;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 
 import com.example.scheduli.data.Appointment;
 import com.example.scheduli.data.User;
 import com.example.scheduli.data.fireBase.DataBaseCallBackOperation;
-import com.example.scheduli.data.fireBase.FirebaseQueryLiveData;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,43 +45,37 @@ public class UserDataRepository {
     public void keepInSync(String uid) {
         userReference = this.dataBaseReference.child(uid);
         userReference.keepSynced(true);
+
+    }
+
+    public void getUserAppointments(final DataBaseCallBackOperation callBackOperation) {
+        if (appointmentListener == null) {
+            appointmentListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    ArrayList<Appointment> appointments = new ArrayList<>();
+                    Iterable<DataSnapshot> appoinmentIndex = dataSnapshot.getChildren();
+                    for (DataSnapshot appointmentData : appoinmentIndex) {
+                        Appointment appointment = appointmentData.getValue(Appointment.class);
+                        appointments.add(appointment);
+                    }
+
+                    callBackOperation.callBack(appointments);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e(TAG_USER_REPOSITORY, "Error cannot get data " + databaseError.getMessage());
+                }
+            };
+
+            userReference.child("appointments").addValueEventListener(appointmentListener);
+        }
     }
 
     public void createNewUserInApp(String uid, User user) {
         Log.i(TAG_USER_REPOSITORY, "Created new User " + user);
         dataBaseReference.child(uid).setValue(user);
-    }
-
-    public LiveData<DataSnapshot> getUserAppointmentsSnapshot() {
-        Log.i(TAG_USER_REPOSITORY, "Retrieving User appointments");
-        return new FirebaseQueryLiveData(userReference.child("appointments"));
-    }
-
-    public void getUserAppointments(final DataBaseCallBackOperation callBack) {
-        appointmentListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.i(TAG_USER_REPOSITORY, "Reading appointment data");
-                ArrayList<Appointment> appointments = new ArrayList<>();
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    appointments.add(snapshot.getValue(Appointment.class));
-                }
-
-                callBack.callBack(appointments);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e(TAG_USER_REPOSITORY, "Failed to read data of appointment");
-            }
-        };
-
-        userReference.child("appointments").addValueEventListener(appointmentListener);
-    }
-
-    public void detachAppointmentListener() {
-        userReference.removeEventListener(appointmentListener);
     }
 
     public void addAppointmentsListToUser(String uid, ArrayList<Appointment> appointments) {
@@ -149,9 +141,28 @@ public class UserDataRepository {
         this.dataBaseReference.child(uid).updateChildren(userValues);
     }
 
-    public void updateUserAppointments(String uid, Appointment appointments) {
+    public void updateUserAppointment(final Appointment appointment) {
+        userReference.child("appointments").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Appointment current = snapshot.getValue(Appointment.class);
+                    if (current.equals(appointment)) {
+                        Log.i(TAG_USER_REPOSITORY, "Updating user appointment " + snapshot.getKey());
+                        userReference.child("appointments").child(snapshot.getKey()).updateChildren(appointment.toMap());
+                    }
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG_USER_REPOSITORY, "error on data retrieval " + databaseError.getMessage());
+            }
+        });
     }
 
-
+    public void clearEventsOfAppointments() {
+        userReference.child("appointments").removeEventListener(this.appointmentListener);
+        this.appointmentListener = null;
+    }
 }

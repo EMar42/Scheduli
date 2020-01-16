@@ -1,29 +1,37 @@
 package com.example.scheduli.ui.appointmentDetails;
 
 import android.app.AlarmManager;
+import android.app.DatePickerDialog;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
+import androidx.fragment.app.DialogFragment;
 
 import com.example.scheduli.BaseMenuActivity;
 import com.example.scheduli.NotificationPublisher;
 import com.example.scheduli.R;
 import com.example.scheduli.data.joined.JoinedAppointment;
+import com.example.scheduli.data.repositories.UserDataRepository;
+import com.example.scheduli.ui.dialogs.DatePickerDialogFragment;
+import com.example.scheduli.ui.dialogs.TimerPickerDialogFragment;
 import com.example.scheduli.utils.DownloadImageTask;
 import com.example.scheduli.utils.UpcomingAppointmentNotification;
 
@@ -31,8 +39,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
-public class AppointmentDetailsActivity extends BaseMenuActivity {
+public class AppointmentDetailsActivity extends BaseMenuActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     public static final String APPOINTMENT_DETAILS = "AppointmentDetailsActivityPassedClass";
     public static final String DETAILS_TAG = "Appointment Details Activity";
 
@@ -47,7 +56,11 @@ public class AppointmentDetailsActivity extends BaseMenuActivity {
     private TextView appointmentDate;
     private TextView appointmentTimes;
     private JoinedAppointment joinedAppointment;
-    private Button setReminderButton;
+    private Button setAlarmTimeButton;
+    private Button setAlarmDateButton;
+    private Button setAlarmButton;
+    private Calendar alarmTime;
+    private Calendar alarmDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,14 +82,40 @@ public class AppointmentDetailsActivity extends BaseMenuActivity {
             }
         });
 
-        setReminderButton.setOnClickListener(new View.OnClickListener() {
+        //Setting the date for the alarm
+        setAlarmDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SetNotificationReminderClass().execute(joinedAppointment);
-                Toast.makeText(AppointmentDetailsActivity.this, "Set Notification for " + 25 + " before the appointment", Toast.LENGTH_LONG).show();
+                DialogFragment datePicker = new DatePickerDialogFragment();
+                datePicker.show(getSupportFragmentManager(), "alarm picker");
             }
         });
 
+        //Setting the time for the alarm
+        setAlarmTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment timePicker = new TimerPickerDialogFragment();
+                timePicker.show(getSupportFragmentManager(), "alarm picker");
+            }
+        });
+
+        //Triggering alarm creation
+        setAlarmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (alarmDate != null && alarmTime != null) {
+                    Calendar timeForAlarm = Calendar.getInstance();
+                    timeForAlarm.setTimeInMillis(alarmDate.getTimeInMillis());
+                    timeForAlarm.set(Calendar.HOUR_OF_DAY, alarmTime.get(Calendar.HOUR_OF_DAY));
+                    timeForAlarm.set(Calendar.MINUTE, alarmTime.get(Calendar.MINUTE));
+                    timeForAlarm.set(Calendar.SECOND, 0);
+
+                    new SetNotificationReminderClass(timeForAlarm).execute(joinedAppointment);
+                    Toast.makeText(AppointmentDetailsActivity.this, "Set alarm for " + timeForAlarm.getTime().toString(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private boolean checkIfEmpty(TextView textView) {
@@ -108,6 +147,15 @@ public class AppointmentDetailsActivity extends BaseMenuActivity {
         appointmentTimes.setText(timeString);
     }
 
+    Locale getCurrentLocale(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return context.getResources().getConfiguration().getLocales().get(0);
+        } else {
+            //noinspection deprecation
+            return context.getResources().getConfiguration().locale;
+        }
+    }
+
     private void initView() {
         Toolbar mainToolbar = findViewById(R.id.app_main_toolbar);
         setSupportActionBar(mainToolbar);
@@ -122,11 +170,39 @@ public class AppointmentDetailsActivity extends BaseMenuActivity {
         serviceCostTv = findViewById(R.id.tv_appDetails_serviceCost);
         appointmentDate = findViewById(R.id.tv_appDetails_appointmentDate);
         appointmentTimes = findViewById(R.id.tv_appDetails_appointmentTimes);
-        setReminderButton = findViewById(R.id.btn_details_apppointmet_setReminder);
+        setAlarmTimeButton = findViewById(R.id.btn_details_apppointmet_pickTime);
+        setAlarmDateButton = findViewById(R.id.btn_appointment_details_pickDate);
+        setAlarmButton = findViewById(R.id.btn_appointment_details_set_alarm);
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        Calendar timeForAlarm = Calendar.getInstance();
+        timeForAlarm.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        timeForAlarm.set(Calendar.MINUTE, minute);
+        timeForAlarm.set(Calendar.SECOND, 0);
+
+        this.alarmTime = timeForAlarm;
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar dateForAlarm = Calendar.getInstance();
+        dateForAlarm.set(Calendar.YEAR, year);
+        dateForAlarm.set(Calendar.MONTH, month);
+        dateForAlarm.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        this.alarmDate = dateForAlarm;
     }
 
 
     private class SetNotificationReminderClass extends AsyncTask<JoinedAppointment, Void, Void> {
+
+        private final Calendar dateForAlarm;
+
+        public SetNotificationReminderClass(Calendar alarmDate) {
+            this.dateForAlarm = alarmDate;
+        }
 
         @Override
         protected Void doInBackground(JoinedAppointment... joinedAppointments) {
@@ -135,28 +211,29 @@ public class AppointmentDetailsActivity extends BaseMenuActivity {
                 NotificationCompat.Builder builder = UpcomingAppointmentNotification.createNotification(getApplicationContext(), joinedAppointment);
                 Notification notification = builder.build();
 
-                scheduleNotification(notification, joinedAppointment, 25); //TODO make dynamic
+                scheduleNotification(notification, joinedAppointment);
             }
 
             return null;
         }
 
-        private void scheduleNotification(Notification notification, JoinedAppointment appointment, int delayInMinutes) {
+        private void scheduleNotification(Notification notification, JoinedAppointment appointment) {
+            Calendar appointmentDate = Calendar.getInstance();
+            appointmentDate.setTimeInMillis(appointment.getAppointment().getStart());
 
-            Intent notificationIntent = new Intent(AppointmentDetailsActivity.this, NotificationPublisher.class);
-            notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
-            notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            if (dateForAlarm.before(appointmentDate)) {
+                Intent notificationIntent = new Intent(AppointmentDetailsActivity.this, NotificationPublisher.class);
+                notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, NotificationPublisher.NOTIFICATION_COUNT++);
+                notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            long futureInMillis = SystemClock.elapsedRealtime() + delayInMinutes;
+                Log.i(DETAILS_TAG, "Setting Alarm for " + dateForAlarm.getTime().toString());
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, dateForAlarm.getTimeInMillis(), pendingIntent);
 
-            Calendar beforeAppointment = Calendar.getInstance();
-            beforeAppointment.setTimeInMillis(appointment.getAppointment().getStart());
-            beforeAppointment.add(Calendar.MINUTE, -1 * delayInMinutes);
-
-
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, beforeAppointment.getTimeInMillis(), pendingIntent);
+                appointment.getAppointment().setAlarmReminderTime(dateForAlarm.getTimeInMillis());
+                UserDataRepository.getInstance().updateUserAppointment(appointment.getAppointment());
+            }
         }
 
     }

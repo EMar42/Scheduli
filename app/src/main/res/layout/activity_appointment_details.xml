@@ -29,17 +29,26 @@
         app:layout_constraintTop_toBottomOf="@+id/app_main_toolbar" />
 
     <Button
-        android:id="@+id/btn_details_apppointmet_setReminder"
+        android:id="@+id/btn_details_apppointmet_pickTime"
         style="@style/appCompactButtons"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/set_reminder"
+        android:text="@string/set_alarm_time"
         app:layout_constraintBottom_toTopOf="@+id/btn_appointment_details_cancel"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_appointment_details_pickDate"
+        style="@style/appCompactButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/set_alarm_date"
+        app:layout_constraintBottom_toTopOf="@+id/btn_appointment_details_cancel"
+        app:layout_constraintStart_toEndOf="@+id/btn_details_apppointmet_pickTime" />
 
     <Button
         android:id="@+id/btn_appointment_details_cancel"
@@ -54,13 +63,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/btn_appointment_details_set_alarm"
+        style="@style/appCompactButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:text="Set Alarm"
+        app:layout_constraintBottom_toTopOf="@+id/btn_appointment_details_cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_appointment_details_pickDate" />
+
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_details_apppointmet_setReminder"
+        app:layout_constraintBottom_toTopOf="@+id/btn_details_apppointmet_pickTime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7">
@@ -86,7 +108,7 @@
 
             <TextView
                 android:id="@+id/textView14"
-                style="@style/baseicTextFont"
+                style="@style/basicTextFont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -99,7 +121,7 @@
 
             <TextView
                 android:id="@+id/tv_appDetails_providerCompany"
-                style="@style/baseicTextFont"
+                style="@style/basicTextFont"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -112,7 +134,7 @@
 
             <TextView
                 android:id="@+id/textView4"
-                style="@style/baseicTextFont"
+                style="@style/basicTextFont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -125,7 +147,7 @@
 
             <TextView
                 android:id="@+id/tv_appDetails_providerProffesion"
-                style="@style/baseicTextFont"
+                style="@style/basicTextFont"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="52dp"
@@ -138,7 +160,7 @@
 
             <TextView
                 android:id="@+id/textView5"
-                style="@style/baseicTextFont"
+                style="@style/basicTextFont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -151,7 +173,7 @@
 
             <TextView
                 android:id="@+id/tv_appDetails_serviceName"
-                style="@style/baseicTextFont"
+                style="@style/basicTextFont"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -164,7 +186,7 @@
 
             <TextView
                 android:id="@+id/textView6"
-                style="@style/baseicTextFont"
+                style="@style/basicTextFont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -177,7 +199,7 @@
 
             <TextView
                 android:id="@+id/tv_appDetails_serviceCost"
-                style="@style/baseicTextFont"
+                style="@style/basicTextFont"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
@@ -190,7 +212,7 @@
 
             <TextView
                 android:id="@+id/textView8"
-                style="@style/baseicTextFont"
+                style="@style/basicTextFont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -203,7 +225,7 @@
 
             <TextView
                 android:id="@+id/tv_appDetails_appointmentDate"
-                style="@style/baseicTextFont"
+                style="@style/basicTextFont"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="43dp"
@@ -216,7 +238,7 @@
 
             <TextView
                 android:id="@+id/textView9"
-                style="@style/baseicTextFont"
+                style="@style/basicTextFont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -229,7 +251,7 @@
 
             <TextView
                 android:id="@+id/tv_appDetails_appointmentTimes"
-                style="@style/baseicTextFont"
+                style="@style/basicTextFont"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="65dp"
@@ -243,7 +265,7 @@
 
             <TextView
                 android:id="@+id/textView10"
-                style="@style/baseicTextFont"
+                style="@style/basicTextFont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -256,7 +278,7 @@
 
             <TextView
                 android:id="@+id/tv_appDetails_providerAddress"
-                style="@style/baseicTextFont"
+                style="@style/basicTextFont"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="76dp"
@@ -269,7 +291,7 @@
 
             <TextView
                 android:id="@+id/tv_appDetails_providerPhone"
-                style="@style/baseicTextFont"
+                style="@style/basicTextFont"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -282,7 +304,7 @@
 
             <TextView
                 android:id="@+id/textView11"
-                style="@style/baseicTextFont"
+                style="@style/basicTextFont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -310,7 +332,7 @@
                 app:srcCompat="@drawable/ic_local_phone_white" />
 
             <TextView
-                style="@style/baseicTextFont"
+                style="@style/basicTextFont"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"

@@ -116,23 +116,23 @@ public class Provider {
         this.address = address;
     }
 
-    public Boolean addService(String name, float cost, int singleSessionInMinutes, final String dayOfWeek, final String date, long workStart, long workEnd , long serviceStart, long serviceEnd, String userUid, boolean isAvailable) { //define time
+    public Boolean addService(String name, float cost, int singleSessionInMinutes, final String dayOfWeek, final String date, final Long workStart , final long workEnd, long start, long end, String userUid, boolean isAvailable) { //define time
 
         int day = Integer.valueOf(dayOfWeek);
         if(day < 0 || day >= 7) {
 
             //Create a new working days map:
-//            long start, long end
             final WorkDay workDay = new WorkDay(workStart,workEnd);
             Map<String, WorkDay> tempWorkingDayMap = new HashMap<String, WorkDay>() {{ // work
                 put(dayOfWeek, workDay);
             }};
 
 
+
             //Create a new dailySessions map:
             //  new Array<Sessions>:
             final ArrayList<Sessions> tempSessionsArray = new ArrayList<>();
-            tempSessionsArray.add(new Sessions(serviceStart, serviceEnd, userUid, isAvailable));
+            tempSessionsArray.add(new Sessions(start, end, userUid, isAvailable));
 
             Map<String, ArrayList<Sessions>> tempDailySessionsMap = new HashMap<String, ArrayList<Sessions>>() {{
                 put(date, tempSessionsArray);

@@ -21,6 +21,7 @@
             android:background="@drawable/picture_circle_boarder">
 
             <ImageView
+                android:id="@+id/user_profile_picture"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_margin="9dp"
@@ -40,7 +41,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/imgUsr"
             android:layout_centerHorizontal="true"
-
             android:padding="3dp"
             android:text="User name"
             android:textColor="@color/colorAccent"
@@ -77,7 +77,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Eric clapton"
-                        android:textAppearance="@style/baseicTextFont" />
+                        android:textAppearance="@style/basicTextFont" />
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -99,7 +99,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="+1-202-555-0157"
-                        android:textAppearance="@style/baseicTextFont"/>
+                        android:textAppearance="@style/basicTextFont"/>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -122,7 +122,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="lalala"
-                        android:textAppearance="@style/baseicTextFont"/>
+                        android:textAppearance="@style/basicTextFont"/>
 
                     <View
                         android:layout_width="match_parent"
