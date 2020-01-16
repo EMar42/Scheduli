@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -35,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchProviderActivity extends AppCompatActivity implements ProvidersAdapter.OnProviderListener{
-
     private static final String TAG_SEARCH_ACT = "SearchProviderActivity";
     private EditText searchField;
     private ImageButton searchBtn;

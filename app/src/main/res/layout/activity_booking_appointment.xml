@@ -44,6 +44,15 @@
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp">
 
+        <fragment
+            android:id="@+id/booking_set_time_fragment_container"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:defaultNavHost="true"
+            />
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/services_recycleview"
             android:layout_width="match_parent"

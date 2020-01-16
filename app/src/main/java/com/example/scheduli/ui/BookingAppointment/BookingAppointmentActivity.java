@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.scheduli.R;
@@ -28,6 +29,8 @@ public class BookingAppointmentActivity extends AppCompatActivity  {
 
     DatabaseReference databaseReference ;
 
+    private FrameLayout fragmentContainer;
+
     private static final String TAG_BOOKING_ACT = "BookingAppointmentActiv";
     private RecyclerView.LayoutManager mLayout;
     private RecyclerView.Adapter mAdapter;
@@ -42,6 +45,7 @@ public class BookingAppointmentActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_appointment);
+        fragmentContainer = (FrameLayout) findViewById(R.id.booking_set_time_fragment_container) ;
 
 
         init();
@@ -105,7 +109,6 @@ public class BookingAppointmentActivity extends AppCompatActivity  {
                 /********************************************************/
 
                 if (!servicesList.isEmpty()) {
-//                    adapter = new ProvidersAdapter(providersList);
                     recyclerView.setAdapter(mAdapter);
                 }
             }
