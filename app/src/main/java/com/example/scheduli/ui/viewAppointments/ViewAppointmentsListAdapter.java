@@ -21,6 +21,7 @@ import com.example.scheduli.utils.TriggerCallback;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -73,6 +74,11 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
             @SuppressLint("SimpleDateFormat") DateFormat timeFormatter = new SimpleDateFormat("HH:mm");
             String timeString = timeFormatter.format(start) + " - " + timeFormatter.format(end);
             appointmentViewHolder.appointmentTime.setText(timeString);
+
+            if (current.getAppointment().getAlarmReminderTime() != 0 || new Date(Calendar.getInstance().getTimeInMillis()).before(new Date(current.getAppointment().getAlarmReminderTime()))) {
+                @SuppressLint("SimpleDateFormat") DateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                appointmentViewHolder.appointmentAlarm.setText(simpleDateFormat.format(new Date(current.getAppointment().getAlarmReminderTime())));
+            }
             appointmentViewHolder.currentPosition = position;
         }
     }
@@ -158,6 +164,7 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
         TextView appointmentTime;
         TextView appointmentPhone;
         TextView appointmentAddress;
+        TextView appointmentAlarm;
         int currentPosition;
 
         AppointmentViewHolder(@NonNull final View itemView) {
@@ -168,13 +175,13 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
             appointmentTime = itemView.findViewById(R.id.tv_item_appointmentTime);
             appointmentPhone = itemView.findViewById(R.id.tv_item_appointmentContact);
             appointmentAddress = itemView.findViewById(R.id.tv_item_appointment_address);
-
+            appointmentAlarm = itemView.findViewById(R.id.tv_item_appointment_alarm);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent detailsIntent = new Intent(context, AppointmentDetailsActivity.class);
-                    detailsIntent.putExtra(AppointmentDetailsActivity.APPOINTMENT_DETAILS, joinedAppointments.get(currentPosition));
+                    detailsIntent.putExtra(AppointmentDetailsActivity.APPOINTMENT_DETAILS, shownJoinedAppointments.get(currentPosition));
                     context.startActivity(detailsIntent);
                 }
             });

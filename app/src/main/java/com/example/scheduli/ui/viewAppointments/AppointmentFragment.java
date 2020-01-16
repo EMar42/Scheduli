@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -35,9 +34,6 @@ public class AppointmentFragment extends Fragment {
     private TextView noAppointmentsTextView;
     private RecyclerView appointmentRecyclerView;
     private TextView noAppointeesTextViewDescription;
-    private RadioButton filterAllButton;
-    private RadioButton filterFutureButton;
-    private RadioButton filterPastButton;
     private RadioGroup filterGroup;
 
 

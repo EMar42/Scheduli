@@ -7,8 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +31,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class AppointmentDetailsActivity extends BaseMenuActivity {
     public static final String APPOINTMENT_DETAILS = "AppointmentDetailsActivityPassedClass";
@@ -108,6 +110,15 @@ public class AppointmentDetailsActivity extends BaseMenuActivity {
         appointmentTimes.setText(timeString);
     }
 
+    Locale getCurrentLocale(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return context.getResources().getConfiguration().getLocales().get(0);
+        } else {
+            //noinspection deprecation
+            return context.getResources().getConfiguration().locale;
+        }
+    }
+
     private void initView() {
         Toolbar mainToolbar = findViewById(R.id.app_main_toolbar);
         setSupportActionBar(mainToolbar);
@@ -135,7 +146,7 @@ public class AppointmentDetailsActivity extends BaseMenuActivity {
                 NotificationCompat.Builder builder = UpcomingAppointmentNotification.createNotification(getApplicationContext(), joinedAppointment);
                 Notification notification = builder.build();
 
-                scheduleNotification(notification, joinedAppointment, 25); //TODO make dynamic
+                scheduleNotification(notification, joinedAppointment, 17); //TODO make dynamic
             }
 
             return null;
@@ -148,15 +159,17 @@ public class AppointmentDetailsActivity extends BaseMenuActivity {
             notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            long futureInMillis = SystemClock.elapsedRealtime() + delayInMinutes;
-
+            //Set the appointment reminder time
             Calendar beforeAppointment = Calendar.getInstance();
-            beforeAppointment.setTimeInMillis(appointment.getAppointment().getStart());
+            beforeAppointment.setTimeZone(TimeZone.getDefault());
+            beforeAppointment.setTimeInMillis(new Date(appointment.getAppointment().getStart()).getTime());
+            beforeAppointment.set(Calendar.SECOND, 0);
             beforeAppointment.add(Calendar.MINUTE, -1 * delayInMinutes);
+            Log.i("TEST TIME", beforeAppointment.getTime().toString());
 
 
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, beforeAppointment.getTimeInMillis(), pendingIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, beforeAppointment.getTimeInMillis(), pendingIntent);
         }
 
     }

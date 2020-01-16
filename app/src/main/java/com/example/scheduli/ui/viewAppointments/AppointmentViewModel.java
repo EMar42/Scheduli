@@ -25,4 +25,5 @@ public class AppointmentViewModel extends ViewModel {
     public LiveData<DataSnapshot> getAllAppointments() {
         return allAppointments;
     }
+
 }
