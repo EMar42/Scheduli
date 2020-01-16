@@ -50,8 +50,8 @@ public class AppointmentFragment extends Fragment {
         mViewModel.getAllJoinedAppointments().observe(this, new Observer<ArrayList<JoinedAppointment>>() {
             @Override
             public void onChanged(ArrayList<JoinedAppointment> joinedAppointments) {
+                mViewModel.setSavedAppointments(joinedAppointments);
                 adapter.setJoinedAppointments(joinedAppointments);
-
             }
         });
 
@@ -108,6 +108,7 @@ public class AppointmentFragment extends Fragment {
     public void onResume() {
         super.onResume();
         filterGroup.check(R.id.appointment_radio_filter_all);
+
     }
 
     private void initFragmentView(@NonNull View view) {
@@ -120,12 +121,15 @@ public class AppointmentFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mViewModel.clearListeners();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mViewModel.clearListeners(); // TODO find out how to save the data
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 }

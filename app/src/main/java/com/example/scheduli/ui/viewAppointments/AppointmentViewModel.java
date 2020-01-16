@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class AppointmentViewModel extends ViewModel {
 
     private MutableLiveData<ArrayList<JoinedAppointment>> allJoinedAppointments;
+    private ArrayList<JoinedAppointment> savedAppointments;
 
 
     public AppointmentViewModel() {
@@ -63,8 +64,12 @@ public class AppointmentViewModel extends ViewModel {
         });
     }
 
-    public void clearListeners() {
-        UserDataRepository.getInstance().clearEventsOfAppointments();
+    public ArrayList<JoinedAppointment> getSavedAppointments() {
+        return savedAppointments;
+    }
+
+    public void setSavedAppointments(ArrayList<JoinedAppointment> savedAppointments) {
+        this.savedAppointments = savedAppointments;
     }
 
 }
