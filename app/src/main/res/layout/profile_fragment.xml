@@ -76,7 +76,7 @@
                         android:id="@+id/tv_user_full_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Eric clapton"
+                        android:text="@string/sample"
                         android:textAppearance="@style/basicTextFont" />
                     <View
                         android:layout_width="match_parent"
@@ -96,9 +96,10 @@
                         android:text="@string/user_phone_number"
                         android:textAppearance="@style/headLine"/>
                     <TextView
+                        android:id="@+id/tv_user_phonenumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="+1-202-555-0157"
+                        android:text="@string/sample"
                         android:textAppearance="@style/basicTextFont"/>
                     <View
                         android:layout_width="match_parent"
@@ -119,9 +120,10 @@
                         android:textAppearance="@style/headLine"/>
 
                     <TextView
+                        android:id="@+id/tv_user_email"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="lalala"
+                        android:text="@string/sample"
                         android:textAppearance="@style/basicTextFont"/>
 
                     <View
