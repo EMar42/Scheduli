@@ -3,12 +3,10 @@ package com.example.scheduli.data.repositories;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 
 import com.example.scheduli.data.Appointment;
 import com.example.scheduli.data.User;
 import com.example.scheduli.data.fireBase.DataBaseCallBackOperation;
-import com.example.scheduli.data.fireBase.FirebaseQueryLiveData;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -79,12 +77,6 @@ public class UserDataRepository {
         Log.i(TAG_USER_REPOSITORY, "Created new User " + user);
         dataBaseReference.child(uid).setValue(user);
     }
-
-    public LiveData<DataSnapshot> getUserAppointmentsSnapshot() {
-        Log.i(TAG_USER_REPOSITORY, "Retrieving User appointments");
-        return new FirebaseQueryLiveData(userReference.child("appointments"));
-    }
-
 
     public void addAppointmentsListToUser(String uid, ArrayList<Appointment> appointments) {
         dataBaseReference.child(uid).child("appointments").setValue(appointments);
@@ -171,5 +163,6 @@ public class UserDataRepository {
 
     public void clearEventsOfAppointments() {
         userReference.child("appointments").removeEventListener(this.appointmentListener);
+        this.appointmentListener = null;
     }
 }

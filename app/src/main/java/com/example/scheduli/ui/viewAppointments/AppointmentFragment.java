@@ -54,6 +54,7 @@ public class AppointmentFragment extends Fragment {
 
             }
         });
+
     }
 
 
@@ -63,24 +64,26 @@ public class AppointmentFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initFragmentView(view);
 
-        adapter = new ViewAppointmentsListAdapter(view.getContext(), new TriggerCallback() {
-            @Override
-            public void onCallback() {
-                appointmentRecyclerView.setVisibility(View.VISIBLE);
-                filterGroup.setVisibility(View.VISIBLE);
-                noAppointmentsTextView.setVisibility(View.GONE);
-                noAppointeesTextViewDescription.setVisibility(View.GONE);
-                adapter.triggerSorting();
+        if (adapter == null) {
+            adapter = new ViewAppointmentsListAdapter(view.getContext(), new TriggerCallback() {
+                @Override
+                public void onCallback() {
+                    appointmentRecyclerView.setVisibility(View.VISIBLE);
+                    filterGroup.setVisibility(View.VISIBLE);
+                    noAppointmentsTextView.setVisibility(View.GONE);
+                    noAppointeesTextViewDescription.setVisibility(View.GONE);
+                    adapter.triggerSorting();
+                }
+            });
+            if (adapter.getItemCount() > 0) {
+                appointmentRecyclerView.setVisibility(View.GONE);
+                filterGroup.setVisibility(View.INVISIBLE);
+                noAppointmentsTextView.setVisibility(View.VISIBLE);
+                noAppointeesTextViewDescription.setVisibility(View.VISIBLE);
             }
-        });
-        if (adapter.getItemCount() > 0) {
-            appointmentRecyclerView.setVisibility(View.GONE);
-            filterGroup.setVisibility(View.INVISIBLE);
-            noAppointmentsTextView.setVisibility(View.VISIBLE);
-            noAppointeesTextViewDescription.setVisibility(View.VISIBLE);
+            appointmentRecyclerView.setAdapter(adapter);
+            appointmentRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         }
-        appointmentRecyclerView.setAdapter(adapter);
-        appointmentRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         filterGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -118,5 +121,11 @@ public class AppointmentFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         mViewModel.clearListeners();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mViewModel.clearListeners(); // TODO find out how to save the data
     }
 }
