@@ -13,10 +13,10 @@ import java.net.URL;
 /**
  *
  */
-public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+public class DownloadImageAsync extends AsyncTask<String, Void, Bitmap> {
     private ImageView imageView;
 
-    public DownloadImageTask(ImageView imageView) {
+    public DownloadImageAsync(ImageView imageView) {
         this.imageView = imageView;
     }
 

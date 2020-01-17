@@ -3,6 +3,7 @@ package com.example.scheduli.ui.login;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.scheduli.BuildConfig;
 import com.example.scheduli.R;
 import com.example.scheduli.data.repositories.UserDataRepository;
 import com.example.scheduli.ui.forgotPassowrd.ForgotPasswordActivity;
@@ -33,9 +35,24 @@ public class LoginActivity extends AppCompatActivity {
     private UsersUtils usersUtils;
     private FirebaseAuth.AuthStateListener userLoginStateListener;
 
+    //FOR TESTING PERFORMANCE
+    private void enableStrictMode() {
+        if (BuildConfig.DEBUG) {
+
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyDialog()
+                    .build();
+            StrictMode.setThreadPolicy(policy);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        enableStrictMode();
+
         setContentView(R.layout.activity_login);
         initView();
 

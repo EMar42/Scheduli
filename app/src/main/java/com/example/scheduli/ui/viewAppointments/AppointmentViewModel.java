@@ -1,5 +1,7 @@
 package com.example.scheduli.ui.viewAppointments;
 
+import android.os.AsyncTask;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -47,24 +49,37 @@ public class AppointmentViewModel extends ViewModel {
     }
 
     private void pullAppointemmntsOfUser(final DataBaseCallBackOperation callBackOperation) {
-        UserDataRepository.getInstance().getUserAppointments(new DataBaseCallBackOperation() {
-            @Override
-            public void callBack(Object object) {
-                ArrayList<Appointment> appointments = (ArrayList<Appointment>) object;
+        new PopulateTask().execute(callBackOperation);
+    }
 
-                for (final Appointment appointment : appointments) {
+    //Call Database for pulling the required information for the appointment list
+    private class PopulateTask extends AsyncTask<DataBaseCallBackOperation, Void, Void> {
 
-                    ProviderDataRepository.getInstance().getProviderByUid(appointment.getProviderUid(), new DataBaseCallBackOperation() {
-                        @Override
-                        public void callBack(Object object) {
-                            Provider provider = (Provider) object;
-                            JoinedAppointment joinedAppointment = new JoinedAppointment(appointment, provider.getImageUrl(), provider.getCompanyName(), provider.getProfession(), provider.getPhoneNumber(), provider.getAddress());
-                            callBackOperation.callBack(joinedAppointment);
-                        }
-                    });
+        @Override
+        protected Void doInBackground(final DataBaseCallBackOperation... dataBaseCallBackOperations) {
+
+            UserDataRepository.getInstance().getUserAppointments(new DataBaseCallBackOperation() {
+                @Override
+                public void callBack(Object object) {
+                    ArrayList<Appointment> appointments = (ArrayList<Appointment>) object;
+
+                    for (final Appointment appointment : appointments) {
+
+                        ProviderDataRepository.getInstance().getProviderByUid(appointment.getProviderUid(), new DataBaseCallBackOperation() {
+                            @Override
+                            public void callBack(Object object) {
+                                Provider provider = (Provider) object;
+                                JoinedAppointment joinedAppointment = new JoinedAppointment(appointment, provider.getImageUrl(), provider.getCompanyName(), provider.getProfession(), provider.getPhoneNumber(), provider.getAddress());
+                                dataBaseCallBackOperations[0].callBack(joinedAppointment);
+                            }
+                        });
+                    }
                 }
-            }
-        });
+            });
+
+            return null;
+        }
+
     }
 
 }

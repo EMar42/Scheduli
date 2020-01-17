@@ -32,7 +32,7 @@ import com.example.scheduli.data.joined.JoinedAppointment;
 import com.example.scheduli.data.repositories.UserDataRepository;
 import com.example.scheduli.ui.dialogs.DatePickerDialogFragment;
 import com.example.scheduli.ui.dialogs.TimerPickerDialogFragment;
-import com.example.scheduli.utils.DownloadImageTask;
+import com.example.scheduli.utils.DownloadImageAsync;
 import com.example.scheduli.utils.UpcomingAppointmentNotification;
 
 import java.text.DateFormat;
@@ -126,7 +126,7 @@ public class AppointmentDetailsActivity extends BaseMenuActivity implements Time
         Intent intent = getIntent();
         joinedAppointment = intent.getParcelableExtra(APPOINTMENT_DETAILS);
 
-        new DownloadImageTask(profileImage).execute(joinedAppointment.getProviderImageUrl());
+        new DownloadImageAsync(profileImage).execute(joinedAppointment.getProviderImageUrl());
         providerNameTv.setText(joinedAppointment.getProviderCompanyName());
         providerProfessionTv.setText(joinedAppointment.getProviderProfession());
         providerPhoneTv.setText(joinedAppointment.getProviderPhoneNumber());
