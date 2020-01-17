@@ -14,6 +14,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +27,8 @@ import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.ProvidersAdapter;
 import com.example.scheduli.ui.BookingAppointment.BookingAppointmentActivity;
 import com.example.scheduli.utils.UsersUtils;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
@@ -36,6 +43,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchProviderActivity extends AppCompatActivity implements ProvidersAdapter.OnProviderListener{
+
+    BottomNavigationView bottomNavigationView;
+    private Toolbar mainToolbar;
+    private FloatingActionButton searchProviderButton;
+    private AppBarConfiguration appBarConfiguration;
+    private NavController navController;
+
+
+
     private static final String TAG_SEARCH_ACT = "SearchProviderActivity";
     private EditText searchField;
     private ImageButton searchBtn;
@@ -58,6 +74,7 @@ public class SearchProviderActivity extends AppCompatActivity implements Provide
 
         providersList = new ArrayList<>();
 
+        initView();
         init();
 
 
@@ -85,6 +102,19 @@ public class SearchProviderActivity extends AppCompatActivity implements Provide
         getAllProviders();
 
     }
+
+    private void initView() {
+        mainToolbar = findViewById(R.id.app_main_toolbar);
+        setSupportActionBar(mainToolbar);
+        bottomNavigationView = findViewById(R.id.main_bottom_navigation);
+        appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_profile, R.id.navigation_appointments)
+                .build();
+//        navController = Navigation.findNavController(this, R.id.main_fragment_container);
+//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+//        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+    }
+
 
     private void init() {
         searchField = (EditText) findViewById(R.id.editText_search_field);

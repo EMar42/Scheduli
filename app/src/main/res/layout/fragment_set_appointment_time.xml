@@ -6,13 +6,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.BookingAppointment.SetAppointmentTime">
 
+    <include
+        android:id="@+id/app_main_toolbar"
+        layout="@layout/app_main_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/booking_frg_header"
+        style="@style/headLine"
         android:layout_width="328dp"
         android:layout_height="55dp"
-        style="@style/headLine"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-black"
         android:text="@string/booking_appointment"
         android:textAlignment="textStart"
@@ -20,7 +29,7 @@
         android:textColor="@android:color/background_dark"
         android:textSize="36sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/app_main_toolbar" />
 
     <TextView
         android:id="@+id/booking_frg_chosen_service"
@@ -38,7 +47,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="32dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/main_bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/booking_frg_chosen_service">
@@ -47,6 +56,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/main_bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/colorPrimaryDark"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/main_bottom_navigation_menu" >
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
