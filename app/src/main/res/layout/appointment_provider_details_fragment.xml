@@ -48,7 +48,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appointemtn_details_provider_image" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_appointemtn_details_provider_image" />
 
             <TextView
                 android:id="@+id/tv_provider_app_details_proffesion_title"
@@ -86,13 +86,15 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_provider_app_details_address_title" />
 
             <ImageView
-                android:id="@+id/appointemtn_details_provider_image"
+                android:id="@+id/iv_appointemtn_details_provider_image"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="64dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="32dp"
                 android:contentDescription="@string/provider_profile_picture"
+                android:maxWidth="64dp"
+                android:maxHeight="64dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -126,7 +128,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/tv_provider_app_details_company_name_title"
-                app:layout_constraintTop_toBottomOf="@+id/appointemtn_details_provider_image"
+                app:layout_constraintTop_toBottomOf="@+id/iv_appointemtn_details_provider_image"
                 tools:text="Floop Floop" />
 
             <TextView

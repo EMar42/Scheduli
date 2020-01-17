@@ -25,6 +25,7 @@ public class Sessions {
         this.start = start;
         this.end = end;
         this.isAvailable = isAvailable;
+
     }
 
     public long getStart() {

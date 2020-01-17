@@ -136,6 +136,7 @@ public class AppointmentDetailsActivity extends BaseMenuActivity implements Time
     }
 
     private void initView() {
+
         Toolbar mainToolbar = findViewById(R.id.app_main_toolbar);
         setSupportActionBar(mainToolbar);
         detailsBottomView = findViewById(R.id.appointment_details_bottom_nav);
