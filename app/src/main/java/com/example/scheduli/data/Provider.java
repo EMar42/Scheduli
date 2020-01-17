@@ -139,10 +139,11 @@ public class Provider {
             }};
 
 
-            //Create a new Service:
-            Service service = new Service(name, cost, singleSessionInMinutes, tempWorkingDayMap, tempDailySessionsMap);
 
-            this.services.add(service);
+            //Create a new Service:
+            //Service service = new Service(name, cost, singleSessionInMinutes, tempWorkingDayMap, tempDailySessionsMap);
+
+            //this.services.add(service);
             Log.d(SERVICE_TAG, "Service Added: " + name);
             return true; //Service Added Succesfully
 

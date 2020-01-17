@@ -22,120 +22,63 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_item_appointmentTitle"
+                style="@style/adapterTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                android:textAlignment="center"
+                tools:text="At Service With" />
 
-                <TextView
-                    android:id="@+id/tv_item_appointmentTitle"
-                    style="@style/adapterTextStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    tools:text="At Service With" />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_item_appointmentDate"
+                style="@style/adapterTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="2"
+                android:drawableStart="@drawable/ic_date_icon_white"
+                android:drawablePadding="15dp"
+                tools:text="November 17" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:contentDescription="@string/app_icon_description"
-                    app:srcCompat="@drawable/ic_date_icon_white" />
-
-                <TextView
-                    android:id="@+id/tv_item_appointmentDate"
-                    style="@style/adapterTextStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="2"
-                    tools:text="November 17" />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_item_appointmentTime"
+                style="@style/adapterTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="2"
+                android:drawableStart="@drawable/ic_access_time_white"
+                android:drawablePadding="15dp"
+                tools:text="11:00 PM" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:contentDescription="@string/adapter_time_icon_desc"
-                    app:srcCompat="@drawable/ic_access_time_white" />
-
-                <TextView
-                    android:id="@+id/tv_item_appointmentTime"
-                    style="@style/adapterTextStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="2"
-                    tools:text="11:00 PM" />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_item_appointmentContact"
+                style="@style/adapterTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="2"
+                android:drawableStart="@drawable/ic_local_phone_white"
+                android:drawablePadding="15dp"
+                tools:text="04-672222" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:contentDescription="@string/adapter_phone_icon_desc"
-                    app:srcCompat="@drawable/ic_local_phone_white" />
-
-                <TextView
-                    android:id="@+id/tv_item_appointmentContact"
-                    style="@style/adapterTextStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="2"
-                    tools:text="04-672222" />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_item_appointment_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginBottom="10dp"
-                    app:srcCompat="@drawable/ic_appointment_location_white_24dp" />
-
-                <TextView
-                    android:id="@+id/tv_item_appointment_address"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_weight="2"
-                    android:textAppearance="@style/adapterTextStyle"
-                    tools:text="Test Address" />
-            </LinearLayout>
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="2"
+                android:drawableStart="@drawable/ic_appointment_location_white_24dp"
+                android:drawablePadding="15dp"
+                android:textAppearance="@style/adapterTextStyle"
+                tools:text="Test Address" />
 
             <TextView
                 android:id="@+id/tv_item_appointment_alarm"

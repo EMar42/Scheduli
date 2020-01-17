@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.scheduli.data.repositories.UserDataRepository;
 import com.example.scheduli.ui.login.LoginActivity;
 import com.example.scheduli.ui.settings.SettingsActivity;
 import com.example.scheduli.utils.UsersUtils;
@@ -19,7 +20,6 @@ public class BaseMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -44,9 +44,10 @@ public class BaseMenuActivity extends AppCompatActivity {
 
     private void logoutFromApp() {
         UsersUtils.getInstance().logout();
-        UsersUtils.getInstance().getFireBaseAuth().signOut();
-        startActivity(new Intent(this, LoginActivity.class));
-        finish();
+        Intent returnToLoginIntent = new Intent(this, LoginActivity.class);
+        returnToLoginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        UserDataRepository.getInstance().clearEventsOfAppointments();
+        startActivity(returnToLoginIntent);
     }
 
     private void startAppSettings() {

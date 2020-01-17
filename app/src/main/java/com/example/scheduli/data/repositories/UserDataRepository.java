@@ -162,7 +162,9 @@ public class UserDataRepository {
     }
 
     public void clearEventsOfAppointments() {
-        userReference.child("appointments").removeEventListener(this.appointmentListener);
-        this.appointmentListener = null;
+        if (this.appointmentListener != null) {
+            userReference.child("appointments").removeEventListener(this.appointmentListener);
+            this.appointmentListener = null;
+        }
     }
 }

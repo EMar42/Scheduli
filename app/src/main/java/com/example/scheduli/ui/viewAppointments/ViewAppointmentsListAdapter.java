@@ -34,6 +34,9 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
     private List<JoinedAppointment> shownJoinedAppointments;
     private final TriggerCallback callback;
 
+    public List<JoinedAppointment> getJoinedAppointments() {
+        return joinedAppointments;
+    }
 
     ViewAppointmentsListAdapter(Context context, TriggerCallback triggerCallback) {
         callback = triggerCallback;
@@ -76,8 +79,8 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
             appointmentViewHolder.appointmentTime.setText(timeString);
 
             if (current.getAppointment().getAlarmReminderTime() != 0 && new Date(Calendar.getInstance().getTimeInMillis()).after(new Date(current.getAppointment().getAlarmReminderTime()))) {
-                @SuppressLint("SimpleDateFormat") DateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                appointmentViewHolder.appointmentAlarm.setText(context.getString(R.string.alarm_reminder_text, simpleDateFormat.format(new Date(current.getAppointment().getAlarmReminderTime()))));
+                @SuppressLint("SimpleDateFormat") DateFormat simpleDateFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
+                appointmentViewHolder.appointmentAlarm.setText("Alarm set for " + simpleDateFormat.format(new Date(current.getAppointment().getAlarmReminderTime())));
             }
             appointmentViewHolder.currentPosition = position;
         }
@@ -149,8 +152,8 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
     void setJoinedAppointments(ArrayList<JoinedAppointment> joinedAppointments) {
         this.joinedAppointments = joinedAppointments;
         this.shownJoinedAppointments = new ArrayList<>(joinedAppointments);
-        callback.onCallback();
         notifyDataSetChanged();
+        callback.onCallback();
     }
 
     public class AppointmentViewHolder extends RecyclerView.ViewHolder {

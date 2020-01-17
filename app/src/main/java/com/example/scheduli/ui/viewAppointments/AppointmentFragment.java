@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +21,7 @@ import com.example.scheduli.data.joined.JoinedAppointment;
 import com.example.scheduli.utils.TriggerCallback;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AppointmentFragment extends Fragment {
 
@@ -30,11 +32,6 @@ public class AppointmentFragment extends Fragment {
     private TextView noAppointeesTextViewDescription;
     private RadioGroup filterGroup;
 
-
-    public static AppointmentFragment newInstance() {
-        return new AppointmentFragment();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -44,20 +41,19 @@ public class AppointmentFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(AppointmentViewModel.class);
+        mViewModel = ViewModelProviders.of(getParentFragment()).get(AppointmentViewModel.class);
 
-        //fill appointment data later
         mViewModel.getAllJoinedAppointments().observe(this, new Observer<ArrayList<JoinedAppointment>>() {
             @Override
             public void onChanged(ArrayList<JoinedAppointment> joinedAppointments) {
-                mViewModel.setSavedAppointments(joinedAppointments);
+                List<JoinedAppointment> currentAppointments = adapter.getJoinedAppointments();
+                DiffUtil.DiffResult appointmentResult = DiffUtil.calculateDiff(new AppointmentDiffCallback(currentAppointments, joinedAppointments));
                 adapter.setJoinedAppointments(joinedAppointments);
+                appointmentResult.dispatchUpdatesTo(adapter);
             }
         });
 
     }
-
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -65,26 +61,36 @@ public class AppointmentFragment extends Fragment {
         initFragmentView(view);
 
         if (adapter == null) {
-            adapter = new ViewAppointmentsListAdapter(view.getContext(), new TriggerCallback() {
-                @Override
-                public void onCallback() {
-                    appointmentRecyclerView.setVisibility(View.VISIBLE);
-                    filterGroup.setVisibility(View.VISIBLE);
-                    noAppointmentsTextView.setVisibility(View.GONE);
-                    noAppointeesTextViewDescription.setVisibility(View.GONE);
-                    adapter.triggerSorting();
-                }
-            });
-            if (adapter.getItemCount() > 0) {
-                appointmentRecyclerView.setVisibility(View.GONE);
-                filterGroup.setVisibility(View.INVISIBLE);
-                noAppointmentsTextView.setVisibility(View.VISIBLE);
-                noAppointeesTextViewDescription.setVisibility(View.VISIBLE);
-            }
-            appointmentRecyclerView.setAdapter(adapter);
-            appointmentRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+            setRecyclerViewAndAdapter(view);
         }
 
+        setFilterGroupClick();
+
+    }
+
+    private void setRecyclerViewAndAdapter(@NonNull View view) {
+        adapter = new ViewAppointmentsListAdapter(view.getContext(), new TriggerCallback() {
+            @Override
+            public void onCallback() {
+                appointmentRecyclerView.setVisibility(View.VISIBLE);
+                filterGroup.setVisibility(View.VISIBLE);
+                noAppointmentsTextView.setVisibility(View.GONE);
+                noAppointeesTextViewDescription.setVisibility(View.GONE);
+            }
+        });
+
+        if (adapter.getItemCount() == 0) {
+            appointmentRecyclerView.setVisibility(View.GONE);
+            filterGroup.setVisibility(View.GONE);
+            noAppointmentsTextView.setVisibility(View.VISIBLE);
+            noAppointeesTextViewDescription.setVisibility(View.VISIBLE);
+        }
+
+        appointmentRecyclerView.setAdapter(adapter);
+        appointmentRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+    }
+
+    private void setFilterGroupClick() {
         filterGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -101,14 +107,6 @@ public class AppointmentFragment extends Fragment {
                 }
             }
         });
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        filterGroup.check(R.id.appointment_radio_filter_all);
-
     }
 
     private void initFragmentView(@NonNull View view) {
@@ -119,17 +117,8 @@ public class AppointmentFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onResume() {
+        super.onResume();
+        filterGroup.check(R.id.appointment_radio_filter_all);
     }
 }

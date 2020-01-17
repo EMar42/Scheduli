@@ -1,7 +1,9 @@
 package com.example.scheduli.ui.login;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.scheduli.BuildConfig;
 import com.example.scheduli.R;
 import com.example.scheduli.data.repositories.UserDataRepository;
 import com.example.scheduli.ui.forgotPassowrd.ForgotPasswordActivity;
@@ -32,14 +35,25 @@ public class LoginActivity extends AppCompatActivity {
     private UsersUtils usersUtils;
     private FirebaseAuth.AuthStateListener userLoginStateListener;
 
+    //FOR TESTING PERFORMANCE
+    private void enableStrictMode() {
+        if (BuildConfig.DEBUG) {
+
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyDialog()
+                    .build();
+            StrictMode.setThreadPolicy(policy);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        enableStrictMode();
+
         setContentView(R.layout.activity_login);
-        usersUtils = UsersUtils.getInstance();
-
-        checkLoginStatus();
-
         initView();
 
 
@@ -69,40 +83,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        //setup login for user handler after sign-up.
-        userLoginStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = UsersUtils.getInstance().getCurrentUser();
-                if (user != null) {
-                    Log.i(LOGIN_TAG, "Got user form sign up activity logging in");
-                    loginToMainActivity(user);
-                }
-            }
-        };
+        checkLoginStatus();
     }
 
-    private void loginToMainActivity(FirebaseUser user) {
-        String uid = user.getUid();
-        //TODO add sound on login
-        //TODO implemennt intent change once user logged in to the app from sign-up.
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        intent.putExtra("LOGGED_IN_USER_UID", uid);
-        UserDataRepository.getInstance().keepInSync(uid);
+    protected void loginToMainActivity(Intent intent) {
         startActivity(intent);
-        finish();
     }
 
     private void checkLoginStatus() {
-        FirebaseUser user = UsersUtils.getInstance().getCurrentUser();
-        if (user != null) {
-            Log.i(LOGIN_TAG, "Entering app user already logged in");
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            intent.putExtra("LOGGED_IN_USER_UID", user.getUid() + " " + user.getDisplayName());
-            loginToMainActivity(user);
-            startActivity(intent);
-            finish();
-        }
+        new LoginTask().execute();
     }
 
     private void initView() {
@@ -124,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (!checkIfEmpty(userEmail) && !checkIfEmpty(userPassword) && isEmailValid(userEmail.getText().toString())) {
 
-            usersUtils.getFireBaseAuth().signInWithEmailAndPassword(userEmail.getText().toString(), userPassword.getText().toString()).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            UsersUtils.getInstance().getFireBaseAuth().signInWithEmailAndPassword(userEmail.getText().toString(), userPassword.getText().toString()).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (!task.isSuccessful()) {
@@ -132,8 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, "Sign-in failed", Toast.LENGTH_SHORT).show();
                     } else {
                         Log.i(LOGIN_TAG, "Succesful login to the application using " + userEmail.getText().toString());
-                        FirebaseUser user = usersUtils.getFireBaseAuth().getCurrentUser();
-                        loginToMainActivity(user);
+                        new LoginTask().execute();
                     }
                 }
             });
@@ -146,5 +134,31 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean checkIfEmpty(EditText editText) {
         return editText.getText().toString().isEmpty();
+    }
+
+    class LoginTask extends AsyncTask<Void, Void, Intent> {
+
+        @Override
+        protected Intent doInBackground(Void... voids) {
+            FirebaseUser user = UsersUtils.getInstance().getCurrentUser();
+            if (user != null) {
+                String uid = user.getUid();
+                //TODO add sound on login
+                //TODO implemennt intent change once user logged in to the app from sign-up.
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                UserDataRepository.getInstance().keepInSync(uid);
+                return intent;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Intent intent) {
+            if (intent != null) {
+                loginToMainActivity(intent);
+            }
+
+        }
     }
 }

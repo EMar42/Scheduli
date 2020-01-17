@@ -32,7 +32,7 @@ import com.example.scheduli.data.joined.JoinedAppointment;
 import com.example.scheduli.data.repositories.UserDataRepository;
 import com.example.scheduli.ui.dialogs.DatePickerDialogFragment;
 import com.example.scheduli.ui.dialogs.TimerPickerDialogFragment;
-import com.example.scheduli.utils.DownloadImageTask;
+import com.example.scheduli.utils.DownloadImageAsync;
 import com.example.scheduli.utils.UpcomingAppointmentNotification;
 
 import java.text.DateFormat;
@@ -112,7 +112,6 @@ public class AppointmentDetailsActivity extends BaseMenuActivity implements Time
                     timeForAlarm.set(Calendar.SECOND, 0);
 
                     new SetNotificationReminderClass(timeForAlarm).execute(joinedAppointment);
-                    Toast.makeText(AppointmentDetailsActivity.this, "Set alarm for " + timeForAlarm.getTime().toString(), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -127,7 +126,7 @@ public class AppointmentDetailsActivity extends BaseMenuActivity implements Time
         Intent intent = getIntent();
         joinedAppointment = intent.getParcelableExtra(APPOINTMENT_DETAILS);
 
-        new DownloadImageTask(profileImage).execute(joinedAppointment.getProviderImageUrl());
+        new DownloadImageAsync(profileImage).execute(joinedAppointment.getProviderImageUrl());
         providerNameTv.setText(joinedAppointment.getProviderCompanyName());
         providerProfessionTv.setText(joinedAppointment.getProviderProfession());
         providerPhoneTv.setText(joinedAppointment.getProviderPhoneNumber());
@@ -222,17 +221,17 @@ public class AppointmentDetailsActivity extends BaseMenuActivity implements Time
             appointmentDate.setTimeInMillis(appointment.getAppointment().getStart());
 
             if (dateForAlarm.before(appointmentDate)) {
-                Intent notificationIntent = new Intent(AppointmentDetailsActivity.this, NotificationPublisher.class);
+                Intent notificationIntent = new Intent(getApplicationContext(), NotificationPublisher.class);
                 notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, NotificationPublisher.NOTIFICATION_COUNT++);
                 notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+                appointment.getAppointment().setAlarmReminderTime(dateForAlarm.getTimeInMillis());
+                UserDataRepository.getInstance().updateUserAppointment(appointment.getAppointment());
+
                 Log.i(DETAILS_TAG, "Setting Alarm for " + dateForAlarm.getTime().toString());
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, dateForAlarm.getTimeInMillis(), pendingIntent);
-
-                appointment.getAppointment().setAlarmReminderTime(dateForAlarm.getTimeInMillis());
-                UserDataRepository.getInstance().updateUserAppointment(appointment.getAppointment());
             }
         }
 
