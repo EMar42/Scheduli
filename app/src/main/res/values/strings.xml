@@ -67,7 +67,7 @@
     <string name="past">Past</string>
     <string name="appointment_details">Appointment Details</string>
     <string name="cancel_appointment">Cancel Appointment</string>
-    <string name="set_reminder">Set Reminder</string>
+    <string name="set_alarm">Set Alarm</string>
     <string name="company_name">Company Name</string>
     <string name="profession">Profession</string>
     <string name="service_name">Service Name</string>
@@ -118,8 +118,8 @@
     //Booking Appointment
 
     <string name="booking_appointment">Book Appointment</string>
-
-
+    <string name="attempting_to_login">Attempting To login</string>
+    <string name="provider_details">Provider Details</string>
 
 
 </resources>
