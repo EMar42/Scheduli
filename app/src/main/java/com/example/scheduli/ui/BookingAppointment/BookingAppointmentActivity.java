@@ -3,7 +3,6 @@ package com.example.scheduli.ui.BookingAppointment;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -22,11 +21,10 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @IgnoreExtraProperties
 
-public class BookingAppointmentActivity extends AppCompatActivity {
+public class BookingAppointmentActivity extends AppCompatActivity  {
 
     DatabaseReference databaseReference ;
 
@@ -54,7 +52,7 @@ public class BookingAppointmentActivity extends AppCompatActivity {
         pid = intent.getStringExtra("pid");
         Log.d(TAG_BOOKING_ACT, "Got requested id: " + pid);
 
-        company_txt = (TextView) findViewById(R.id.booking_act_chosen_company);
+        company_txt = (TextView) findViewById(R.id.booking_frg_chosen_service);
         company_txt.setText(intent.getStringExtra("companyName"));
 
         servicesList = new ArrayList<>();

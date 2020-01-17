@@ -32,7 +32,11 @@ public class AppointmentViewModel extends ViewModel {
                 }
                 JoinedAppointment appointment = (JoinedAppointment) object;
                 ArrayList<JoinedAppointment> joinedAppointments = allJoinedAppointments.getValue();
+
+                joinedAppointments.remove(appointment);
                 joinedAppointments.add(appointment);
+
+
                 allJoinedAppointments.setValue(joinedAppointments);
             }
         });
@@ -61,10 +65,6 @@ public class AppointmentViewModel extends ViewModel {
                 }
             }
         });
-    }
-
-    public void clearListeners() {
-        UserDataRepository.getInstance().clearEventsOfAppointments();
     }
 
 }

@@ -112,5 +112,14 @@
     <string name="set_alarm_time">Set Alarm Time</string>
     <string name="set_alarm_date">Set alarm date</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    //Booking Appointment
+
+    <string name="booking_appointment">Book Appointment</string>
+
+
+
 
 </resources>

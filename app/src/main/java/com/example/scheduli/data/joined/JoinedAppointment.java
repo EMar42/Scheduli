@@ -7,6 +7,7 @@ import com.example.scheduli.data.Appointment;
 
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Objects;
 
 public class JoinedAppointment implements Parcelable {
     private Appointment appointment;
@@ -121,5 +122,23 @@ public class JoinedAppointment implements Parcelable {
         dest.writeString(providerProfession);
         dest.writeString(providerPhoneNumber);
         dest.writeString(providerAddress);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof JoinedAppointment)) return false;
+        JoinedAppointment that = (JoinedAppointment) o;
+        return getAppointment().equals(that.getAppointment()) &&
+                Objects.equals(getProviderImageUrl(), that.getProviderImageUrl()) &&
+                getProviderCompanyName().equals(that.getProviderCompanyName()) &&
+                getProviderProfession().equals(that.getProviderProfession()) &&
+                getProviderPhoneNumber().equals(that.getProviderPhoneNumber()) &&
+                getProviderAddress().equals(that.getProviderAddress());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getAppointment(), getProviderImageUrl(), getProviderCompanyName(), getProviderProfession(), getProviderPhoneNumber(), getProviderAddress());
     }
 }
