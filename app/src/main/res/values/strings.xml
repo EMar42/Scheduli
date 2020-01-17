@@ -121,7 +121,7 @@
     <string name="attempting_to_login">Attempting To login</string>
     <string name="provider_details">Provider Details</string>
     <string name="set_appointment_in_calender">Set Appointment In Calender</string>
-    <string name="cancel_delete_appointment">Cancel \\ Delete Appointment</string>
+    <string name="cancel_delete_appointment">Cancel Appointment</string>
 
 
 </resources>
