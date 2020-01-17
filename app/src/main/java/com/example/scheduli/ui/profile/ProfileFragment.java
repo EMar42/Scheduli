@@ -45,7 +45,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
+        mViewModel = ViewModelProviders.of(getParentFragment()).get(ProfileViewModel.class);
         mViewModel.getUserProfileData().observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {

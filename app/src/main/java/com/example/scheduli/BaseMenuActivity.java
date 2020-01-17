@@ -21,7 +21,6 @@ public class BaseMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

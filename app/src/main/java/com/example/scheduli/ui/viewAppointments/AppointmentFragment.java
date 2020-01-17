@@ -41,7 +41,7 @@ public class AppointmentFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(getActivity()).get(AppointmentViewModel.class);
+        mViewModel = ViewModelProviders.of(getParentFragment()).get(AppointmentViewModel.class);
 
         mViewModel.getAllJoinedAppointments().observe(this, new Observer<ArrayList<JoinedAppointment>>() {
             @Override
