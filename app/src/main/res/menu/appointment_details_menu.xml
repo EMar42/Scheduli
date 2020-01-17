@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_appointment_details"
+        android:icon="@drawable/ic_info_white_24dp"
+        android:title="@string/appointment_details" />
+    <item
+        android:id="@+id/navigation_appointment_provider_details"
+        android:icon="@drawable/ic_work_white_24dp"
+        android:title="@string/provider_details" />
+</menu>

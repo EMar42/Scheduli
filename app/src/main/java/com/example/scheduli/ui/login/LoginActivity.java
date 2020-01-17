@@ -9,6 +9,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,8 @@ import com.example.scheduli.ui.signup.SignupActivity;
 import com.example.scheduli.utils.UsersUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button createAccount, loginToApp, forgotPassword;
     private UsersUtils usersUtils;
     private FirebaseAuth.AuthStateListener userLoginStateListener;
+    private Snackbar snackbar;
 
     //FOR TESTING PERFORMANCE
     private void enableStrictMode() {
@@ -86,11 +90,19 @@ public class LoginActivity extends AppCompatActivity {
         checkLoginStatus();
     }
 
-    protected void loginToMainActivity(Intent intent) {
+    protected void loginToMainActivity(FirebaseUser user) {
+        //TODO add sound on login
+        //TODO implemennt intent change once user logged in to the app from sign-up.
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
     }
 
     private void checkLoginStatus() {
+        this.loginToApp.setEnabled(false);
+        this.forgotPassword.setEnabled(false);
+        this.createAccount.setEnabled(false);
+        snackbar = Snackbar.make(findViewById(R.id.login_constraint_layout), getText(R.string.attempting_to_login).toString(), BaseTransientBottomBar.LENGTH_INDEFINITE);
+        snackbar.show();
         new LoginTask().execute();
     }
 
@@ -136,29 +148,41 @@ public class LoginActivity extends AppCompatActivity {
         return editText.getText().toString().isEmpty();
     }
 
-    class LoginTask extends AsyncTask<Void, Void, Intent> {
+    class LoginTask extends AsyncTask<Void, Void, FirebaseUser> {
+        private ProgressBar progressBar;
+
 
         @Override
-        protected Intent doInBackground(Void... voids) {
+        protected void onPreExecute() {
+            progressBar = findViewById(R.id.login_progressBar);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected FirebaseUser doInBackground(Void... voids) {
+            Log.i(LOGIN_TAG, "Checking logged user in a task");
+
             FirebaseUser user = UsersUtils.getInstance().getCurrentUser();
             if (user != null) {
-                String uid = user.getUid();
-                //TODO add sound on login
-                //TODO implemennt intent change once user logged in to the app from sign-up.
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                UserDataRepository.getInstance().keepInSync(uid);
-                return intent;
+                UserDataRepository.getInstance().keepInSync(user.getUid());
+                return user;
             }
 
             return null;
         }
 
         @Override
-        protected void onPostExecute(Intent intent) {
-            if (intent != null) {
-                loginToMainActivity(intent);
+        protected void onPostExecute(FirebaseUser user) {
+            if (user != null) {
+                loginToMainActivity(user);
             }
 
+            //restore button functionality
+            LoginActivity.this.createAccount.setEnabled(true);
+            LoginActivity.this.loginToApp.setEnabled(true);
+            LoginActivity.this.forgotPassword.setEnabled(true);
+            progressBar.setVisibility(View.GONE);
+            snackbar.dismiss();
         }
     }
 }

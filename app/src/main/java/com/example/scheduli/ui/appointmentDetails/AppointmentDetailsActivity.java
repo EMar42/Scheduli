@@ -7,69 +7,56 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
-import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.example.scheduli.BaseMenuActivity;
 import com.example.scheduli.NotificationPublisher;
 import com.example.scheduli.R;
 import com.example.scheduli.data.joined.JoinedAppointment;
 import com.example.scheduli.data.repositories.UserDataRepository;
-import com.example.scheduli.ui.dialogs.DatePickerDialogFragment;
-import com.example.scheduli.ui.dialogs.TimerPickerDialogFragment;
-import com.example.scheduli.utils.DownloadImageAsync;
 import com.example.scheduli.utils.UpcomingAppointmentNotification;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 public class AppointmentDetailsActivity extends BaseMenuActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     public static final String APPOINTMENT_DETAILS = "AppointmentDetailsActivityPassedClass";
     public static final String DETAILS_TAG = "Appointment Details Activity";
 
-    private ImageView profileImage;
-    private ImageButton callProviderBtn;
-    private TextView providerNameTv;
-    private TextView providerProfessionTv;
-    private TextView providerAddressTv;
-    private TextView providerPhoneTv;
-    private TextView serviceNameTv;
-    private TextView serviceCostTv;
-    private TextView appointmentDate;
-    private TextView appointmentTimes;
-    private JoinedAppointment joinedAppointment;
-    private Button setAlarmTimeButton;
-    private Button setAlarmDateButton;
-    private Button setAlarmButton;
     private Calendar alarmTime;
     private Calendar alarmDate;
+
+    private AppointmentDetailsViewModel detailsViewModel;
+
+    //Controls
+    private AppBarConfiguration detailsNavBarConfig;
+    private NavController navController;
+    BottomNavigationView detailsBottomView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment_details);
+        detailsViewModel = ViewModelProviders.of(this).get(AppointmentDetailsViewModel.class);
+
         initView();
 
         fillAppointmentFields();
 
+        /*
         callProviderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +102,8 @@ public class AppointmentDetailsActivity extends BaseMenuActivity implements Time
                 }
             }
         });
+
+         */
     }
 
     private boolean checkIfEmpty(TextView textView) {
@@ -124,54 +113,39 @@ public class AppointmentDetailsActivity extends BaseMenuActivity implements Time
     private void fillAppointmentFields() {
         Log.i(DETAILS_TAG, "Getting information from intent to display in the activity");
         Intent intent = getIntent();
-        joinedAppointment = intent.getParcelableExtra(APPOINTMENT_DETAILS);
+        detailsViewModel.setJoinedAppointment((JoinedAppointment) intent.getParcelableExtra(APPOINTMENT_DETAILS));
 
-        new DownloadImageAsync(profileImage).execute(joinedAppointment.getProviderImageUrl());
-        providerNameTv.setText(joinedAppointment.getProviderCompanyName());
-        providerProfessionTv.setText(joinedAppointment.getProviderProfession());
-        providerPhoneTv.setText(joinedAppointment.getProviderPhoneNumber());
-        providerAddressTv.setText(joinedAppointment.getProviderAddress());
-        serviceNameTv.setText(joinedAppointment.getAppointment().getServiceName());
-        serviceCostTv.setText(joinedAppointment.getAppointment().getServiceCost());
-
-        Date date = new Date(joinedAppointment.getAppointment().getStart());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        appointmentDate.setText(dateFormat.format(date));
-
-        //set time of appointment
-        Date start = new Date(joinedAppointment.getAppointment().getStart());
-        Date end = new Date(joinedAppointment.getAppointment().getEnd());
-        DateFormat timeFormatter = new SimpleDateFormat("HH:mm");
-        String timeString = timeFormatter.format(start) + " - " + timeFormatter.format(end);
-        appointmentTimes.setText(timeString);
-    }
-
-    Locale getCurrentLocale(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return context.getResources().getConfiguration().getLocales().get(0);
-        } else {
-            //noinspection deprecation
-            return context.getResources().getConfiguration().locale;
-        }
+//        new DownloadImageAsync(profileImage).execute(joinedAppointment.getProviderImageUrl());
+//        providerNameTv.setText(joinedAppointment.getProviderCompanyName());
+//        providerProfessionTv.setText(joinedAppointment.getProviderProfession());
+//        providerPhoneTv.setText(joinedAppointment.getProviderPhoneNumber());
+//        providerAddressTv.setText(joinedAppointment.getProviderAddress());
+//        serviceNameTv.setText(joinedAppointment.getAppointment().getServiceName());
+//        serviceCostTv.setText(joinedAppointment.getAppointment().getServiceCost());
+//
+//        Date date = new Date(joinedAppointment.getAppointment().getStart());
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+//        appointmentDate.setText(dateFormat.format(date));
+//
+//        //set time of appointment
+//        Date start = new Date(joinedAppointment.getAppointment().getStart());
+//        Date end = new Date(joinedAppointment.getAppointment().getEnd());
+//        DateFormat timeFormatter = new SimpleDateFormat("HH:mm");
+//        String timeString = timeFormatter.format(start) + " - " + timeFormatter.format(end);
+//        appointmentTimes.setText(timeString);
     }
 
     private void initView() {
+
         Toolbar mainToolbar = findViewById(R.id.app_main_toolbar);
         setSupportActionBar(mainToolbar);
-
-        profileImage = findViewById(R.id.appointment_details_profileImage);
-        callProviderBtn = findViewById(R.id.btn_appointment_details_call);
-        providerNameTv = findViewById(R.id.tv_appDetails_providerCompany);
-        providerProfessionTv = findViewById(R.id.tv_appDetails_providerProffesion);
-        providerAddressTv = findViewById(R.id.tv_appDetails_providerAddress);
-        providerPhoneTv = findViewById(R.id.tv_appDetails_providerPhone);
-        serviceNameTv = findViewById(R.id.tv_appDetails_serviceName);
-        serviceCostTv = findViewById(R.id.tv_appDetails_serviceCost);
-        appointmentDate = findViewById(R.id.tv_appDetails_appointmentDate);
-        appointmentTimes = findViewById(R.id.tv_appDetails_appointmentTimes);
-        setAlarmTimeButton = findViewById(R.id.btn_details_apppointmet_pickTime);
-        setAlarmDateButton = findViewById(R.id.btn_appointment_details_pickDate);
-        setAlarmButton = findViewById(R.id.btn_appointment_details_set_alarm);
+        detailsBottomView = findViewById(R.id.appointment_details_bottom_nav);
+        detailsNavBarConfig = new AppBarConfiguration.Builder(
+                R.id.navigation_appointment_details, R.id.navigation_appointment_provider_details)
+                .build();
+        navController = Navigation.findNavController(this, R.id.details_fragment_host);
+        NavigationUI.setupActionBarWithNavController(this, navController, detailsNavBarConfig);
+        NavigationUI.setupWithNavController(detailsBottomView, navController);
     }
 
     @Override
@@ -207,10 +181,10 @@ public class AppointmentDetailsActivity extends BaseMenuActivity implements Time
         protected Void doInBackground(JoinedAppointment... joinedAppointments) {
 
             for (JoinedAppointment appointment : joinedAppointments) {
-                NotificationCompat.Builder builder = UpcomingAppointmentNotification.createNotification(getApplicationContext(), joinedAppointment);
+                NotificationCompat.Builder builder = UpcomingAppointmentNotification.createNotification(getApplicationContext(), joinedAppointments[0]);
                 Notification notification = builder.build();
 
-                scheduleNotification(notification, joinedAppointment);
+                scheduleNotification(notification, joinedAppointments[0]);
             }
 
             return null;

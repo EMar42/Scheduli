@@ -53,7 +53,7 @@ public class AppointmentViewModel extends ViewModel {
     }
 
     //Call Database for pulling the required information for the appointment list
-    private class PopulateTask extends AsyncTask<DataBaseCallBackOperation, Void, Void> {
+    private static class PopulateTask extends AsyncTask<DataBaseCallBackOperation, Void, Void> {
 
         @Override
         protected Void doInBackground(final DataBaseCallBackOperation... dataBaseCallBackOperations) {

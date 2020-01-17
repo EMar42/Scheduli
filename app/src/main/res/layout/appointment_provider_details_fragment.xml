@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.appointmentDetails.AppointmentProviderDetailsFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_provider_app_details_address_title"
+                style="@style/basicTextFont"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="240dp"
+                android:drawableStart="@drawable/ic_appointment_location_white_24dp"
+                android:drawablePadding="15dp"
+                android:drawableTint="@color/colorPrimary"
+                android:text="@string/address"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_provider_app_details_proffesion_title" />
+
+            <TextView
+                android:id="@+id/tv_provider_app_details_company_name_title"
+                style="@style/basicTextFont"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="240dp"
+                android:drawableStart="@drawable/ic_work_white_24dp"
+                android:drawablePadding="15dp"
+                android:drawableTint="@color/colorPrimary"
+                android:gravity="center_vertical"
+                android:text="@string/company_name"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_appointemtn_details_provider_image" />
+
+            <TextView
+                android:id="@+id/tv_provider_app_details_proffesion_title"
+                style="@style/basicTextFont"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="240dp"
+                android:drawableStart="@drawable/ic_person"
+                android:drawablePadding="15dp"
+                android:drawableTint="@color/colorPrimary"
+                android:text="@string/profession"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_provider_app_details_company_name_title" />
+
+            <TextView
+                android:id="@+id/tv_provider_app_details_phone_title"
+                style="@style/basicTextFont"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="240dp"
+                android:drawableStart="@drawable/ic_local_phone_white"
+                android:drawablePadding="15dp"
+                android:drawableTint="@color/colorPrimary"
+                android:gravity="center_vertical"
+                android:text="@string/phone_number"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_provider_app_details_address_title" />
+
+            <ImageView
+                android:id="@+id/iv_appointemtn_details_provider_image"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp"
+                android:contentDescription="@string/provider_profile_picture"
+                android:maxWidth="64dp"
+                android:maxHeight="64dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
+
+            <Button
+                android:id="@+id/btn_provider_app_details_call"
+                style="@style/appCompactButtons"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="240dp"
+                android:drawableStart="@drawable/ic_local_phone_white"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/call_business"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_provider_app_details_phone_title" />
+
+            <TextView
+                android:id="@+id/tv_provider_app_details_company_name"
+                style="@style/basicTextFont"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center_vertical"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/tv_provider_app_details_company_name_title"
+                app:layout_constraintTop_toBottomOf="@+id/iv_appointemtn_details_provider_image"
+                tools:text="Floop Floop" />
+
+            <TextView
+                android:id="@+id/tv_provider_app_details_proffesion"
+                style="@style/basicTextFont"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center_vertical"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/tv_provider_app_details_proffesion_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_provider_app_details_company_name"
+                tools:text="Terminator" />
+
+            <TextView
+                android:id="@+id/tv_provider_app_details_address"
+                style="@style/basicTextFont"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center_vertical"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/tv_provider_app_details_address_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_provider_app_details_proffesion"
+                tools:text="123 fake street" />
+
+            <TextView
+                android:id="@+id/tv_provider_app_details_phone"
+                style="@style/basicTextFont"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="35dp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center_vertical"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/tv_provider_app_details_phone_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_provider_app_details_address"
+                tools:text="052-741-741" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</FrameLayout>
