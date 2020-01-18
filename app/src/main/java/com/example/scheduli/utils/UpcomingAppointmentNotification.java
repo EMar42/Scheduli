@@ -13,7 +13,7 @@ import androidx.core.app.NotificationCompat;
 import com.example.scheduli.R;
 import com.example.scheduli.data.joined.JoinedAppointment;
 
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.Date;
 
 public class UpcomingAppointmentNotification {
@@ -23,10 +23,9 @@ public class UpcomingAppointmentNotification {
     public static NotificationCompat.Builder createNotification(final Context context, final JoinedAppointment appointment) {
         final Resources res = context.getResources();
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM, HH:mm");
         final String title = res.getString(R.string.upcoming_appointment_notification_title);
         final String text = res.getString(R.string.upcoming_appointment_notification_main_text,
-                appointment.getProviderCompanyName(), simpleDateFormat.format(new Date(appointment.getAppointment().getStart())));
+                appointment.getProviderCompanyName(), DateFormat.getTimeInstance().format(new Date(appointment.getAppointment().getStart())));
 
         return getBuilder(context, title, text);
     }

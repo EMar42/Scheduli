@@ -1,5 +1,10 @@
 package com.example.scheduli.ui.appointmentDetails;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,17 +13,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.scheduli.NotificationPublisher;
 import com.example.scheduli.R;
+import com.example.scheduli.data.repositories.UserDataRepository;
 import com.example.scheduli.ui.dialogs.DatePickerDialogFragment;
 import com.example.scheduli.ui.dialogs.TimerPickerDialogFragment;
 import com.example.scheduli.utils.TriggerCallback;
+import com.example.scheduli.utils.UpcomingAppointmentNotification;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -156,10 +166,49 @@ public class AppointemtDetailsFragment extends Fragment {
         callAlertButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (!checkIfEmpty(alertTimeSet) && !checkIfEmpty(alertDateSet)) {
+                    triggerAlarmNotification();
+                }
             }
         });
 
+    }
+
+    private void triggerAlarmNotification() {
+        Calendar alarmTimeAndDate = Calendar.getInstance();
+        alarmTimeAndDate.setTime(mViewModel.getAlarmSetDateFromDialog().getTime());
+        alarmTimeAndDate.set(Calendar.HOUR, mViewModel.getAlarmSetTimeFromDialog().get(Calendar.HOUR));
+        alarmTimeAndDate.set(Calendar.MINUTE, mViewModel.getAlarmSetTimeFromDialog().get(Calendar.MINUTE));
+        alarmTimeAndDate.set(Calendar.SECOND, 0);
+
+        Calendar appointmentStartDateTime = Calendar.getInstance();
+        appointmentStartDateTime.setTime(new Date(mViewModel.getJoinedAppointment().getAppointment().getStart()));
+
+        if (alarmTimeAndDate.before(appointmentStartDateTime)) {
+
+            NotificationCompat.Builder builder = UpcomingAppointmentNotification.createNotification(getActivity(), mViewModel.getJoinedAppointment());
+            Notification notification = builder.build();
+
+            Intent notificationIntent = new Intent(getActivity(), NotificationPublisher.class);
+            notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, NotificationPublisher.NOTIFICATION_COUNT++);
+            notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            mViewModel.getJoinedAppointment().getAppointment().setAlarmReminderTime(alarmTimeAndDate.getTimeInMillis());
+            UserDataRepository.getInstance().updateUserAppointment(mViewModel.getJoinedAppointment().getAppointment());
+
+            Log.i(APPOINTMENT_TAG, "Setting Alarm for " + alarmTimeAndDate.getTime().toString());
+            AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+            alarmManager.setExact(AlarmManager.RTC, alarmTimeAndDate.getTimeInMillis(), pendingIntent);
+
+        } else {
+            Toast.makeText(getContext(), "Alarm is not before the appointment start time", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    private boolean checkIfEmpty(TextView textView) {
+        return textView.getText().toString().isEmpty();
     }
 
     private void initView(@NonNull View view) {

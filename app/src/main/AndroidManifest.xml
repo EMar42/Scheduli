@@ -17,7 +17,7 @@
         <receiver
             android:name=".NotificationPublisher"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="true" />
 
         <activity android:name=".ui.appointmentDetails.AppointmentDetailsActivity" />
         <activity android:name=".ui.BookingAppointment.BookingAppointmentActivity" />
