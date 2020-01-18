@@ -91,10 +91,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     protected void loginToMainActivity(FirebaseUser user) {
-        //TODO add sound on login
-        //TODO implemennt intent change once user logged in to the app from sign-up.
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  //if bugs happen on login clear this
         startActivity(intent);
+        finish();
     }
 
     private void checkLoginStatus() {
