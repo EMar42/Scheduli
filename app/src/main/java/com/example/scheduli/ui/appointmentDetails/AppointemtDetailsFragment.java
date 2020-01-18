@@ -184,8 +184,7 @@ public class AppointemtDetailsFragment extends Fragment {
         Calendar appointmentStartDateTime = Calendar.getInstance();
         appointmentStartDateTime.setTime(new Date(mViewModel.getJoinedAppointment().getAppointment().getStart()));
 
-        if (alarmTimeAndDate.before(appointmentStartDateTime)) {
-
+        if (alarmTimeAndDate.before(appointmentStartDateTime) && Calendar.getInstance().before(alarmTimeAndDate)) {
             NotificationCompat.Builder builder = UpcomingAppointmentNotification.createNotification(getActivity(), mViewModel.getJoinedAppointment());
             Notification notification = builder.build();
 
@@ -202,7 +201,10 @@ public class AppointemtDetailsFragment extends Fragment {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTimeAndDate.getTimeInMillis(), pendingIntent);
             Toast.makeText(getContext(), "Alarm is set to " + alarmTimeAndDate.getTime().toString(), Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getContext(), "Alarm is not before the appointment start time", Toast.LENGTH_LONG).show();
+            if (alarmTimeAndDate.after(appointmentStartDateTime))
+                Toast.makeText(getContext(), "Alarm is not before the appointment start time", Toast.LENGTH_LONG).show();
+            if (Calendar.getInstance().after(alarmTimeAndDate))
+                Toast.makeText(getContext(), "We passed the time of the alarm already", Toast.LENGTH_LONG).show();
         }
 
     }

@@ -8,6 +8,7 @@ import com.example.scheduli.data.joined.JoinedAppointment;
 import com.example.scheduli.utils.TriggerCallback;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class AppointmentDetailsViewModel extends ViewModel {
     private JoinedAppointment joinedAppointment;
@@ -22,10 +23,17 @@ public class AppointmentDetailsViewModel extends ViewModel {
     public AppointmentDetailsViewModel() {
         this.joinedAppointment = null;
         this.providerImage = null;
+        this.alarmSetTimeFromDialog = Calendar.getInstance();
+        this.alarmSetDateFromDialog = Calendar.getInstance();
+
     }
 
     void setJoinedAppointment(JoinedAppointment joinedAppointment) {
         this.joinedAppointment = joinedAppointment;
+        if (this.joinedAppointment.getAppointment().getAlarmReminderTime() != 0) {
+            alarmSetDateFromDialog.setTime(new Date(this.joinedAppointment.getAppointment().getAlarmReminderTime()));
+            alarmSetTimeFromDialog.setTime(new Date(this.joinedAppointment.getAppointment().getAlarmReminderTime()));
+        }
     }
 
     public Bitmap getProviderImage() {

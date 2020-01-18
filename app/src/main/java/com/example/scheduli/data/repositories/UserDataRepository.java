@@ -26,7 +26,7 @@ public class UserDataRepository {
     private final DatabaseReference dataBaseReference;
     private DatabaseReference userReference;
     private ValueEventListener appointmentListener;
-    private int limitAmount;
+    private int limitAmountofAppointments;
 
     public static UserDataRepository getInstance() {
         if (instance == null) {
@@ -41,6 +41,7 @@ public class UserDataRepository {
 
     private UserDataRepository() {
         this.dataBaseReference = FirebaseDatabase.getInstance().getReference("users");
+        this.limitAmountofAppointments = 100;
     }
 
     public void keepInSync(String uid) {
@@ -71,12 +72,7 @@ public class UserDataRepository {
                 }
             };
 
-            //TODO change detach mechanizem when preference changes so we will pull the data according to settings not only when we logout.
-            if (limitAmount == 0) {
-                limitAmount = 100; // by default show the top 100 appointments for user
-            }
-
-            userReference.child("appointments").orderByChild("start").limitToLast(limitAmount).addValueEventListener(appointmentListener);
+            userReference.child("appointments").orderByChild("start").limitToLast(limitAmountofAppointments).addValueEventListener(appointmentListener);
         }
     }
 
@@ -176,11 +172,19 @@ public class UserDataRepository {
         }
     }
 
-    public void setLimitAmount(int limitAmount) {
-        this.limitAmount = limitAmount;
+    public void setLimitAmountOfAppointments(int limitAmountofAppointments) {
+        if (limitAmountofAppointments != this.limitAmountofAppointments) {
+
+            //Set to maximum if no limit is set from settings
+            if (limitAmountofAppointments == 0)
+                limitAmountofAppointments = 100;
+
+            this.limitAmountofAppointments = limitAmountofAppointments;
+            clearEventsOfAppointments();
+        }
     }
 
-    public int getLimitAmount() {
-        return limitAmount;
+    public int getLimitAmountOfAppointments() {
+        return limitAmountofAppointments;
     }
 }

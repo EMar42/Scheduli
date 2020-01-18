@@ -1,5 +1,6 @@
 package com.example.scheduli.ui.viewAppointments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +13,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.scheduli.R;
 import com.example.scheduli.data.joined.JoinedAppointment;
+import com.example.scheduli.data.repositories.UserDataRepository;
 import com.example.scheduli.utils.TriggerCallback;
 
 import java.util.ArrayList;
@@ -41,7 +44,17 @@ public class AppointmentFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        //TODO Check performance impact
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        if (preferences.getBoolean(getString(R.string.allowAppointmentLimitingKey), false)) {
+            String limitValue = preferences.getString(getString(R.string.appointmentsCountKey), "100");
+
+            UserDataRepository.getInstance().setLimitAmountOfAppointments(Integer.parseInt(limitValue));
+        }
+
         mViewModel = ViewModelProviders.of(getParentFragment()).get(AppointmentViewModel.class);
+
 
         mViewModel.getAllJoinedAppointments().observe(this, new Observer<ArrayList<JoinedAppointment>>() {
             @Override

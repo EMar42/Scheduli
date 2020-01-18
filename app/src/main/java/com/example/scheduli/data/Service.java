@@ -1,13 +1,15 @@
 package com.example.scheduli.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Set;
 
 @IgnoreExtraProperties
-public class Service {
+public class Service implements Parcelable {
 
     private String name;
     private float cost;
@@ -25,6 +27,24 @@ public class Service {
         this.workingDays = workingDays;
         this.dailySessions = dailySessions;
     }
+
+    protected Service(Parcel in) {
+        name = in.readString();
+        cost = in.readFloat();
+        singleSessionInMinutes = in.readInt();
+    }
+
+    public static final Creator<Service> CREATOR = new Creator<Service>() {
+        @Override
+        public Service createFromParcel(Parcel in) {
+            return new Service(in);
+        }
+
+        @Override
+        public Service[] newArray(int size) {
+            return new Service[size];
+        }
+    };
 
     public String getName() {
         return name;
@@ -66,4 +86,15 @@ public class Service {
         this.dailySessions = dailySessions;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeFloat(cost);
+        dest.writeInt(singleSessionInMinutes);
+    }
 }
