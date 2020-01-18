@@ -45,6 +45,8 @@ public class AppointmentDetailsActivity extends BaseMenuActivity implements Time
     private AppBarConfiguration detailsNavBarConfig;
     private NavController navController;
     BottomNavigationView detailsBottomView;
+    private Calendar alarmSetDateFromDialog;
+    private Calendar alarmSetTimeFromDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,17 +59,6 @@ public class AppointmentDetailsActivity extends BaseMenuActivity implements Time
         fillAppointmentFields();
 
         /*
-        callProviderBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!checkIfEmpty(providerPhoneTv)) {
-                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + providerPhoneTv.getText().toString()));
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(AppointmentDetailsActivity.this, getString(R.string.provider_missing_phone_error_message), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
 
         //Setting the date for the alarm
         setAlarmDateButton.setOnClickListener(new View.OnClickListener() {
@@ -148,25 +139,6 @@ public class AppointmentDetailsActivity extends BaseMenuActivity implements Time
         NavigationUI.setupWithNavController(detailsBottomView, navController);
     }
 
-    @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        Calendar timeForAlarm = Calendar.getInstance();
-        timeForAlarm.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        timeForAlarm.set(Calendar.MINUTE, minute);
-        timeForAlarm.set(Calendar.SECOND, 0);
-
-        this.alarmTime = timeForAlarm;
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Calendar dateForAlarm = Calendar.getInstance();
-        dateForAlarm.set(Calendar.YEAR, year);
-        dateForAlarm.set(Calendar.MONTH, month);
-        dateForAlarm.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
-        this.alarmDate = dateForAlarm;
-    }
 
 
     private class SetNotificationReminderClass extends AsyncTask<JoinedAppointment, Void, Void> {
@@ -209,6 +181,23 @@ public class AppointmentDetailsActivity extends BaseMenuActivity implements Time
             }
         }
 
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        alarmSetDateFromDialog = Calendar.getInstance();
+        alarmSetDateFromDialog.set(Calendar.YEAR, year);
+        alarmSetDateFromDialog.set(Calendar.MONTH, month);
+        alarmSetDateFromDialog.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        detailsViewModel.setAlarmDate(alarmSetDateFromDialog);
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        alarmSetTimeFromDialog = Calendar.getInstance();
+        alarmSetTimeFromDialog.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        alarmSetTimeFromDialog.set(Calendar.MINUTE, minute);
+        detailsViewModel.setAlarmTime(alarmSetTimeFromDialog);
     }
 
 
