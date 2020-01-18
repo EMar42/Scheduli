@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -204,6 +205,8 @@ public class AppointemtDetailsFragment extends Fragment {
 
             MediaPlayer mediaPlayer = MediaPlayer.create(getActivity(), R.raw.twin_bell_alarm_clock);
             mediaPlayer.start();
+
+            callAlertButton.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.shake));
         } else {
             if (alarmTimeAndDate.after(appointmentStartDateTime))
                 Toast.makeText(getContext(), "Alarm is not before the appointment start time", Toast.LENGTH_LONG).show();
