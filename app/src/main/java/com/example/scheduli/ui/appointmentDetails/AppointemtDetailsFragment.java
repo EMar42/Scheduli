@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -200,6 +201,9 @@ public class AppointemtDetailsFragment extends Fragment {
             AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTimeAndDate.getTimeInMillis(), pendingIntent);
             Toast.makeText(getContext(), "Alarm is set to " + alarmTimeAndDate.getTime().toString(), Toast.LENGTH_LONG).show();
+
+            MediaPlayer mediaPlayer = MediaPlayer.create(getActivity(), R.raw.twin_bell_alarm_clock);
+            mediaPlayer.start();
         } else {
             if (alarmTimeAndDate.after(appointmentStartDateTime))
                 Toast.makeText(getContext(), "Alarm is not before the appointment start time", Toast.LENGTH_LONG).show();
