@@ -199,8 +199,8 @@ public class AppointemtDetailsFragment extends Fragment {
 
             Log.i(APPOINTMENT_TAG, "Setting Alarm for " + alarmTimeAndDate.getTime().toString());
             AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-            alarmManager.setExact(AlarmManager.RTC, alarmTimeAndDate.getTimeInMillis(), pendingIntent);
-
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTimeAndDate.getTimeInMillis(), pendingIntent);
+            Toast.makeText(getContext(), "Alarm is set to " + alarmTimeAndDate.getTime().toString(), Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(getContext(), "Alarm is not before the appointment start time", Toast.LENGTH_LONG).show();
         }

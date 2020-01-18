@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
 
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                     .detectAll()
-                    .penaltyDialog()
+                    .penaltyLog()
                     .build();
             StrictMode.setThreadPolicy(policy);
         }

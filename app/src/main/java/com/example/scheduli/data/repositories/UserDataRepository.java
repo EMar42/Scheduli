@@ -26,6 +26,7 @@ public class UserDataRepository {
     private final DatabaseReference dataBaseReference;
     private DatabaseReference userReference;
     private ValueEventListener appointmentListener;
+    private int limitAmount;
 
     public static UserDataRepository getInstance() {
         if (instance == null) {
@@ -48,6 +49,7 @@ public class UserDataRepository {
 
     }
 
+
     public void getUserAppointments(final DataBaseCallBackOperation callBackOperation) {
         if (appointmentListener == null) {
             appointmentListener = new ValueEventListener() {
@@ -69,7 +71,12 @@ public class UserDataRepository {
                 }
             };
 
-            userReference.child("appointments").addValueEventListener(appointmentListener);
+            //TODO change detach mechanizem when preference changes so we will pull the data according to settings not only when we logout.
+            if (limitAmount == 0) {
+                limitAmount = 100; // by default show the top 100 appointments for user
+            }
+
+            userReference.child("appointments").orderByChild("start").limitToLast(limitAmount).addValueEventListener(appointmentListener);
         }
     }
 
@@ -141,6 +148,7 @@ public class UserDataRepository {
         this.dataBaseReference.child(uid).updateChildren(userValues);
     }
 
+
     public void updateUserAppointment(final Appointment appointment) {
         userReference.child("appointments").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -166,5 +174,13 @@ public class UserDataRepository {
             userReference.child("appointments").removeEventListener(this.appointmentListener);
             this.appointmentListener = null;
         }
+    }
+
+    public void setLimitAmount(int limitAmount) {
+        this.limitAmount = limitAmount;
+    }
+
+    public int getLimitAmount() {
+        return limitAmount;
     }
 }

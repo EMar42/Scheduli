@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:title="@string/settings_category_language">
-        <ListPreference
-            android:defaultValue="English"
-            android:entries="@array/language_options_select"
-            android:entryValues="@array/language_options_codes"
-            android:key="language_preferences"
-            android:summary="@string/language_select_summary"
-            android:title="@string/language_select_title" />
+    <PreferenceCategory app:title="Appointments pulling settings">
+        <SwitchPreferenceCompat
+            app:key="@string/allowAppointmentLimitingKey"
+            android:defaultValue="false"
+            app:title="@string/allowAppointmentLimitingTitle"
+            app:summary="@string/allowAppointmentLimitingSummary" />
+
+        <DropDownPreference
+            android:dependency="@string/allowAppointmentLimitingKey"
+            app:key="@string/appointmentsCountKey"
+            app:title="@string/appointmentsCountTitle"
+            app:useSimpleSummaryProvider="true"
+            android:entries="@array/settingsLimitValues"
+            android:entryValues="@array/settingsLimitValues" />
     </PreferenceCategory>
 
 
