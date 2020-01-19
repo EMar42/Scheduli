@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.scheduli.R;
+import com.example.scheduli.data.Appointment;
 import com.example.scheduli.data.joined.JoinedAppointment;
 import com.example.scheduli.data.repositories.UserDataRepository;
 import com.example.scheduli.ui.appointmentDetails.AppointmentDetailsActivity;
@@ -206,10 +207,17 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
             delete.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    JoinedAppointment joinedAppointment = joinedAppointments.get(currentPosition);
-                    UserDataRepository.getInstance().deleteAppointmnet(UsersUtils.getInstance().getCurrentUserUid(), joinedAppointment, joinedAppointments);
+                    JoinedAppointment joinedAppointment = shownJoinedAppointments.get(currentPosition);
                     joinedAppointments.remove(currentPosition);
                     shownJoinedAppointments.remove(currentPosition);
+                    ArrayList<Appointment> appointments = new ArrayList<>();
+
+                    for (JoinedAppointment joindApp :
+                            joinedAppointments) {
+                        appointments.add(joindApp.getAppointment());
+                    }
+
+                    UserDataRepository.getInstance().deleteAppointments(UsersUtils.getInstance().getCurrentUserUid(), appointments, joinedAppointment.getAppointment());
                     removeAppointemntOperation.onCallback();
                     return true;
                 }
