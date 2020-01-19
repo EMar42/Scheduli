@@ -67,7 +67,7 @@
     <string name="past">Past</string>
     <string name="appointment_details">Appointment Details</string>
     <string name="cancel_appointment">Cancel Appointment</string>
-    <string name="set_reminder">Set Reminder</string>
+    <string name="set_alarm">Set Alarm</string>
     <string name="company_name">Company Name</string>
     <string name="profession">Profession</string>
     <string name="service_name">Service Name</string>
@@ -82,19 +82,6 @@
     <string name="user_phone_number">Phone Number</string>
     <string name="user_fullname">Full Name</string>
     <string name="profile_provider_button">Provider</string>
-    <string-array name="language_options_select">
-        <item>English</item>
-        <item>Hebrew</item>
-        <item>Russian</item>
-        <item>Portuguese</item>
-    </string-array>
-
-    <string-array name="language_options_codes">
-        <item>en_US</item>
-        <item>iw_rIL</item>
-        <item>ru_</item>
-        <item>pt_BR</item>
-    </string-array>
 
     //upcoming notifications
     <string name="upcoming_appointment_notification_title">Upcoming appointment
@@ -118,8 +105,23 @@
     //Booking Appointment
 
     <string name="booking_appointment">Book Appointment</string>
+    <string name="attempting_to_login">Attempting To login</string>
+    <string name="provider_details">Provider Details</string>
+    <string name="set_appointment_in_calender">Set Appointment In Calender</string>
+    <string name="cancel_delete_appointment">Cancel Appointment</string>
+    <string name="allowAppointmentLimitingKey">allowAppointmentLimiting</string>
+    <string name="appointmentsCountKey">appointmentsCount</string>
+    <string name="appointmentsCountTitle">Select Amount Of appointments to show</string>
+    <string name="allowAppointmentLimitingSummary">Enable or disable appointment limiting this might affect your performance.
+        This will affect the next time we will pull your appointments from the web</string>
+    <string name="allowAppointmentLimitingTitle">Allow appointment limiting</string>
 
-
-
+    //Settings
+    <array name="settingsLimitValues">
+        <item>"5"</item>
+        <item>"10"</item>
+        <item>"15"</item>
+        <item>"20"</item>
+    </array>
 
 </resources>

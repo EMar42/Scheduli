@@ -68,14 +68,12 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
 
             //set date of appointment
             Date date = new Date(current.getAppointment().getStart());
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            appointmentViewHolder.appointmentDate.setText(dateFormat.format(date));
+            appointmentViewHolder.appointmentDate.setText(DateFormat.getDateInstance().format(date));
 
             //set time of appointment
             Date start = new Date(current.getAppointment().getStart());
             Date end = new Date(current.getAppointment().getEnd());
-            @SuppressLint("SimpleDateFormat") DateFormat timeFormatter = new SimpleDateFormat("HH:mm");
-            String timeString = timeFormatter.format(start) + " - " + timeFormatter.format(end);
+            String timeString = DateFormat.getTimeInstance().format(start) + " - " + DateFormat.getTimeInstance().format(end);
             appointmentViewHolder.appointmentTime.setText(timeString);
 
             if (current.getAppointment().getAlarmReminderTime() != 0 && new Date(Calendar.getInstance().getTimeInMillis()).after(new Date(current.getAppointment().getAlarmReminderTime()))) {

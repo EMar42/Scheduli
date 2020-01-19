@@ -26,6 +26,7 @@ public class UserDataRepository {
     private final DatabaseReference dataBaseReference;
     private DatabaseReference userReference;
     private ValueEventListener appointmentListener;
+    private int limitAmountofAppointments;
 
     public static UserDataRepository getInstance() {
         if (instance == null) {
@@ -40,6 +41,7 @@ public class UserDataRepository {
 
     private UserDataRepository() {
         this.dataBaseReference = FirebaseDatabase.getInstance().getReference("users");
+        this.limitAmountofAppointments = 100;
     }
 
     public void keepInSync(String uid) {
@@ -47,6 +49,7 @@ public class UserDataRepository {
         userReference.keepSynced(true);
 
     }
+
 
     public void getUserAppointments(final DataBaseCallBackOperation callBackOperation) {
         if (appointmentListener == null) {
@@ -69,7 +72,7 @@ public class UserDataRepository {
                 }
             };
 
-            userReference.child("appointments").addValueEventListener(appointmentListener);
+            userReference.child("appointments").orderByChild("start").limitToLast(limitAmountofAppointments).addValueEventListener(appointmentListener);
         }
     }
 
@@ -141,6 +144,7 @@ public class UserDataRepository {
         this.dataBaseReference.child(uid).updateChildren(userValues);
     }
 
+
     public void updateUserAppointment(final Appointment appointment) {
         userReference.child("appointments").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -166,5 +170,21 @@ public class UserDataRepository {
             userReference.child("appointments").removeEventListener(this.appointmentListener);
             this.appointmentListener = null;
         }
+    }
+
+    public void setLimitAmountOfAppointments(int limitAmountofAppointments) {
+        if (limitAmountofAppointments != this.limitAmountofAppointments) {
+
+            //Set to maximum if no limit is set from settings
+            if (limitAmountofAppointments == 0)
+                limitAmountofAppointments = 100;
+
+            this.limitAmountofAppointments = limitAmountofAppointments;
+            clearEventsOfAppointments();
+        }
+    }
+
+    public int getLimitAmountOfAppointments() {
+        return limitAmountofAppointments;
     }
 }

@@ -15,6 +15,7 @@ public class ScheduliApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         //Set cache for fire database
         DataBaseSetup.setDatabasePersistentOn();
 

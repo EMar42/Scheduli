@@ -11,15 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.scheduli.R;
+import com.example.scheduli.data.Service;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SetAppointmentTime.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SetAppointmentTime#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class SetAppointmentTime extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,7 +21,7 @@ public class SetAppointmentTime extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private Service mService;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
@@ -58,7 +52,6 @@ public class SetAppointmentTime extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -67,7 +60,9 @@ public class SetAppointmentTime extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_set_appointment_time, container, false);
+        View view = inflater.inflate(R.layout.fragment_set_appointment_time, container, false);
+        return view;
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

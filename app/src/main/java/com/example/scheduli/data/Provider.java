@@ -1,22 +1,17 @@
 package com.example.scheduli.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.appcompat.widget.DialogTitle;
-
-import com.example.scheduli.ui.login.LoginActivity;
-import com.example.scheduli.ui.mainScreen.MainActivity;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 @IgnoreExtraProperties
-public class Provider {
+public class Provider implements Parcelable {
 
      private static final String SERVICE_TAG = "Provider activity";
 
@@ -67,6 +62,42 @@ public class Provider {
         this.services = provider.services;
     }
 
+
+    protected Provider(Parcel in) {
+        imageUrl = in.readString();
+        companyName = in.readString();
+        profession = in.readString();
+        phoneNumber = in.readString();
+        address = in.readString();
+        services = in.createTypedArrayList(Service.CREATOR);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(imageUrl);
+        dest.writeString(companyName);
+        dest.writeString(profession);
+        dest.writeString(phoneNumber);
+        dest.writeString(address);
+        dest.writeTypedList(services);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Provider> CREATOR = new Creator<Provider>() {
+        @Override
+        public Provider createFromParcel(Parcel in) {
+            return new Provider(in);
+        }
+
+        @Override
+        public Provider[] newArray(int size) {
+            return new Provider[size];
+        }
+    };
 
     public String getCompanyName() {
         return companyName;

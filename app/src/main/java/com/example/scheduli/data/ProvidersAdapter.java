@@ -3,8 +3,6 @@ package com.example.scheduli.data;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,27 +10,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.scheduli.R;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.ProviderViewHolder>{// implements Filterable {
 
     private  List<Provider> providerList;
     private  List<Provider> providerListAll; // for dynamic search
-    private OnProviderListener onProviderListener;
+    private OnProviderListener listener;
 
 
     public ProvidersAdapter(List<Provider> providerList, OnProviderListener onProviderListener) {
         this.providerList = providerList;
         this.providerListAll = providerList;
-        this.onProviderListener = onProviderListener;
+        this.listener = onProviderListener;
     }
 
 
@@ -40,7 +31,7 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
     @Override
     public ProviderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item, parent, false);
-        return new ProviderViewHolder(view, onProviderListener);
+        return new ProviderViewHolder(view, listener);
     }
 
     @Override

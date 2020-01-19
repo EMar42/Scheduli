@@ -7,11 +7,22 @@
     android:background="@android:color/background_light"
     tools:context=".ui.SearchProvider.SearchProviderActivity">
 
+
+    <include
+        android:id="@+id/app_main_toolbar"
+        layout="@layout/app_main_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <TextView
         android:id="@+id/header_book_appointment"
         android:layout_width="328dp"
         android:layout_height="55dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-black"
         android:text="Book Appointment"
         android:textAlignment="textStart"
@@ -21,33 +32,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/main_bar_image_search_act"
-        android:layout_width="425dp"
-        android:layout_height="104dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/main_bar_background" />
-
-    <Button
-        android:id="@+id/searchProviderButton_search_act"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="155dp"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/ic_main_button_unavailable"
-        android:fontFamily="serif"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@android:color/background_light"
-        android:textSize="50dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/app_main_toolbar" />
 
     <TextView
         android:id="@+id/booking_frg_chosen_service"
@@ -66,7 +51,7 @@
         android:id="@+id/editText_search_field"
         android:layout_width="328dp"
         android:layout_height="42dp"
-        android:layout_marginTop="39dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/search_bar"
         android:ems="10"
         android:hint="Search Provider..."
@@ -82,32 +67,46 @@
         android:id="@+id/search_provider_button"
         android:layout_width="37dp"
         android:layout_height="32dp"
-        android:layout_marginTop="42dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
         android:padding="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/booking_frg_chosen_service"
-        app:srcCompat="@drawable/ic_search_btn"/>
-<!--        app:showAsAction="always|collapseActionView"-->
+        app:layout_constraintEnd_toEndOf="@+id/editText_search_field"
+        app:layout_constraintTop_toTopOf="@+id/editText_search_field"
+        app:srcCompat="@drawable/ic_search_btn" />
+    <!--        app:showAsAction="always|collapseActionView"-->
 <!--        app:actionViewClass="androidx.appcompat.widget.SearchView"-->
-        />
-
+    />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_results_list"
         android:layout_width="383dp"
-        android:layout_height="347dp"
+        android:layout_height="430dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:scrollbars="vertical"
         android:backgroundTint="@android:color/darker_gray"
-        app:layout_constraintBottom_toTopOf="@+id/searchProviderButton_search_act"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/main_bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText_search_field"
         tools:itemCount="5"
         tools:listitem="@layout/recycler_view_item" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/main_bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/colorPrimaryDark"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/main_bottom_navigation_menu" >
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -36,18 +36,17 @@ public class MainActivity extends BaseMenuActivity {
                 searchActivity();
             }
         });
+
     }
+
 
     private void initView() {
         mainToolbar = findViewById(R.id.app_main_toolbar);
         setSupportActionBar(mainToolbar);
         bottomNavigationView = findViewById(R.id.main_bottom_navigation);
+
         searchProviderButton = findViewById(R.id.floating_search_provider);
-        appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_profile, R.id.navigation_appointments)
-                .build();
         navController = Navigation.findNavController(this, R.id.main_fragment_container);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 

@@ -2,17 +2,22 @@ package com.example.scheduli.ui.BookingAppointment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.scheduli.R;
 import com.example.scheduli.data.Service;
 import com.example.scheduli.data.ServiceAdapter;
+import com.example.scheduli.data.repositories.ProviderDataRepository;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,9 +33,12 @@ public class BookingAppointmentActivity extends AppCompatActivity  {
 
     DatabaseReference databaseReference ;
 
+    private FrameLayout fragmentContainer;
+    public static FragmentManager fragmentManager;
+
     private static final String TAG_BOOKING_ACT = "BookingAppointmentActiv";
     private RecyclerView.LayoutManager mLayout;
-    private RecyclerView.Adapter mAdapter;
+    private ServiceAdapter mAdapter;
     private ArrayList<Service> servicesList;
     private String pid;
 
@@ -43,6 +51,11 @@ public class BookingAppointmentActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_appointment);
 
+//        fragmentContainer = (FrameLayout) findViewById(R.id.booking_set_time_fragment_container) ;
+//        fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        SetAppointmentTime setAppointmentTimeFragment = new SetAppointmentTime();
+
 
         init();
     }
@@ -54,8 +67,8 @@ public class BookingAppointmentActivity extends AppCompatActivity  {
 
         company_txt = (TextView) findViewById(R.id.booking_frg_chosen_service);
         company_txt.setText(intent.getStringExtra("companyName"));
-
         servicesList = new ArrayList<>();
+
         databaseReference =  FirebaseDatabase.getInstance().getReference("providers").child(pid).child("services");
         mLayout = new GridLayoutManager(this,2);
         mAdapter = new ServiceAdapter(servicesList);
@@ -64,6 +77,14 @@ public class BookingAppointmentActivity extends AppCompatActivity  {
         recyclerView.setLayoutManager(mLayout);
         recyclerView.setAdapter(mAdapter);
         getServices();
+
+        mAdapter.setOnItemClickListener(new ServiceAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                servicesList.get(position);
+                Log.d(TAG_BOOKING_ACT, "User choose service: [" + position + "] - " + servicesList.get(position).getName());
+            }
+        });
     }
 
     private void getServices() {
@@ -105,7 +126,6 @@ public class BookingAppointmentActivity extends AppCompatActivity  {
                 /********************************************************/
 
                 if (!servicesList.isEmpty()) {
-//                    adapter = new ProvidersAdapter(providersList);
                     recyclerView.setAdapter(mAdapter);
                 }
             }
