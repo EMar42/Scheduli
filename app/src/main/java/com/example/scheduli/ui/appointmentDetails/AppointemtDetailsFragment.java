@@ -252,7 +252,6 @@ public class AppointemtDetailsFragment extends Fragment {
         setAlertTimeButton = view.findViewById(R.id.btn_app_details_alarm_set_time);
         setAppointmentInCalenderButton = view.findViewById(R.id.btn_app_details_set_appointment_in_calender);
         callAlertButton = view.findViewById(R.id.btn_app_details_alarm_activate);
-        cancelAppointmentButton = view.findViewById(R.id.btn_app_details_cancel_appointment);
     }
 
 
