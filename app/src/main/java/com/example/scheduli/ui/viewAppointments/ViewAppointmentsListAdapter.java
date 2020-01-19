@@ -3,7 +3,9 @@ package com.example.scheduli.ui.viewAppointments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -15,8 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.scheduli.R;
 import com.example.scheduli.data.joined.JoinedAppointment;
+import com.example.scheduli.data.repositories.UserDataRepository;
 import com.example.scheduli.ui.appointmentDetails.AppointmentDetailsActivity;
 import com.example.scheduli.utils.TriggerCallback;
+import com.example.scheduli.utils.UsersUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -33,6 +37,12 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
     private List<JoinedAppointment> joinedAppointments;
     private List<JoinedAppointment> shownJoinedAppointments;
     private final TriggerCallback callback;
+    private final TriggerCallback removeAppointemntOperation = new TriggerCallback() {
+        @Override
+        public void onCallback() {
+            ViewAppointmentsListAdapter.this.notifyDataSetChanged();
+        }
+    };
 
     public List<JoinedAppointment> getJoinedAppointments() {
         return joinedAppointments;
@@ -43,6 +53,8 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
         this.context = context;
         inflater = LayoutInflater.from(context);
         joinedAppointments = new ArrayList<>();
+
+
     }
 
     @NonNull
@@ -154,7 +166,7 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
         callback.onCallback();
     }
 
-    public class AppointmentViewHolder extends RecyclerView.ViewHolder {
+    public class AppointmentViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         TextView appointmentTitle;
         TextView appointmentDate;
         TextView appointmentTime;
@@ -183,7 +195,27 @@ public class ViewAppointmentsListAdapter extends RecyclerView.Adapter implements
                     }
                 }
             });
+
+            itemView.setOnCreateContextMenuListener(this);
         }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            menu.setHeaderTitle("Select an action");
+            MenuItem delete = menu.add(0, itemView.getId(), 0, context.getString(R.string.cancel_delete_appointment));
+            delete.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    JoinedAppointment joinedAppointment = joinedAppointments.get(currentPosition);
+                    UserDataRepository.getInstance().deleteAppointmnet(UsersUtils.getInstance().getCurrentUserUid(), joinedAppointment, joinedAppointments);
+                    joinedAppointments.remove(currentPosition);
+                    shownJoinedAppointments.remove(currentPosition);
+                    removeAppointemntOperation.onCallback();
+                    return true;
+                }
+            });
+        }
+
 
     }
 }

@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.example.scheduli.data.Appointment;
 import com.example.scheduli.data.User;
 import com.example.scheduli.data.fireBase.DataBaseCallBackOperation;
+import com.example.scheduli.data.joined.JoinedAppointment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -14,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -186,5 +188,9 @@ public class UserDataRepository {
 
     public int getLimitAmountOfAppointments() {
         return limitAmountofAppointments;
+    }
+
+    public void deleteAppointmnet(String currentUserUid, JoinedAppointment joinedAppointment, List<JoinedAppointment> joinedAppointments) {
+        //TODO implement method to delete appointment from database
     }
 }
