@@ -2,22 +2,26 @@ package com.example.scheduli.ui.BookingAppointment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.scheduli.BaseMenuActivity;
 import com.example.scheduli.R;
+import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.Service;
 import com.example.scheduli.data.ServiceAdapter;
-import com.example.scheduli.data.repositories.ProviderDataRepository;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,47 +29,70 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.Instant;
 import java.util.ArrayList;
 
 @IgnoreExtraProperties
 
-public class BookingAppointmentActivity extends AppCompatActivity  {
+public class BookingAppointmentActivity extends BaseMenuActivity {
 
     DatabaseReference databaseReference ;
-
-    private FrameLayout fragmentContainer;
-    public static FragmentManager fragmentManager;
+    Button btn_next;
 
     private static final String TAG_BOOKING_ACT = "BookingAppointmentActiv";
     private RecyclerView.LayoutManager mLayout;
     private ServiceAdapter mAdapter;
     private ArrayList<Service> servicesList;
     private String pid;
+    Provider provider;
+    private int servicePosition = -1;
 
     TextView company_txt;
     TextView serviceName;
     RecyclerView recyclerView;
+    private Toolbar mainToolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_appointment);
 
-//        fragmentContainer = (FrameLayout) findViewById(R.id.booking_set_time_fragment_container) ;
-//        fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        SetAppointmentTime setAppointmentTimeFragment = new SetAppointmentTime();
-
+        mainToolbar = findViewById(R.id.app_main_toolbar);
+        setSupportActionBar(mainToolbar);
 
         init();
+
+
+        btn_next = (Button) findViewById(R.id.btn_next_2);
+        btn_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(servicePosition >= 0) {
+                    Intent intent = new Intent(BookingAppointmentActivity.this, SetAppointmentTime.class);
+                intent.putExtra("provider" , provider);
+                intent.putExtra("service" , provider.getServices().get(servicePosition));
+                intent.putExtra("pid", pid);
+                startActivity(intent);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(),"Select service first." ,Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        });
     }
 
     private void init() {
+
         Intent intent = getIntent();
         pid = intent.getStringExtra("pid");
+        provider = intent.getParcelableExtra("provider");
         Log.d(TAG_BOOKING_ACT, "Got requested id: " + pid);
+        System.out.println("Got provider: " + provider.getCompanyName()); // TEST
 
-        company_txt = (TextView) findViewById(R.id.booking_frg_chosen_service);
+        company_txt = (TextView) findViewById(R.id.set_appointment_time_act_chosen_service);
         company_txt.setText(intent.getStringExtra("companyName"));
         servicesList = new ArrayList<>();
 
@@ -82,6 +109,7 @@ public class BookingAppointmentActivity extends AppCompatActivity  {
             @Override
             public void onItemClick(int position) {
                 servicesList.get(position);
+                servicePosition = position;
                 Log.d(TAG_BOOKING_ACT, "User choose service: [" + position + "] - " + servicesList.get(position).getName());
             }
         });

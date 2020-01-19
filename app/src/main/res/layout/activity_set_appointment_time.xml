@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/app_main_toolbar" />
 
     <TextView
-        android:id="@+id/booking_frg_chosen_service"
+        android:id="@+id/set_appointment_time_act_chosen_service"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -43,34 +43,46 @@
         app:layout_constraintTop_toBottomOf="@+id/booking_frg_header" />
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="32dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/main_bottom_navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/booking_frg_chosen_service">
+        android:layout_marginBottom="80dp"
+        android:background="@drawable/ic_recycle_service_backgruond"
+        android:backgroundTint="@color/common_google_signin_btn_text_dark_pressed"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/set_appointment_time_act_chosen_service"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleview_available_slots"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/main_bottom_navigation"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/btn_next_2"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/colorPrimaryDark"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="#5C8BF7"
+        android:text="NEXT"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/main_bottom_navigation_menu" >
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+    <Button
+        android:id="@+id/btn_back_2"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/ic_btn_back"
+        android:text="BACK"
+        android:textColor="#5C8BF7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

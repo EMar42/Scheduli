@@ -14,6 +14,8 @@
         android:roundIcon="@mipmap/ic_app_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.BookingAppointment.SetAppointmentTime"></activity>
+
         <receiver
             android:name=".NotificationPublisher"
             android:enabled="true"
@@ -34,7 +36,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

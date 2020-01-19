@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/slot_card"
     android:layout_width="80dp"
     android:layout_height="40dp"
     android:layout_margin="5dp"
-    app:cardCornerRadius="6dp"
-    >
-
+    android:orientation="vertical"
+    app:cardCornerRadius="6dp">
 
 
     <LinearLayout
@@ -22,7 +22,7 @@
             android:fontFamily="sans-serif-light"
             android:gravity="center|center_horizontal|top"
             android:padding="10dp"
-            android:text="99:99 PM"
+            android:text="99:99"
             android:textAlignment="center"
             android:textColor="@color/black" />
 
@@ -35,9 +35,6 @@
         </ImageView>
 
     </LinearLayout>
-
-
-
 
 
 </androidx.cardview.widget.CardView>
