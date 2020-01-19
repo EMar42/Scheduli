@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -174,6 +175,26 @@ public class AppointemtDetailsFragment extends Fragment {
             }
         });
 
+        //Insert Appointment to calendar
+        setAppointmentInCalenderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addAppointmentToCalendar();
+            }
+        });
+
+    }
+
+    private void addAppointmentToCalendar() {
+        Intent calendarIntent = new Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, mViewModel.getJoinedAppointment().getAppointment().getStart())
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, mViewModel.getJoinedAppointment().getAppointment().getEnd())
+                .putExtra(CalendarContract.Events.TITLE, getString(R.string.upcoming_appointment_notification_title))
+                .putExtra(CalendarContract.Events.DESCRIPTION, getString(R.string.calender_appointemnt_text, mViewModel.getJoinedAppointment().getAppointment().getServiceName()))
+                .putExtra(CalendarContract.Events.EVENT_LOCATION, mViewModel.getJoinedAppointment().getProviderAddress())
+                .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
+        startActivity(calendarIntent);
     }
 
     private void triggerAlarmNotification() {

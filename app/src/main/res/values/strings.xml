@@ -115,6 +115,7 @@
     <string name="allowAppointmentLimitingSummary">Enable or disable appointment limiting this might affect your performance.
         This will affect the next time we will pull your appointments from the web</string>
     <string name="allowAppointmentLimitingTitle">Allow appointment limiting</string>
+    <string name="calender_appointemnt_text">You have appointment for %1$s</string>
 
     //Settings
     <array name="settingsLimitValues">
