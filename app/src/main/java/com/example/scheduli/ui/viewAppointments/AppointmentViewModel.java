@@ -63,6 +63,7 @@ public class AppointmentViewModel extends ViewModel {
                 public void callBack(Object object) {
                     ArrayList<Appointment> appointments = (ArrayList<Appointment>) object;
 
+
                     for (final Appointment appointment : appointments) {
 
                         ProviderDataRepository.getInstance().getProviderByUid(appointment.getProviderUid(), new DataBaseCallBackOperation() {

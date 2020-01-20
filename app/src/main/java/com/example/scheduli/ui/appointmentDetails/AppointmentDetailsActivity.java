@@ -78,6 +78,7 @@ public class AppointmentDetailsActivity extends BaseMenuActivity implements Time
         alarmSetTimeFromDialog = Calendar.getInstance();
         alarmSetTimeFromDialog.set(Calendar.HOUR_OF_DAY, hourOfDay);
         alarmSetTimeFromDialog.set(Calendar.MINUTE, minute);
+        alarmSetTimeFromDialog.set(Calendar.SECOND, 0);
         detailsViewModel.setAlarmTime(alarmSetTimeFromDialog);
     }
 

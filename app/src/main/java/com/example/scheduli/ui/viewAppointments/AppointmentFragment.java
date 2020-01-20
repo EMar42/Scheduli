@@ -45,7 +45,6 @@ public class AppointmentFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //TODO Check performance impact
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         if (preferences.getBoolean(getString(R.string.allowAppointmentLimitingKey), false)) {
             String limitValue = preferences.getString(getString(R.string.appointmentsCountKey), "100");

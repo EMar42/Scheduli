@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Map;
 import java.util.Objects;
 
@@ -91,6 +92,7 @@ public class UserDataRepository {
             public void callBack(Object object) {
                 Integer index = (Integer) object;
 
+                Log.i(TAG_USER_REPOSITORY, "added appointment to user " + uid + " at index " + index);
                 dataBaseReference.child(uid).child("appointments").child(Integer.toString(index)).setValue(appointment);
             }
         };
@@ -174,7 +176,7 @@ public class UserDataRepository {
 
     public void setLimitAmountOfAppointments(int limitAmountofAppointments) {
         if (limitAmountofAppointments != this.limitAmountofAppointments) {
-
+            Log.i(TAG_USER_REPOSITORY, "Setting appointment limit " + limitAmountofAppointments);
             //Set to maximum if no limit is set from settings
             if (limitAmountofAppointments == 0)
                 limitAmountofAppointments = 100;
@@ -186,5 +188,17 @@ public class UserDataRepository {
 
     public int getLimitAmountOfAppointments() {
         return limitAmountofAppointments;
+    }
+
+    public void deleteAppointments(String currentUserUid, ArrayList<Appointment> appointments, Appointment appointment) {
+        Log.i(TAG_USER_REPOSITORY, "deleteing appointment from " + currentUserUid + " appointment: " + appointment);
+        this.dataBaseReference.child(currentUserUid).child("appointments").setValue(appointments);
+
+        //TODO add update to provider
+        Calendar appointmentStartTime = Calendar.getInstance();
+        appointmentStartTime.setTimeInMillis(appointment.getStart());
+        if (Calendar.getInstance().before(appointmentStartTime)) {
+            //TODO need provider to change status of session to available
+        }
     }
 }

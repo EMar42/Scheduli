@@ -22,6 +22,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.scheduli.BaseMenuActivity;
 import com.example.scheduli.R;
 import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.ProvidersAdapter;
@@ -42,7 +43,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchProviderActivity extends AppCompatActivity implements ProvidersAdapter.OnProviderListener{
+public class SearchProviderActivity extends BaseMenuActivity implements ProvidersAdapter.OnProviderListener{
 
     BottomNavigationView bottomNavigationView;
     private Toolbar mainToolbar;
@@ -56,10 +57,8 @@ public class SearchProviderActivity extends AppCompatActivity implements Provide
     private EditText searchField;
     private ImageButton searchBtn;
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayout;
     private List<Provider> providersList;
-    UsersUtils usersUtils;
     ProvidersAdapter adapter;
      DatabaseReference ref;
      private static String PID = null;
@@ -70,6 +69,7 @@ public class SearchProviderActivity extends AppCompatActivity implements Provide
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_provider);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
 
 
         providersList = new ArrayList<>();
@@ -110,9 +110,6 @@ public class SearchProviderActivity extends AppCompatActivity implements Provide
         appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_profile, R.id.navigation_appointments)
                 .build();
-//        navController = Navigation.findNavController(this, R.id.main_fragment_container);
-//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-//        NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 
 
@@ -168,9 +165,6 @@ public class SearchProviderActivity extends AppCompatActivity implements Provide
 
                     Provider provider = snapshot.getValue(Provider.class);
                     providersList.add(provider);
-//                    Provider provider = new Provider();
-//                    String id = UsersUtils.getInstance().getCurrentUserUid();
-//                    provider.setCompanyName(snapshot.child(id).getValue(Provider.class).getCompanyName());
 
                 }
 
@@ -241,8 +235,10 @@ public class SearchProviderActivity extends AppCompatActivity implements Provide
                         Log.d(TAG_SEARCH_ACT, "User Choose: " + item_snapshot.toString());
                         uid[0] = item_snapshot.getKey();
                         Intent intent = new Intent(SearchProviderActivity.this, BookingAppointmentActivity.class);
+                        //TODO: refatoring data transaction
                         intent.putExtra("companyName", provider.getCompanyName());
                         intent.putExtra("pid", uid[0]);
+                        intent.putExtra("provider", provider);
                         startActivity(intent);
                     }
 
