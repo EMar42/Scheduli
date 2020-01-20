@@ -2,8 +2,15 @@ package com.example.scheduli.ui.signup;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -12,9 +19,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.scheduli.R;
@@ -29,13 +38,16 @@ import com.google.firebase.auth.AuthResult;
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG_SIGN_UP = "Sign-up Activity";
     private static final int PERMISSION_REQUEST_PHONE = 0;
+    private static final int PERMISSION_REQUEST_STORAGE = 0;
+    private static final int RESULT_LOAD_IMAGE = 1;
 
     private UsersUtils usersUtils;
     private EditText userEmail, userName, userPassword, userFullName, userPhoneNumber;
-    private Button signUpToApp, returnToLogin;
+    private Button signUpToApp, returnToLogin, selectProfileImage;
     private UserDataRepository userDataRepository;
     private ImageButton getCurrentPhoneButton;
-
+    private ImageView profilePreview;
+    private String imagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +81,20 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
+        selectProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,}, PERMISSION_REQUEST_STORAGE);
 
+                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(SignupActivity.this, "Cannot pull image from gallery without permissions", Toast.LENGTH_LONG).show();
+                    return;
+                } else {
+                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent, RESULT_LOAD_IMAGE);
+                }
+            }
+        });
     }
 
     private void setPhoneNumberOnCurrent() {
@@ -115,7 +140,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void writeNewUserToDataBase(String uid, String email, String userName, String fullName, String phoneNumber) {
-        User user = new User(userName, fullName, email, phoneNumber);
+        User user = new User(userName, fullName, email, phoneNumber, imagePath);
         userDataRepository.createNewUserInApp(uid, user);
     }
 
@@ -151,12 +176,14 @@ public class SignupActivity extends AppCompatActivity {
     private void initView() {
         signUpToApp = findViewById(R.id.btn_sign_up_create);
         returnToLogin = findViewById(R.id.btn_sign_up_return);
+        selectProfileImage = findViewById(R.id.btn_signup_select_profile_image);
         getCurrentPhoneButton = findViewById(R.id.btn_sign_up_getCurrentPhoneNumber);
         userEmail = findViewById(R.id.et_sign_up_email);
         userFullName = findViewById(R.id.et_sign_up_full_name);
         userName = findViewById(R.id.et_sign_up_user_name);
         userPassword = findViewById(R.id.et_sign_up_password);
         userPhoneNumber = findViewById(R.id.et_sign_up_phone_number);
+        profilePreview = findViewById(R.id.signup_profile_preview);
     }
 
     private boolean isEmailValid(String email) {
@@ -165,5 +192,40 @@ public class SignupActivity extends AppCompatActivity {
 
     private boolean checkIfEmpty(EditText editText) {
         return editText.getText().toString().isEmpty();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+
+            new AsyncTask<Intent, Void, Bitmap>() {
+
+                @Override
+                protected Bitmap doInBackground(Intent... intents) {
+                    Uri selectedImage = intents[0].getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                    Cursor cursor = getContentResolver().query(selectedImage,
+                            filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String picturePath = cursor.getString(columnIndex);
+                    cursor.close();
+
+                    imagePath = picturePath;
+
+                    return BitmapFactory.decodeFile(picturePath);
+                }
+
+                @Override
+                protected void onPostExecute(Bitmap image) {
+                    profilePreview.setImageBitmap(image);
+                }
+            }.execute(data);
+
+        }
     }
 }
