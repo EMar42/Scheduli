@@ -70,10 +70,10 @@ public class BookingAppointmentActivity extends BaseMenuActivity {
             public void onClick(View view) {
                 if(servicePosition >= 0) {
                     Intent intent = new Intent(BookingAppointmentActivity.this, SetAppointmentTime.class);
-                intent.putExtra("provider" , provider);
-                intent.putExtra("service" , provider.getServices().get(servicePosition));
-                intent.putExtra("pid", pid);
-                startActivity(intent);
+                    intent.putExtra("provider", provider);
+                    intent.putExtra("service", provider.getServices().get(servicePosition));
+                    intent.putExtra("pid", pid);
+                    startActivity(intent);
                 }
                 else {
                     Toast.makeText(getApplicationContext(),"Select service first." ,Toast.LENGTH_SHORT).show();
@@ -91,6 +91,7 @@ public class BookingAppointmentActivity extends BaseMenuActivity {
         provider = intent.getParcelableExtra("provider");
         Log.d(TAG_BOOKING_ACT, "Got requested id: " + pid);
         System.out.println("Got provider: " + provider.getCompanyName()); // TEST
+        System.out.println("Got provider services: " + provider.getServices()); // TEST
 
         company_txt = (TextView) findViewById(R.id.set_appointment_time_act_chosen_service);
         company_txt.setText(intent.getStringExtra("companyName"));

@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +45,7 @@ public class SetAppointmentTime extends BaseMenuActivity {
     private RecyclerView recyclerViewParent;
     private TextView dateText;
     private DateAdapter dateAdapter;
+    private List<Date> dates;
 
     //child (slots) cycleview (SubItem)
     private RecyclerView recyclerViewChild;
@@ -67,6 +69,7 @@ public class SetAppointmentTime extends BaseMenuActivity {
 //        Sessions session3 = new Sessions( 1546336800000l, 1546344000000l, "FakeID", true);
 //        Sessions session4 = new Sessions( 1546340400000l, 1546344000000l, "FakeID", true);
 
+
 //        sessionsList.add(session1);
 //        sessionsList.add(session2);
 //        sessionsList.add(session3);
@@ -76,8 +79,12 @@ public class SetAppointmentTime extends BaseMenuActivity {
         provider = intent.getParcelableExtra("provider");
         service = intent.getParcelableExtra("service");
         pid = intent.getStringExtra("pid");
+        System.out.println("Got service: " + service.getName()); // TEST
+        System.out.println("Got service sessoins: " + service.getDailySessions()); // TEST
+
         serviceChoosen.setText(provider.getCompanyName() + " ⌘ " + service.getName());
         dailySessions = service.getDailySessions();
+        printMap(dailySessions);
 
 
         slots = new ArrayList<>();
@@ -89,6 +96,9 @@ public class SetAppointmentTime extends BaseMenuActivity {
         slots.add(date2);
         Date date3 = new Date(1046374000000l);
         slots.add(date3);
+
+        dates = new ArrayList<>();
+        dates.add(new Date(21-02-2020));
         recyclerViewParent = (RecyclerView) findViewById(R.id.recycleview_available_slots);
         databaseReference =  FirebaseDatabase.getInstance().getReference("providers").child(pid).child("services");
         mLayout = new GridLayoutManager(this,3);
@@ -99,5 +109,20 @@ public class SetAppointmentTime extends BaseMenuActivity {
 
 
 
+    }
+
+
+
+    public static void printMap(Map mp) {
+        if(mp != null) {
+            Iterator it = mp.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry) it.next();
+                System.out.println(pair.getKey() + " = " + pair.getValue());
+                it.remove(); // avoids a ConcurrentModificationException
+            }
+        }else {
+            System.out.println("[TEST] null map..");
+        }
     }
 }

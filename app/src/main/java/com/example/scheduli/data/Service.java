@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 @IgnoreExtraProperties
@@ -14,8 +15,8 @@ public class Service implements Parcelable {
     private String name;
     private float cost;
     private int singleSessionInMinutes;
-    private Map<String, WorkDay> workingDays; // key is of type DayOfWeek enum
-    private Map<String, ArrayList<Sessions>> dailySessions; // key is a date (day/month/year).
+    private Map<String, WorkDay> workingDays ; // key is of type DayOfWeek enum
+    private Map<String, ArrayList<Sessions>> dailySessions ; // key is a date (day/month/year).
 
     public Service() {
     }
@@ -32,6 +33,10 @@ public class Service implements Parcelable {
         name = in.readString();
         cost = in.readFloat();
         singleSessionInMinutes = in.readInt();
+        workingDays = new HashMap<String, WorkDay>();
+        dailySessions = new HashMap<String, ArrayList<Sessions>>();
+        in.readMap(dailySessions,Sessions.class.getClassLoader());
+        in.readMap(workingDays,WorkDay.class.getClassLoader());
     }
 
     public static final Creator<Service> CREATOR = new Creator<Service>() {
@@ -96,5 +101,9 @@ public class Service implements Parcelable {
         dest.writeString(name);
         dest.writeFloat(cost);
         dest.writeInt(singleSessionInMinutes);
+        dest.writeMap(dailySessions);
+        dest.writeMap(workingDays);
+
+
     }
 }

@@ -239,6 +239,8 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
                         intent.putExtra("companyName", provider.getCompanyName());
                         intent.putExtra("pid", uid[0]);
                         intent.putExtra("provider", provider);
+                        System.out.println("Got provider list of dailySessions: " + provider.getServices().get(1).getDailySessions()); // TEST
+
                         startActivity(intent);
                     }
 
