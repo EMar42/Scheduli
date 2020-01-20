@@ -122,12 +122,14 @@ public class User implements Parcelable {
         map.put("email", email);
         map.put("profileImage", profileImage);
         map.put("phoneNumber", phoneNumber);
-        HashMap<String, Appointment> appointmentHashMap = new HashMap<>();
-        for (int i = 0; i < appointments.size(); i++) {
-            appointmentHashMap.put(Integer.toString(i), appointments.get(i));
-        }
+        if (appointments != null) {
+            HashMap<String, Appointment> appointmentHashMap = new HashMap<>();
+            for (int i = 0; i < appointments.size(); i++) {
+                appointmentHashMap.put(Integer.toString(i), appointments.get(i));
+            }
 
-        map.put("appointments", appointmentHashMap);
+            map.put("appointments", appointmentHashMap);
+        }
 
         return map;
     }

@@ -28,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.scheduli.R;
 import com.example.scheduli.data.User;
+import com.example.scheduli.data.repositories.StorageRepository;
 import com.example.scheduli.data.repositories.UserDataRepository;
 import com.example.scheduli.utils.SignUpNotification;
 import com.example.scheduli.utils.UsersUtils;
@@ -47,7 +48,7 @@ public class SignupActivity extends AppCompatActivity {
     private UserDataRepository userDataRepository;
     private ImageButton getCurrentPhoneButton;
     private ImageView profilePreview;
-    private String imagePath;
+    private Bitmap imageBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +130,9 @@ public class SignupActivity extends AppCompatActivity {
                         AuthResult result = task.getResult();
                         String uid = result.getUser().getUid();
                         writeNewUserToDataBase(uid, email, userNameString, fullName, phoneNumber);
+                        if (imageBitmap != null) {
+                            StorageRepository.getInstance().uploadBitmapImageToFireBase(uid, "profile.jpg", imageBitmap);
+                        }
                         SignUpNotification.notify(getApplicationContext(), fullName, 1);
                         finish();
                     }
@@ -140,7 +144,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void writeNewUserToDataBase(String uid, String email, String userName, String fullName, String phoneNumber) {
-        User user = new User(userName, fullName, email, phoneNumber, imagePath);
+        User user = new User(userName, fullName, email, phoneNumber, null);
         userDataRepository.createNewUserInApp(uid, user);
     }
 
@@ -215,13 +219,12 @@ public class SignupActivity extends AppCompatActivity {
                     String picturePath = cursor.getString(columnIndex);
                     cursor.close();
 
-                    imagePath = picturePath;
-
                     return BitmapFactory.decodeFile(picturePath);
                 }
 
                 @Override
                 protected void onPostExecute(Bitmap image) {
+                    imageBitmap = image;
                     profilePreview.setImageBitmap(image);
                 }
             }.execute(data);

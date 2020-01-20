@@ -1,15 +1,16 @@
 package com.example.scheduli.data.repositories;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.scheduli.data.User;
 import com.example.scheduli.data.fireBase.DataBaseCallBackOperation;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -37,30 +38,56 @@ public class StorageRepository {
     }
 
 
-    //Upload file to user storage /user/uid/
-    public void uploadBitmapImageToUSer(final String uid, final String imageName, Bitmap picture, final DataBaseCallBackOperation callBackOperation) {
+    //Upload file to user storage /user/uid/filename
+    public void uploadBitmapImageToFireBase(final String uid, final String fileNameWithPostFix, Bitmap picture) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         picture.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
-        final StorageReference userReference = this.scheduliStorage.getReference("user").child(uid).child(imageName + ".jpg");
-        userReference.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        final StorageReference userReference = this.scheduliStorage.getReference("user").child(uid).child(fileNameWithPostFix);
+        UploadTask uploadTask = userReference.putBytes(data);
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Log.i(TAG_STORAGE, "Successful image upload to storage");
 
+                UserDataRepository.getInstance().getUserFromUid(uid, new DataBaseCallBackOperation() {
+                    @Override
+                    public void callBack(Object object) {
+                        User user = (User) object;
+                        user.setProfileImage(fileNameWithPostFix);
+                        UserDataRepository.getInstance().updateUserProfile(uid, user);
+                    }
+                });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.e(TAG_STORAGE, "Failed to upload file to storage");
             }
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                callBackOperation.callBack(progress);
-                Log.i(TAG_STORAGE, "Upload progress: " + progress);
-            }
         });
+
+    }
+
+    //Give pictureName and user id to download from
+    public void downloadImageFromStorage(String uid, String pictureName, final DataBaseCallBackOperation callBackOperation) {
+        StorageReference userImageReference = this.scheduliStorage.getReference("user/" + uid + "/" + pictureName);
+        final long FOUR_MEGABYTE = 1024 * 1024 * 4;
+        try {
+            userImageReference.getBytes(FOUR_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    callBackOperation.callBack(image);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG_STORAGE, "Failed to load provided image from storage");
+                }
+            });
+        } catch (Exception e) {
+            Log.e(TAG_STORAGE, e.getMessage());
+        }
     }
 }

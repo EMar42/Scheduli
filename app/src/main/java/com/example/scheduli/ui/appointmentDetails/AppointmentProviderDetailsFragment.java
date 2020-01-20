@@ -1,6 +1,7 @@
 package com.example.scheduli.ui.appointmentDetails;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,7 +19,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.scheduli.R;
-import com.example.scheduli.utils.DownloadImageAsync;
+import com.example.scheduli.data.fireBase.DataBaseCallBackOperation;
+import com.example.scheduli.data.repositories.StorageRepository;
 
 public class AppointmentProviderDetailsFragment extends Fragment {
 
@@ -48,7 +50,14 @@ public class AppointmentProviderDetailsFragment extends Fragment {
         mViewModel = ViewModelProviders.of(getActivity()).get(AppointmentDetailsViewModel.class);
 
         if (mViewModel.getProviderImage() == null) {
-            new DownloadImageAsync(providerProfileImage).execute(mViewModel.getJoinedAppointment().getProviderImageUrl());
+            StorageRepository.getInstance().downloadImageFromStorage(mViewModel.getJoinedAppointment().getAppointment().getProviderUid(), mViewModel.getJoinedAppointment().getProviderImageUrl(), new DataBaseCallBackOperation() {
+                @Override
+                public void callBack(Object object) {
+                    if (object != null) {
+                        providerProfileImage.setImageBitmap((Bitmap) object);
+                    }
+                }
+            });
         } else {
             providerProfileImage.setImageBitmap(mViewModel.getProviderImage());
         }
