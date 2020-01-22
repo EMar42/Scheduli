@@ -52,6 +52,8 @@ public class UserDataRepository {
     }
 
 
+    //Get the appointments of the user
+    //just pass call back operation to receive the appointment list from FireBase.
     public void getUserAppointments(final DataBaseCallBackOperation callBackOperation) {
         if (appointmentListener == null) {
             appointmentListener = new ValueEventListener() {
@@ -119,6 +121,7 @@ public class UserDataRepository {
 
     /**
      * Call this to get a user from the database
+     * Pass the user UID from user utils, pass a callback action to the method, in it you will get the user value returned from FireBase.
      */
     public void getUserFromUid(final String uid, final DataBaseCallBackOperation callBack) {
         ValueEventListener userEventListener = new ValueEventListener() {
@@ -140,6 +143,7 @@ public class UserDataRepository {
 
     /**
      * Call this to update a user in the database
+     * Just pass in the UID and the user to update.
      */
     public void updateUserProfile(String uid, User user) {
         Map<String, Object> userValues = user.toMap();
@@ -167,6 +171,8 @@ public class UserDataRepository {
         });
     }
 
+
+    //On logout clear all the event listeners from appointments of the user.
     public void clearEventsOfAppointments() {
         if (this.appointmentListener != null) {
             userReference.child("appointments").removeEventListener(this.appointmentListener);
@@ -174,6 +180,7 @@ public class UserDataRepository {
         }
     }
 
+    // get the limit from the shared preferences for the number of appointments
     public void setLimitAmountOfAppointments(int limitAmountofAppointments) {
         if (limitAmountofAppointments != this.limitAmountofAppointments) {
             Log.i(TAG_USER_REPOSITORY, "Setting appointment limit " + limitAmountofAppointments);
@@ -190,6 +197,9 @@ public class UserDataRepository {
         return limitAmountofAppointments;
     }
 
+    //Remove an appointment from the database.
+    //Pass the user uid and the updated appointment list.
+    //pass the removed appointment to update the provider as well
     public void deleteAppointments(String currentUserUid, ArrayList<Appointment> appointments, Appointment appointment) {
         Log.i(TAG_USER_REPOSITORY, "deleteing appointment from " + currentUserUid + " appointment: " + appointment);
         this.dataBaseReference.child(currentUserUid).child("appointments").setValue(appointments);
