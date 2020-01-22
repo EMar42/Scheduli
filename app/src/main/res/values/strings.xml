@@ -116,6 +116,9 @@
         This will affect the next time we will pull your appointments from the web</string>
     <string name="allowAppointmentLimitingTitle">Allow appointment limiting</string>
     <string name="calender_appointemnt_text">You have appointment for %1$s</string>
+    <string name="provider_company_name">Provider Company Name</string>
+    <string name="provider_sing_up_title">Provider Sing Up</string>
+    <string name="business_phone_number">Buisness Phone Number</string>
 
     //Settings
     <array name="settingsLimitValues">
