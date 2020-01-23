@@ -1,12 +1,14 @@
 package com.example.scheduli.ui.login;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -130,6 +132,9 @@ public class LoginActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (!task.isSuccessful()) {
                         Log.e(LOGIN_TAG, "Failed to login with email " + userEmail.getText().toString());
+                        MediaPlayer player = MediaPlayer.create(LoginActivity.this, R.raw.computer_error);
+                        player.start();
+                        loginToApp.startAnimation(AnimationUtils.loadAnimation(LoginActivity.this, R.anim.shake));
                         Toast.makeText(LoginActivity.this, "Sign-in failed", Toast.LENGTH_SHORT).show();
                     } else {
                         Log.i(LOGIN_TAG, "Succesful login to the application using " + userEmail.getText().toString());

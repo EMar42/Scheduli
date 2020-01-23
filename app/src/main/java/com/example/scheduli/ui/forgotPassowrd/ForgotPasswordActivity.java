@@ -1,5 +1,6 @@
 package com.example.scheduli.ui.forgotPassowrd;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -58,9 +59,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
                         Log.i(FORGOT_TAG, "Sent recovery password to client email " + userEmail.getText().toString());
+
                     } else {
                         Log.i(FORGOT_TAG, "Sent recovery password to client email " + userEmail.getText().toString());
                         Toast.makeText(ForgotPasswordActivity.this, "Cannot send recovery mail", Toast.LENGTH_LONG).show();
+                        MediaPlayer player = MediaPlayer.create(ForgotPasswordActivity.this, R.raw.computer_error);
+                        player.start();
+                        userEmail.setError("Email Address is not in the system");
                     }
                 }
             });
