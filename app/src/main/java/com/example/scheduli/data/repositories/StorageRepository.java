@@ -39,6 +39,7 @@ public class StorageRepository {
 
 
     //Upload file to user storage /user/uid/filename
+    // Just pass the uid of the user, the string of the file name with the type "myFile.jpg", and the bitmap of the picture (this can be taken from BitmapFactory)
     public void uploadBitmapImageToFireBase(final String uid, final String fileNameWithPostFix, Bitmap picture) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         picture.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -70,6 +71,7 @@ public class StorageRepository {
     }
 
     //Give pictureName and user id to download from
+    // pass the uid of the user, give the file name + type "myFile.jpg", pass call back action to get the Bitmap of the picture
     public void downloadImageFromStorage(String uid, String pictureName, final DataBaseCallBackOperation callBackOperation) {
         StorageReference userImageReference = this.scheduliStorage.getReference("user/" + uid + "/" + pictureName);
         final long FOUR_MEGABYTE = 1024 * 1024 * 4;
