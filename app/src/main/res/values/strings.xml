@@ -118,7 +118,9 @@
     <string name="calender_appointemnt_text">You have appointment for %1$s</string>
     <string name="provider_company_name">Provider Company Name</string>
     <string name="provider_sing_up_title">Provider Sing Up</string>
-    <string name="business_phone_number">Buisness Phone Number</string>
+    <string name="business_phone_number">Business Phone Number</string>
+    <string name="return_to_profile_screen">Return back to Profile screen</string>
+    <string name="provider_sing_up_confirm">Let\'s Start</string>
 
     //Settings
     <array name="settingsLimitValues">

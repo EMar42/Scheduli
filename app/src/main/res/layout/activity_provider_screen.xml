@@ -12,7 +12,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:text="Maybe put logo or something"
+        android:text="Mayber put here something later"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +32,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/provider_sing_up_title"
@@ -93,20 +93,52 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ed_provider_profession" />
 
-            <EditText
-                android:id="@+id/ed_provider_address"
+
+            <ImageView
+                android:id="@+id/signup_profile_preview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
-                android:ems="10"
-                android:hint="@string/business_phone_number"
-                android:inputType="textPersonName"
+                android:maxWidth="24dp"
+                android:maxHeight="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ed_provider_phone_number"
+                tools:srcCompat="@tools:sample/avatars"
+                tools:visibility="visible" />
+
+            <Button
+                android:id="@+id/btn_sign_up_create_provider"
+                style="@style/appCompactButtons"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:text="@string/provider_sing_up_confirm"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ed_provider_phone_number" />
+                app:layout_constraintTop_toBottomOf="@+id/signup_profile_preview" />
+
+            <Button
+                android:id="@+id/btn_sign_up_return"
+                style="@style/appBorderLessButtons"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/return_to_profile_screen"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_sign_up_create_provider" />
+
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
