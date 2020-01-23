@@ -9,8 +9,11 @@
     <RelativeLayout
         android:id="@+id/rallay1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/picture_grad">
+        android:layout_height="wrap_content">
+
+<!--        android:background="@drawable/picture_grad">-->
+
+
 
         <RelativeLayout
             android:id="@+id/imgUsr"
@@ -30,9 +33,6 @@
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_profile_icon"
                 android:onClick="handleImageClick">
-
-
-
             </ImageView>
         </RelativeLayout>
 
@@ -134,7 +134,7 @@
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/profile_provider_button"
+                    android:id="@+id/btn_profile_provider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/appCompactButtons"
