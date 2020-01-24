@@ -18,6 +18,9 @@ public class ProfileViewModel extends ViewModel {
     // TODO: Implement the ViewModel
 
     private static final String PROFILEVM_TAG = "Profile View Model Fragment";
+
+
+
     private MutableLiveData<User> userMutableLiveData;
     private MutableLiveData<Provider> providerMutableLiveData;
 
@@ -55,4 +58,11 @@ public class ProfileViewModel extends ViewModel {
         return providerMutableLiveData;
     }
 
+    public void setUserMutableLiveData(MutableLiveData<User> userMutableLiveData) {
+        this.userMutableLiveData = userMutableLiveData;
+    }
+
+    public void setProviderMutableLiveData(MutableLiveData<Provider> providerMutableLiveData) {
+        this.providerMutableLiveData = providerMutableLiveData;
+    }
 }

@@ -15,7 +15,7 @@ public class ProviderActivity extends BaseMenuActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_provider_screen);
+        setContentView(R.layout.activity_provider_singup);
 
 
     }
