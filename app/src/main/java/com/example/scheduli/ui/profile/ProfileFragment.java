@@ -20,6 +20,8 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.scheduli.R;
 import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.User;
+import com.example.scheduli.ui.BookingAppointment.BookingAppointmentActivity;
+import com.example.scheduli.ui.appointmentDetails.AppointmentDetailsActivity;
 import com.example.scheduli.ui.provider.ProviderActivity;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -83,11 +85,20 @@ public class ProfileFragment extends Fragment {
         providerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (true){
+                if (true) {
                     Log.i(PROFILEFRAGMENT, "clicked on providerButton");
-                    //Intent intent = new Intent(getActivity(), ProviderActivity.class);
-                    //startActivity(intent);
-                    Toast.makeText(getContext(),"clicked succ",Toast.LENGTH_SHORT).show();
+                    try {
+                        Log.i(PROFILEFRAGMENT, "Get inside try");
+                        Toast.makeText(getContext(), "haha", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getContext(), ProviderActivity.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        Log.i(PROFILEFRAGMENT, "Get inside catch");
+                        System.err.println(e);
+                    }
+
+                    //Toast.makeText(getContext(),"This is getActivity "+getActivity().getSupportFragmentManager(),Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(),"This is " + ProviderActivity.class.toString(),Toast.LENGTH_LONG);
                 }
             }
         });
@@ -100,6 +111,10 @@ public class ProfileFragment extends Fragment {
         userPhoneNumberTv = view.findViewById(R.id.tv_user_phonenumber);
         userEmailTv = view.findViewById(R.id.tv_user_email);
         providerButton = view.findViewById(R.id.btn_profile_provider);
+
+    }
+
+    private void getProviderSingUp() {
 
     }
 
