@@ -57,7 +57,6 @@
                 android:layout_marginEnd="32dp"
                 android:ems="10"
                 android:hint="@string/provider_company_name"
-                android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -93,9 +92,24 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ed_provider_profession" />
 
+            <EditText
+                android:id="@+id/ed_provider_email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:inputType="textEmailAddress"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:ems="10"
+                android:hint="@string/ed_provider_email"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ed_provider_phone_number" />
+
 
             <ImageView
-                android:id="@+id/signup_profile_preview"
+                android:id="@+id/im_provider_pic"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -105,7 +119,7 @@
                 android:maxHeight="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ed_provider_phone_number"
+                app:layout_constraintTop_toBottomOf="@+id/ed_provider_email"
                 tools:srcCompat="@tools:sample/avatars"
                 tools:visibility="visible" />
 
@@ -121,10 +135,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/signup_profile_preview" />
+                app:layout_constraintTop_toBottomOf="@+id/im_provider_pic" />
 
             <Button
-                android:id="@+id/btn_sign_up_return"
+                android:id="@+id/btn_return_profile_screen"
                 style="@style/appBorderLessButtons"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

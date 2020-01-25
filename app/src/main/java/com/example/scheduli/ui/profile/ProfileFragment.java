@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,9 +19,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.scheduli.R;
 import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.User;
-import com.example.scheduli.ui.BookingAppointment.BookingAppointmentActivity;
-import com.example.scheduli.ui.appointmentDetails.AppointmentDetailsActivity;
-import com.example.scheduli.ui.provider.ProviderActivity;
+import com.example.scheduli.ui.provider.ProviderSingUpActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 public class ProfileFragment extends Fragment {
@@ -62,7 +59,7 @@ public class ProfileFragment extends Fragment {
                 userFullNameTv.setText(user.getFullName());
                 userPhoneNumberTv.setText(user.getPhoneNumber());
                 userEmailTv.setText(user.getEmail());
-                //TODO: Fix picture
+                //TODO: Fix on click picture
             }
         });
         mViewModel.getProviderProfileData().observe(this, new Observer<Provider>() {
@@ -85,20 +82,18 @@ public class ProfileFragment extends Fragment {
         providerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO fix the true to check if null returned
                 if (true) {
                     Log.i(PROFILEFRAGMENT, "clicked on providerButton");
                     try {
-                        Log.i(PROFILEFRAGMENT, "Get inside try");
-                        Toast.makeText(getContext(), "haha", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getContext(), ProviderActivity.class);
+                        //Toast.makeText(getContext(), "haha", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getContext(), ProviderSingUpActivity.class);
                         startActivity(intent);
+                        Log.i(PROFILEFRAGMENT, "Start successfully provider activity");
                     } catch (Exception e) {
-                        Log.i(PROFILEFRAGMENT, "Get inside catch");
                         System.err.println(e);
+                        Log.i(PROFILEFRAGMENT, "Error is creating activity");
                     }
-
-                    //Toast.makeText(getContext(),"This is getActivity "+getActivity().getSupportFragmentManager(),Toast.LENGTH_LONG).show();
-                    //Toast.makeText(getContext(),"This is " + ProviderActivity.class.toString(),Toast.LENGTH_LONG);
                 }
             }
         });
@@ -111,7 +106,6 @@ public class ProfileFragment extends Fragment {
         userPhoneNumberTv = view.findViewById(R.id.tv_user_phonenumber);
         userEmailTv = view.findViewById(R.id.tv_user_email);
         providerButton = view.findViewById(R.id.btn_profile_provider);
-
     }
 
     private void getProviderSingUp() {
