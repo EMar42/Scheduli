@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -65,10 +66,10 @@ public class ProfileFragment extends Fragment {
         mViewModel.getProviderProfileData().observe(this, new Observer<Provider>() {
             @Override
             public void onChanged(Provider provider) {
-                if (provider == null) {
-                    Log.i(PROFILEFRAGMENT, "True from if");
-                }
-                Log.i(PROFILEFRAGMENT, "Get in onChanged of getProviderProfileData ");
+                Log.i(PROFILEFRAGMENT, "Callback return from getProviderProfileData result" + provider );
+//                providerButton.setAlpha(buttonEnableColor);
+                providerButton.setAlpha(buttonEnableColor);
+                providerButton.setEnabled(true);
             }
         });
     }
@@ -83,10 +84,10 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO fix the true to check if null returned
+                Toast.makeText(getContext(),"isEnabled " + providerButton.isEnabled() + " is Clickable" + providerButton.isClickable(), Toast.LENGTH_LONG).show();
                 if (true) {
                     Log.i(PROFILEFRAGMENT, "clicked on providerButton");
                     try {
-                        //Toast.makeText(getContext(), "haha", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getContext(), ProviderSingUpActivity.class);
                         startActivity(intent);
                         Log.i(PROFILEFRAGMENT, "Start successfully provider activity");
@@ -106,6 +107,8 @@ public class ProfileFragment extends Fragment {
         userPhoneNumberTv = view.findViewById(R.id.tv_user_phonenumber);
         userEmailTv = view.findViewById(R.id.tv_user_email);
         providerButton = view.findViewById(R.id.btn_profile_provider);
+        providerButton.setAlpha(buttonDisableButton);
+        providerButton.setEnabled(false);
     }
 
     private void getProviderSingUp() {
