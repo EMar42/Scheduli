@@ -68,7 +68,7 @@ public class ProfileFragment extends Fragment {
             public void onChanged(Provider provider) {
                 Log.i(PROFILEFRAGMENT, "Callback return from getProviderProfileData result" + provider );
 //                providerButton.setAlpha(buttonEnableColor);
-                providerButton.setAlpha(buttonEnableColor);
+//                providerButton.setAlpha(buttonEnableColor);
                 providerButton.setEnabled(true);
             }
         });
@@ -107,7 +107,7 @@ public class ProfileFragment extends Fragment {
         userPhoneNumberTv = view.findViewById(R.id.tv_user_phonenumber);
         userEmailTv = view.findViewById(R.id.tv_user_email);
         providerButton = view.findViewById(R.id.btn_profile_provider);
-        providerButton.setAlpha(buttonDisableButton);
+//        providerButton.setAlpha(buttonDisableButton);
         providerButton.setEnabled(false);
     }
 

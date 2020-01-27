@@ -72,6 +72,7 @@ public class BookingAppointmentActivity extends BaseMenuActivity {
                     Intent intent = new Intent(BookingAppointmentActivity.this, SetAppointmentTime.class);
                     intent.putExtra("provider", provider);
                     intent.putExtra("service", provider.getServices().get(servicePosition));
+                    intent.putExtra("position" , servicePosition);
                     intent.putExtra("pid", pid);
                     startActivity(intent);
                 }

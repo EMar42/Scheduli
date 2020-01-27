@@ -49,11 +49,9 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView slotTime;
-//        TextView slotPmAm;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-//            slotPmAm = (TextView) itemView.findViewById(R.id.slot_pm_am);
             slotTime = (TextView) itemView.findViewById(R.id.slot_time);
         }
     }
