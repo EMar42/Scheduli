@@ -3,9 +3,7 @@ package com.example.scheduli.ui.BookingAppointment;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -13,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,10 +29,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -43,41 +42,31 @@ public class SetAppointmentTime extends BaseMenuActivity {
 
     DatabaseReference databaseReference;
     private Toolbar mainToolbar;
-    private static final String TAG = "SetAppointmentTime";
+    private static final String TAG_SET_APPOINTMENT_ACT = "SetAppointmentTime";
 
 
     private Service service;
     private Provider provider;
-    private List<Sessions> sessionsList;
     private Map<String, ArrayList<Sessions>> dailySessions; // key is a date (day/month/year).
+    private ArrayList<Sessions> sessionsArrayList;
     private RecyclerView.LayoutManager mLayout;
-    private RecyclerView.LayoutManager mLayout2;
 
     private String pid;
     private int servicePosition;
 
-    private List<Long> testSlots;
-
     private Button next;
     private Button back;
     private TextView serviceChoosen;
-    private TextView datePick;
 
-    //Calendar
+    //Calendar view
     CompactCalendarView compactCalendarView;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM - yyyy", Locale.getDefault());
 
     //parent (dates) cycleview (Item)
-    private RecyclerView recyclerViewParent;
-    private TextView dateText;
-    private DateAdapter dateAdapter;
+    private RecyclerView recyclerViewSlots;
     private List<String> dates;
-
-    //child (slots) cycleview (SubItem)
-    private RecyclerView recyclerViewChild;
     private SlotAdapter slotAdapter;
     private List<Date> slots;
-    private int numOfSlots;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,112 +76,114 @@ public class SetAppointmentTime extends BaseMenuActivity {
         mainToolbar = findViewById(R.id.app_main_toolbar);
         setSupportActionBar(mainToolbar);
 
-
+        //Calendar
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setTitle(null);
         compactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
         compactCalendarView.setUseThreeLetterAbbreviation(true);
 
+
+        //init Arrays
         dates = new ArrayList<>();
         slots = new ArrayList<>();
-        testSlots = new ArrayList<>();
+        sessionsArrayList = new ArrayList<>();
 
-
-        recyclerViewChild = (RecyclerView) findViewById(R.id.recycleview_available_slots1);
+        //Init buttons and texts
         serviceChoosen = (TextView) findViewById(R.id.set_appointment_time_act_chosen_service);
-        datePick = (TextView) findViewById(R.id.date_pick);
+        next = (Button) findViewById(R.id.btn_next_2);
+        back = (Button) findViewById(R.id.btn_back_2);
 
+        //Get Data from previous intent
         Intent intent = getIntent();
         provider = intent.getParcelableExtra("provider");
         service = intent.getParcelableExtra("service");
         pid = intent.getStringExtra("pid");
         servicePosition = intent.getIntExtra("position", 0);
-        System.out.println("Got service: " + service.getName()); // TEST
-        System.out.println("Got service sessoins " + "[" + service.getDailySessions().size() + "] :" + service.getDailySessions()); // TEST
-
+        Log.d(TAG_SET_APPOINTMENT_ACT,"Got service: " + service.getName());
+        Log.d(TAG_SET_APPOINTMENT_ACT, "Got service sessoins " + "[" + service.getDailySessions().size() + "] :" + service.getDailySessions());
         serviceChoosen.setText(provider.getCompanyName() + " ⌘ " + service.getName());
         dailySessions = service.getDailySessions();
-        printMap(dailySessions);
 
-        System.out.println("[TEST]: date: " + dates.get(0));
+        //Get dates
+        getDatesFromMap(dailySessions);
 
-//Event:
-
-        for (int i = 0; i < testSlots.size(); i++) {
-            Date date = new Date(testSlots.get(i));
-            Event event = new Event(Color.GREEN, date.getTime(), "somethig to do here..");
-            compactCalendarView.addEvent(event);
-
+        //Get Events for calendar:
+        for(int i=0; i<dates.size();i++) {
+            getSessions(dates.get(i));
+            Log.d(TAG_SET_APPOINTMENT_ACT,"Getting Evet data from date: " + dates.get(i) );
         }
-        Event event = new Event(Color.GREEN, 1580162400000L, "somthig to do here");
-        compactCalendarView.addEvent(event);
 
+
+        recyclerViewSlots = (RecyclerView) findViewById(R.id.recycleview_available_slots);
+        mLayout = new GridLayoutManager(this, 3);
+        slotAdapter = new SlotAdapter(slots);
+        recyclerViewSlots.setLayoutManager(mLayout);
+        recyclerViewSlots.setHasFixedSize(true);
+        recyclerViewSlots.setAdapter(slotAdapter);
 
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
                 Context context = getApplicationContext();
+                slots.clear();
 
+//                System.out.println("TEST: picked date: " + dateClicked.getTime());
 
-                for (int i = 0; i < dates.size(); i++) {
+                for (int i = 0; i < sessionsArrayList.size(); i++) {
+                    Date date = new Date(sessionsArrayList.get(i).getStart());
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-                    if (dateClicked.getTime() == 1580162400000L) {
-                        //TODO: add Formater here
-                        datePick.setText(dates.get(i));
-                        getSessions(dates.get(0));
-
-                    } else {
-                        Toast.makeText(context, String.valueOf(dateClicked.getTime()), Toast.LENGTH_SHORT).show();
+                    if(dateFormat.format(dateClicked.getTime()).compareTo(dateFormat.format(date.getTime()))==0){
+                        slots.add(new Date(sessionsArrayList.get(i).getStart()));
                     }
                 }
+
+                recyclerViewSlots.setAdapter(slotAdapter);
             }
 
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
                 actionBar.setTitle(dateFormat.format(firstDayOfNewMonth));
-
             }
         });
 
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-        recyclerViewParent = (RecyclerView) findViewById(R.id.recycleview_available_slots1);
-//        recyclerViewChild = (RecyclerView) findViewById(R.id.recycleview_available_slots2);
-        databaseReference = FirebaseDatabase.getInstance().getReference("providers").child(pid).child("services");
-        mLayout = new GridLayoutManager(this, 3);
-//        dateAdapter = new DateAdapter(dates);
-        slotAdapter = new SlotAdapter(slots);
-        recyclerViewParent.setLayoutManager(mLayout);
-        recyclerViewParent.setHasFixedSize(true);
-        recyclerViewParent.setAdapter(slotAdapter);
+                    Toast.makeText(getApplicationContext(),"To be continued..." ,Toast.LENGTH_SHORT).show();
+                }
+
+
+
+        });
+
+
 
     }
 
 
-    public void printMap(Map mp) {
+    public void getDatesFromMap(Map map) {
 
-        if (mp != null) {
-            Iterator it = mp.entrySet().iterator();
+        if (map != null) {
+            Iterator it = map.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();
-                System.out.println(pair.getKey() + " = " + pair.getValue());
+//                System.out.println(pair.getKey() + " : " + pair.getValue()); //TEST
                 dates.add(pair.getKey().toString());
-                it.remove(); // avoids a ConcurrentModificationException
+                it.remove();
             }
         } else {
-            System.out.println("[TEST] null map..");
+            Log.d(TAG_SET_APPOINTMENT_ACT, "getDatesFromMap: null map");
         }
     }
 
-    public void getSessions(String date) {
+    public void getSessions(String index) {
         int i = 0;
-        databaseReference = FirebaseDatabase.getInstance().getReference("providers").child(pid).child("services").child(String.valueOf(servicePosition)).child("dailySessions").child(date);
-
-//        for(i = 0; i< 3 ;  i++) {
-        databaseReference.child(String.valueOf("0"));
+        databaseReference = FirebaseDatabase.getInstance().getReference("providers").child(pid).child("services").child(String.valueOf(servicePosition)).child("dailySessions").child(index);
+        databaseReference.child(index);
         databaseReference.addListenerForSingleValueEvent(valueEventListener);
-//        }
-
 
     }
 
@@ -209,49 +200,32 @@ public class SetAppointmentTime extends BaseMenuActivity {
 
                     Sessions sessions = snapshot.getValue(Sessions.class);
                     System.out.println("[TEST] sesions start: " + sessions.getStart()); //TEST
-                    testSlots.add(sessions.getStart());
-                    slots.add(new Date(sessions.getStart()));
+                    if(sessions.isAvailable()) {
+                        sessionsArrayList.add(sessions);
+                        slots.add(new Date(sessions.getStart()));
+
+                        Event event = new Event(Color.GREEN, sessions.getStart(), service.getName() + " slot");
+                        compactCalendarView.addEvent(event);
+                    }
 
                 }
-                System.out.println("got " + slots.size() + " sessions.");
-                /********************************************************/
-                //TEST: for testing the recycle view
-//        Date date = new Date(1446344000000l);
-//        slots.add(date);
-//        Date date1 = new Date(1246354000000l);
-//        slots.add(date1);
-//        Date date2 = new Date(1546364000000l);
-//        slots.add(date2);
-//        Date date3 = new Date(1046374000000l);
-//        slots.add(date3);
-                /********************************************************/
+
 
                 if (!slots.isEmpty()) {
 //                    System.out.println(" [TEST] slots is not empty");
-                    recyclerViewParent.setAdapter(slotAdapter);
+//                    recyclerViewSlots.setAdapter(slotAdapter);
                 }
             } else {
-                System.out.println("[TEST]: snapshot not exists");
+                Log.d(TAG_SET_APPOINTMENT_ACT, "Snapshot is not exists");
             }
         }
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            System.out.println("Something went wrong..");
+            Log.d(TAG_SET_APPOINTMENT_ACT, "onCancellelled: Something went wrong..");
         }
     };
 
-    private void loadSlotsFromDate(String date) {
 
-//        ArrayList<Sessions> sessions =  new ArrayList<Sessions>();
-//        sessions = service.getDailySessions().get(servicePosition);
-//        for(int i=0; i<= service.getDailySessions().size() ; i++){
-//            if(sessions.get(i).isAvailable()) {
-//                slots.add(new Date(sessions.get(i).getStart()));
-//            }
-//        }
-
-
-    }
 }

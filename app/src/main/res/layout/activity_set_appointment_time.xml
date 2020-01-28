@@ -60,25 +60,33 @@
             android:layout_height="250dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            app:compactCalendarBackgroundColor="#ffe95451"
-            app:compactCalendarCurrentDayBackgroundColor="#B71C1C"
-            app:compactCalendarCurrentSelectedDayBackgroundColor="#E57373"
+            app:compactCalendarBackgroundColor="#F9F9F9"
+            app:compactCalendarCurrentDayBackgroundColor="#FFE0CAD2"
+            app:compactCalendarCurrentSelectedDayBackgroundColor="#FF5A65F4"
             app:compactCalendarMultiEventIndicatorColor="#fff"
             app:compactCalendarTargetHeight="250dp"
-            app:compactCalendarTextColor="#fff"
+            app:compactCalendarTextColor="@color/black"
             app:compactCalendarTextSize="12sp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="262dp">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycleview_available_slots1"
+            <ImageView
+                android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/recycleview_available_slots"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_line" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycleview_available_slots"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="80dp"
-                android:padding="25dp"
+                android:padding="30dp"
                 android:paddingTop="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -88,11 +96,12 @@
                 android:id="@+id/date_pick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="28dp"
-                android:layout_marginBottom="32dp"
-                android:text="TextView"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/anton"
+                android:text="SLOTS AVAILABLE"
+                app:layout_constraintStart_toStartOf="@+id/imageView"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
@@ -104,7 +113,7 @@
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#5C8BF7"
-        android:text="NEXT"
+        android:text="BOOK"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
