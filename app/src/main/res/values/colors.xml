@@ -6,4 +6,13 @@
     <color name="white">#fff</color>
     <color name="black">#000000</color>
     <color name="warning_red">#CA1616</color>
+
+<!--    Services recycle view item Colors   -->
+<color name="colorPrimaryServiceLight">#FF5A65F4</color>
+<color name="colorPrimaryService">#ffffff</color>
+<color name="colorPrimaryDarkService">#00574B</color>
+<color name="colorAccentService">#D81B60</color>
+
 </resources>
+
+

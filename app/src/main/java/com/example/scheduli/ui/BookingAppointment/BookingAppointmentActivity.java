@@ -100,7 +100,7 @@ public class BookingAppointmentActivity extends BaseMenuActivity {
 
         databaseReference =  FirebaseDatabase.getInstance().getReference("providers").child(pid).child("services");
         mLayout = new GridLayoutManager(this,2);
-        mAdapter = new ServiceAdapter(servicesList);
+        mAdapter = new ServiceAdapter(BookingAppointmentActivity.this, servicesList);
         recyclerView = (RecyclerView) findViewById(R.id.services_recycleview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLayout);
@@ -110,8 +110,10 @@ public class BookingAppointmentActivity extends BaseMenuActivity {
         mAdapter.setOnItemClickListener(new ServiceAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                servicesList.get(position);
+                //TODO: why the app didnt provide the position? ()
+                System.out.println("[TEST] position = " + position);
                 servicePosition = position;
+                servicesList.get(position);
                 Log.d(TAG_BOOKING_ACT, "User choose service: [" + position + "] - " + servicesList.get(position).getName());
             }
         });

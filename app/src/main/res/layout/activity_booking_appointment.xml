@@ -66,6 +66,7 @@
             android:layout_marginBottom="24dp"
             android:clipToPadding="true"
             android:padding="25dp"
+
             android:scrollbars="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

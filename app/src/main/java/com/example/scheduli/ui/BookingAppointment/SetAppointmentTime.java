@@ -117,7 +117,7 @@ public class SetAppointmentTime extends BaseMenuActivity {
 
         recyclerViewSlots = (RecyclerView) findViewById(R.id.recycleview_available_slots);
         mLayout = new GridLayoutManager(this, 3);
-        slotAdapter = new SlotAdapter(slots);
+        slotAdapter = new SlotAdapter(getApplicationContext(), slots);
         recyclerViewSlots.setLayoutManager(mLayout);
         recyclerViewSlots.setHasFixedSize(true);
         recyclerViewSlots.setAdapter(slotAdapter);
@@ -160,6 +160,12 @@ public class SetAppointmentTime extends BaseMenuActivity {
         });
 
 
+        slotAdapter.setOnItemClickListener(new SlotAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                System.out.println("[TEST slot] position = " + position);
+            }
+        });
 
     }
 

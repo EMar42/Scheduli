@@ -5,6 +5,7 @@
     android:layout_width="140dp"
     android:layout_height="140dp"
     android:layout_margin="5dp"
+    android:id="@+id/service_card_view"
     android:foreground="@drawable/ic_service_frame"
     app:cardCornerRadius="6dp">
 

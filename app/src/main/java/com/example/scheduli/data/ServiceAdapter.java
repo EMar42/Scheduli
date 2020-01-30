@@ -1,13 +1,14 @@
 package com.example.scheduli.data;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.scheduli.R;
@@ -18,10 +19,13 @@ import java.util.ArrayList;
 public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceViewHolder> {
 
 public ArrayList<Service> services;
+private int selectedItem = -1;
+private Context context;
 private OnItemClickListener mListener;
 
-    public ServiceAdapter(ArrayList<Service> mServices) {
+    public ServiceAdapter(Context context, ArrayList<Service> mServices) {
 
+        this.context = context;
         this.services = mServices;
     }
 
@@ -36,11 +40,31 @@ private OnItemClickListener mListener;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ServiceViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ServiceViewHolder holder, final int position) {
 
-        Service currentItem = services.get(position);
-
+        final Service currentItem = services.get(position);
         holder.serviceName.setText(currentItem.getName());
+
+
+//        holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimaryService));
+
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int previousItem = selectedItem;
+                selectedItem = position;
+                mListener.onItemClick(position);
+                notifyItemChanged(previousItem);
+                notifyItemChanged(position);
+
+            }
+        });
+
+        if (selectedItem == position ) {
+            holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimaryServiceLight));
+        }
 
     }
 
@@ -59,27 +83,29 @@ private OnItemClickListener mListener;
     public static class ServiceViewHolder extends RecyclerView.ViewHolder {
         public ImageView serviceIcon;
         public TextView serviceName;
+        public CardView cardView;
 
 
         public ServiceViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             serviceIcon = itemView.findViewById(R.id.slot_frame);
             serviceName = itemView.findViewById(R.id.slot_time);
+            cardView = itemView.findViewById(R.id.service_card_view);
 
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(listener != null){
-                        int position = getAdapterPosition();
-
-                        if(position != RecyclerView.NO_POSITION){
-                            listener.onItemClick(position);
-                        }
-                    }
-
-                }
-            });
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if(listener != null){
+//                        int position = getAdapterPosition();
+//
+//                        if(position != RecyclerView.NO_POSITION){
+//                            listener.onItemClick(position);
+//                        }
+//                    }
+//
+//                }
+//            });
 
         }
 
