@@ -46,12 +46,20 @@ public class MainActivity extends BaseMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /***** IN CASE OF DATA LOST (providers DB)              *****/
+        /***** inserting full provider snippet                  *****/
+        /***** under the current user connected (current uid):  *****/
+        /***** use this func:                                   *****/
+//        insertNewProvider(); //contain full provider snippet
+
+
+
+
 
         initView();
         searchProviderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//        insertNewProvider();
                 searchActivity();
             }
         });
