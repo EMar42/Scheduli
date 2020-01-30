@@ -26,6 +26,7 @@ import com.example.scheduli.BaseMenuActivity;
 import com.example.scheduli.R;
 import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.ProvidersAdapter;
+import com.example.scheduli.data.joined.JoinedProvider;
 import com.example.scheduli.ui.BookingAppointment.BookingAppointmentActivity;
 import com.example.scheduli.utils.UsersUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -59,6 +60,8 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
     ProvidersAdapter adapter;
     DatabaseReference ref;
     private static String PID = null;
+
+   private JoinedProvider joinedProvider = new JoinedProvider();
 
 
     @Override
@@ -95,7 +98,7 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
                 }
             }
         });
-        getAllProviders();
+//        getAllProviders();
 
     }
 
@@ -182,12 +185,13 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
         Log.d(TAG_SEARCH_ACT, "onProviderClick: clicked");
 
         final Provider provider = providersList.get(position);
-        final String[] uid = new String[1];
+
+        joinedProvider = new JoinedProvider(provider);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
 
-        myRef.child("providers").addValueEventListener(new ValueEventListener() {
+        myRef.child("providers").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -196,15 +200,21 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
                     //The key is by company name.
                     if (provider.getCompanyName().contains(item_snapshot.child("companyName").getValue().toString())) {
                         Log.d(TAG_SEARCH_ACT, "User Choose: " + item_snapshot.toString());
-                        uid[0] = item_snapshot.getKey();
-                        Intent intent = new Intent(SearchProviderActivity.this, BookingAppointmentActivity.class);
-                        //TODO: refatoring data transaction
-                        intent.putExtra("companyName", provider.getCompanyName());
-                        intent.putExtra("pid", uid[0]);
-                        intent.putExtra("provider", provider);
-                        System.out.println("Got provider list of dailySessions: " + provider.getServices().get(1).getDailySessions()); // TEST
 
-                        startActivity(intent);
+                        joinedProvider.setPid(item_snapshot.getKey());
+
+                        if (joinedProvider.getPid()!=null && joinedProvider.getCompanyName()!= null) {
+                            Intent intent = new Intent(SearchProviderActivity.this, BookingAppointmentActivity.class);
+                            //TODO: refatoring data transaction
+                            intent.putExtra("companyName", provider.getCompanyName());
+                            intent.putExtra("pid", joinedProvider.getPid());
+                            intent.putExtra("provider", provider);
+                            System.out.println("Got provider list of dailySessions: " + provider.getServices().get(1).getDailySessions()); // TEST
+                            joinedProvider.setPid(null);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "null pid", Toast.LENGTH_LONG).show();
+                        }
                     }
 
                 }

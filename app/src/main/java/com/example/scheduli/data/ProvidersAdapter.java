@@ -41,6 +41,8 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
         holder.profileImg.setImageResource(R.drawable.ic_person);
         holder.textViewCompanyName.setText(provider.getCompanyName());
         holder.textViewProfession.setText("profession: " + provider.getProfession());
+
+
     }
 
     @Override

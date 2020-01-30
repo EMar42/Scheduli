@@ -38,6 +38,7 @@ public class BookingAppointmentActivity extends BaseMenuActivity {
 
     DatabaseReference databaseReference ;
     Button btn_next;
+    Button btn_back;
 
     private static final String TAG_BOOKING_ACT = "BookingAppointmentActiv";
     private RecyclerView.LayoutManager mLayout;
@@ -65,6 +66,7 @@ public class BookingAppointmentActivity extends BaseMenuActivity {
 
 
         btn_next = (Button) findViewById(R.id.btn_next_2);
+        btn_back = (Button) findViewById(R.id.btn_back_2);
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,6 +83,13 @@ public class BookingAppointmentActivity extends BaseMenuActivity {
                 }
 
 
+            }
+        });
+
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
