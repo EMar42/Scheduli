@@ -69,13 +69,12 @@
         android:layout_height="32dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
+        android:background="#ffffff"
         android:padding="100dp"
         app:layout_constraintEnd_toEndOf="@+id/editText_search_field"
         app:layout_constraintTop_toTopOf="@+id/editText_search_field"
         app:srcCompat="@drawable/ic_search_btn" />
-    <!--        app:showAsAction="always|collapseActionView"-->
-<!--        app:actionViewClass="androidx.appcompat.widget.SearchView"-->
-    />
+
 
 
     <androidx.recyclerview.widget.RecyclerView
