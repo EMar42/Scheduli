@@ -77,6 +77,7 @@ public class BookingAppointmentActivity extends BaseMenuActivity {
                     intent.putExtra("position" , servicePosition);
                     intent.putExtra("pid", pid);
                     startActivity(intent);
+                    finish();
                 }
                 else {
                     Toast.makeText(getApplicationContext(),"Select service first." ,Toast.LENGTH_SHORT).show();

@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.Service;
+import com.example.scheduli.data.Sessions;
 import com.example.scheduli.data.fireBase.DataBaseCallBackOperation;
 import com.example.scheduli.data.fireBase.FirebaseQueryLiveData;
 import com.google.firebase.database.DataSnapshot;
@@ -16,6 +17,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @IgnoreExtraProperties
 
 public class ProviderDataRepository {
@@ -23,6 +28,8 @@ public class ProviderDataRepository {
     private static ProviderDataRepository instance;
     private final DatabaseReference dataBaseReference;
     private FirebaseQueryLiveData providersLiveData;
+    private DateFormat sessionFormat = new SimpleDateFormat("yyyy-MM-dd");
+
 
     public static ProviderDataRepository getInstance() {
         if (instance == null) {
@@ -53,9 +60,11 @@ public class ProviderDataRepository {
         ValueEventListener providerListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.i(TAG_PROVIDER_REPOSITORY, "Getting data from database on " + uid);
-                Provider provider = dataSnapshot.child(uid).getValue(Provider.class);
-                callback.callBack(provider);
+                if(dataSnapshot.exists()) {
+                    Log.i(TAG_PROVIDER_REPOSITORY, "Getting data from database on " + uid);
+                    Provider provider = dataSnapshot.child(uid).getValue(Provider.class);
+                    callback.callBack(provider);
+                }
             }
 
             @Override
@@ -77,12 +86,18 @@ public class ProviderDataRepository {
     }
 
 
-
-    public void setServices(String uid, Service service){
+    public void setServices(String uid, Service service) {
 
         dataBaseReference.child(uid).child("services").setValue(service);
         Log.d(TAG_PROVIDER_REPOSITORY, "Services updated. " + service.getName());
 
+
+    }
+
+    public void setSingleAppointmentValue(String provider_id, int serviceIndex, Date date, int sessionIndex, Sessions session) {
+        Log.i(TAG_PROVIDER_REPOSITORY, "Created new Session " + session);
+
+         dataBaseReference.child(provider_id).child("services").child(String.valueOf(serviceIndex)).child("dailySessions").child(sessionFormat.format(date)).child(String.valueOf(sessionIndex)).setValue(session);
 
     }
 

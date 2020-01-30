@@ -24,6 +24,7 @@ import com.example.scheduli.data.Appointment;
 import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.Service;
 import com.example.scheduli.data.Sessions;
+import com.example.scheduli.data.repositories.ProviderDataRepository;
 import com.example.scheduli.data.repositories.UserDataRepository;
 import com.example.scheduli.ui.mainScreen.MainActivity;
 import com.example.scheduli.utils.UsersUtils;
@@ -167,29 +168,24 @@ public class SetAppointmentTime extends BaseMenuActivity {
     }
 
     private void updateSessionDetails(int i)  {
-        DatabaseReference sessionsReference;
-        sessionsReference = FirebaseDatabase.getInstance().getReference("providers").child(pid).child("services").child(String.valueOf(servicePosition)).child("dailySessions").child(dateFormatFireBase.format(currentDate)).child(String.valueOf(slotPosition));
+        //insert session
         Sessions s;
         s = sessionsArrayList.get(i);
         s.setUserUid(UsersUtils.getInstance().getCurrentUserUid());
         s.setAvailable(false);
-        sessionsReference.setValue(s);
+        ProviderDataRepository.getInstance().setSingleAppointmentValue(pid,servicePosition,currentDate,slotPosition,s);
 
+        //insert new appointment to current user
         appointment = new Appointment();
         appointment.setProviderUid(pid);
         appointment.setEnd(s.getEnd());
         appointment.setStart(s.getStart());
         appointment.setServiceCost(String.valueOf(service.getCost()));
         appointment.setServiceName(service.getName());
-
         UserDataRepository.getInstance().addSingleAppointmentToUser(UsersUtils.getInstance().getCurrentUserUid(), appointment);
 
     }
-    //    private String providerUid;
-//    private String serviceName;
-//    private String serviceCost;
-//    private long start;
-//    private long end;
+
 
     private void setEvents() {
         for(int i=0; i<dates.size();i++) {

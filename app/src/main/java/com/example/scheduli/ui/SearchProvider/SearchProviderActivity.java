@@ -212,6 +212,7 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
                             System.out.println("Got provider list of dailySessions: " + provider.getServices().get(1).getDailySessions()); // TEST
                             joinedProvider.setPid(null);
                             startActivity(intent);
+                            finish();
                         } else {
                             Toast.makeText(getApplicationContext(), "null pid", Toast.LENGTH_LONG).show();
                         }
