@@ -73,7 +73,8 @@
         android:padding="100dp"
         app:layout_constraintEnd_toEndOf="@+id/editText_search_field"
         app:layout_constraintTop_toTopOf="@+id/editText_search_field"
-        app:srcCompat="@drawable/ic_search_btn" />
+        app:srcCompat="@drawable/ic_search_btn"
+        />
 
 
 
