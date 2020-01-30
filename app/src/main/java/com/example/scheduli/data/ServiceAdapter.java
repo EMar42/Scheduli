@@ -6,14 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.scheduli.R;
-
-
 import java.util.ArrayList;
 
 public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceViewHolder> {
@@ -45,10 +41,6 @@ private OnItemClickListener mListener;
         final Service currentItem = services.get(position);
         holder.serviceName.setText(currentItem.getName());
 
-
-//        holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimaryService));
-
-
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +56,8 @@ private OnItemClickListener mListener;
 
         if (selectedItem == position ) {
             holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimaryServiceLight));
+            holder.serviceName.setTextColor(context.getResources().getColor(R.color.white));
+
         }
 
     }
@@ -92,33 +86,15 @@ private OnItemClickListener mListener;
             serviceName = itemView.findViewById(R.id.slot_time);
             cardView = itemView.findViewById(R.id.service_card_view);
 
-
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if(listener != null){
-//                        int position = getAdapterPosition();
-//
-//                        if(position != RecyclerView.NO_POSITION){
-//                            listener.onItemClick(position);
-//                        }
-//                    }
-//
-//                }
-//            });
-
         }
-
 
     }
 
     public interface OnItemClickListener{
         void  onItemClick(int position);
-
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){
-
         mListener = listener;
     }
 

@@ -5,14 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.scheduli.R;
-import com.example.scheduli.data.ServiceAdapter;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -62,6 +58,7 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.ViewHolder> {
         });
         if (selectedItem == position ) {
             holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimaryServiceLight));
+            holder.slotTime.setTextColor(context.getResources().getColor(R.color.white));
 
         }
         else {

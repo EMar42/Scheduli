@@ -50,9 +50,6 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
     private FloatingActionButton searchProviderButton;
     private AppBarConfiguration appBarConfiguration;
     private NavController navController;
-
-
-
     private static final String TAG_SEARCH_ACT = "SearchProviderActivity";
     private EditText searchField;
     private ImageButton searchBtn;
@@ -60,8 +57,8 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
     private RecyclerView.LayoutManager mLayout;
     private List<Provider> providersList;
     ProvidersAdapter adapter;
-     DatabaseReference ref;
-     private static String PID = null;
+    DatabaseReference ref;
+    private static String PID = null;
 
 
     @Override
@@ -69,7 +66,6 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_provider);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
 
 
         providersList = new ArrayList<>();
@@ -94,7 +90,7 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
                 }
                 else {
                     getAllProviders();
-              Toast.makeText(SearchProviderActivity.this, "Empty search...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchProviderActivity.this, "Empty search...", Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -111,7 +107,6 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
                 R.id.navigation_profile, R.id.navigation_appointments)
                 .build();
     }
-
 
     private void init() {
         searchField = (EditText) findViewById(R.id.editText_search_field);
@@ -139,12 +134,11 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
     }
 
 
-
     private void firebaseProviderSearchByCompany(String company){
 
         Query query = ref.orderByChild("companyName").equalTo(company);
         query.addListenerForSingleValueEvent(valueEventListener);
-}
+    }
 
     //select * from providers
     private void getAllProviders() {
@@ -181,37 +175,6 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
         }
     };
 
-
-    /*
-    TODO: complete dynamic search
-     */
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.search_menu, menu);
-//        Menu item = (Menu) menu.findItem(R.id.action_search);
-//
-//        SearchView searchView = (SearchView) item;
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-////                adapter.getFilter().filter(newText);
-//                return false;
-//            }
-//        });
-//
-//
-//
-//        return super.onCreateOptionsMenu(menu);
-//    }
-    /*
-    *
-    *
-    */
 
     @Override
     public void onProviderClick(int position) {
@@ -254,4 +217,3 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
         });
     }
 }
-

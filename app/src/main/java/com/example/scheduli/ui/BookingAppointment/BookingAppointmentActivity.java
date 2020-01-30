@@ -97,6 +97,7 @@ public class BookingAppointmentActivity extends BaseMenuActivity {
         company_txt = (TextView) findViewById(R.id.set_appointment_time_act_chosen_service);
         company_txt.setText(intent.getStringExtra("companyName"));
         servicesList = new ArrayList<>();
+        servicesList = provider.getServices();
 
         databaseReference =  FirebaseDatabase.getInstance().getReference("providers").child(pid).child("services");
         mLayout = new GridLayoutManager(this,2);
@@ -105,7 +106,7 @@ public class BookingAppointmentActivity extends BaseMenuActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLayout);
         recyclerView.setAdapter(mAdapter);
-        getServices();
+//        getServices();
 
         mAdapter.setOnItemClickListener(new ServiceAdapter.OnItemClickListener() {
             @Override
@@ -120,53 +121,53 @@ public class BookingAppointmentActivity extends BaseMenuActivity {
     }
 
     private void getServices() {
-        databaseReference.addListenerForSingleValueEvent(valueEventListener);
+//        databaseReference.addListenerForSingleValueEvent(valueEventListener);
     }
 
-    ValueEventListener valueEventListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            servicesList.clear();
-
-            if(dataSnapshot.exists()) {
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-                    Service service = snapshot.getValue(Service.class);
-//                    System.out.println("[TEST] service name: " + service.getName()); //TEST
-                    servicesList.add(service);
-
-                }
-                Log.d(TAG_BOOKING_ACT, "got " + servicesList.size() + " services.");
-                /********************************************************/
-                //TEST: for testing the recycle view
-//                Service service1 = new Service();
-//                service1.setName("test1");
-//                Service service2 = new Service();
-//                service2.setName("test2");
-//                Service service3 = new Service();
-//                service3.setName("test3");
-//                Service service4 = new Service();
-//                service4.setName("test4");
-//                Service service5 = new Service();
-//                service5.setName("test5");
-//                servicesList.add(service1);
-//                servicesList.add(service2);
-//                servicesList.add(service3);
-//                servicesList.add(service4);
-//                servicesList.add(service5);
-                /********************************************************/
-
-                if (!servicesList.isEmpty()) {
-                    recyclerView.setAdapter(mAdapter);
-                }
-            }
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            Log.e(TAG_BOOKING_ACT,"Something went wrong.. ");
-        }
-    };
+//    ValueEventListener valueEventListener = new ValueEventListener() {
+//        @Override
+//        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//            servicesList.clear();
+//
+//            if(dataSnapshot.exists()) {
+//
+//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//
+//                    Service service = snapshot.getValue(Service.class);
+////                    System.out.println("[TEST] service name: " + service.getName()); //TEST
+//                    servicesList.add(service);
+//
+//                }
+//                Log.d(TAG_BOOKING_ACT, "got " + servicesList.size() + " services.");
+//                /********************************************************/
+//                //TEST: for testing the recycle view
+////                Service service1 = new Service();
+////                service1.setName("test1");
+////                Service service2 = new Service();
+////                service2.setName("test2");
+////                Service service3 = new Service();
+////                service3.setName("test3");
+////                Service service4 = new Service();
+////                service4.setName("test4");
+////                Service service5 = new Service();
+////                service5.setName("test5");
+////                servicesList.add(service1);
+////                servicesList.add(service2);
+////                servicesList.add(service3);
+////                servicesList.add(service4);
+////                servicesList.add(service5);
+//                /********************************************************/
+//
+//                if (!servicesList.isEmpty()) {
+//                    recyclerView.setAdapter(mAdapter);
+//                }
+//            }
+//        }
+//
+//        @Override
+//        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            Log.e(TAG_BOOKING_ACT,"Something went wrong.. ");
+//        }
+//    };
 }

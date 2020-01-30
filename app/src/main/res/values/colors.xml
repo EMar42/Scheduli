@@ -3,15 +3,15 @@
     <color name="colorPrimary">#3B3BB2</color>
     <color name="colorPrimaryDark">#3232AF</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="white">#fff</color>
+    <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="warning_red">#CA1616</color>
 
 <!--    Services recycle view item Colors   -->
-<color name="colorPrimaryServiceLight">#FF5A65F4</color>
+<color name="colorPrimaryServiceLight">#4236FE</color>
 <color name="colorPrimaryService">#ffffff</color>
-<color name="colorPrimaryDarkService">#00574B</color>
-<color name="colorAccentService">#D81B60</color>
+<color name="colorPrimaryButton">#4236FE</color>
+<color name="colorClickedButton">#6668FF</color>
 
 </resources>
 

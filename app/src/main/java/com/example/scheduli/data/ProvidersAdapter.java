@@ -48,12 +48,6 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
         return providerList.size();
     }
 
-    // for dynamic search
-//    @Override
-//    public Filter getFilter() {
-//        return filter;
-//    }
-
 
     public static class ProviderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
@@ -61,9 +55,9 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
         ImageView profileImg;
         View view;
 
-        OnProviderListener onProviderListener;//
+        OnProviderListener onProviderListener;
 
-//..
+
         public ProviderViewHolder(@NonNull View itemView, OnProviderListener onProviderListener) {
             super(itemView);
 
@@ -80,7 +74,7 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
         public void onClick(View view) {
             onProviderListener.onProviderClick(getAdapterPosition());
         }
-        //..
+
     }
 
     /**
@@ -89,45 +83,5 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
     public interface OnProviderListener{
         void onProviderClick(int position);
     }
-
-    //TODO: immplement dynamic search (OPT)
-    // *********************** Dynamic search *************************
-
-//    Filter filter = new Filter() {
-//
-//        // Run on background thread
-//        @Override
-//        protected FilterResults performFiltering(CharSequence charSequence) {
-//
-//            List<Provider> filteredList = new ArrayList<>();
-//
-//            if(charSequence.toString().isEmpty()){
-//                filteredList.addAll(providerListAll);
-//            }else {
-//                for(Provider provider : providerList){
-//                    if(provider.companyName.contains(charSequence.toString())){
-//                        filteredList.add(provider);
-//                    }
-//                }
-//            }
-//
-//            FilterResults filterResults = new FilterResults();
-//            filterResults.values = filteredList;
-//
-//
-//            return filterResults;
-//        }
-//
-//        //Run on ui thread
-//        @Override
-//        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-//            providerList.clear();
-//            providerList.addAll((Collection<? extends Provider>) filterResults);
-//            notifyDataSetChanged();
-//
-//        }
-//    };
-    // *********************** Dynamic search *************************
-
 
 }

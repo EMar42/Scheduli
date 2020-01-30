@@ -82,7 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="20dp"
-        android:backgroundTint="#5C8BF7"
+        android:background="@color/colorPrimaryButton"
         android:text="NEXT"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -95,7 +95,7 @@
         android:layout_marginStart="50dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/ic_btn_back"
-        android:text="Button"
+        android:text="BACK"
         android:textColor="#5C8BF7"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

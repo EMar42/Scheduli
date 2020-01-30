@@ -6,12 +6,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +23,8 @@ import com.example.scheduli.R;
 import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.Service;
 import com.example.scheduli.data.Sessions;
+import com.example.scheduli.ui.mainScreen.MainActivity;
+import com.example.scheduli.utils.UsersUtils;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +41,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class SetAppointmentTime extends BaseMenuActivity {
 
@@ -60,13 +65,17 @@ public class SetAppointmentTime extends BaseMenuActivity {
 
     //Calendar view
     CompactCalendarView compactCalendarView;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM - yyyy", Locale.getDefault());
+    private SimpleDateFormat dateFormatPrimarry = new SimpleDateFormat("MMMM - yyyy", Locale.getDefault());
+    private DateFormat dateFormatFireBase = new SimpleDateFormat("yyyy-MM-dd");
 
-    //parent (dates) cycleview (Item)
+    //cycleview (Item)
     private RecyclerView recyclerViewSlots;
     private List<String> dates;
     private SlotAdapter slotAdapter;
     private List<Date> slots;
+    private int slotPosition = -1;
+    private Date currentDate = new Date();
+    private Sessions currentSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +88,96 @@ public class SetAppointmentTime extends BaseMenuActivity {
         //Calendar
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setTitle(null);
+        final Date date = new Date();
+        actionBar.setTitle(dateFormatPrimarry.format(date));
         compactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
         compactCalendarView.setUseThreeLetterAbbreviation(true);
 
+        init();
 
+
+
+        //On date change:
+        compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+            @Override
+            public void onDayClick(Date dateClicked) {
+                Context context = getApplicationContext();
+                slots.clear();
+
+//                System.out.println("TEST: picked date: " + dateClicked.getTime());
+
+                for (int i = 0; i < sessionsArrayList.size(); i++) {
+                    Date date = new Date(sessionsArrayList.get(i).getStart());
+
+                    if(dateFormatFireBase.format(dateClicked.getTime()).compareTo(dateFormatFireBase.format(date.getTime()))==0){
+                        slots.add(new Date(sessionsArrayList.get(i).getStart()));
+                        currentDate = new Date(sessionsArrayList.get(i).getStart());
+                        currentSession = new Sessions(sessionsArrayList.get(i));
+
+
+                    }
+                }
+
+                recyclerViewSlots.setAdapter(slotAdapter);
+            }
+
+            @Override
+            public void onMonthScroll(Date firstDayOfNewMonth) {
+                actionBar.setTitle(dateFormatPrimarry.format(firstDayOfNewMonth));
+            }
+        });
+
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println(slots.get(slotPosition) + " " + "clicked"); /// TEST
+                System.out.println("[TEST] s.p: " + servicePosition + " date: " + dateFormatFireBase.format(currentDate) + " position: " + slotPosition);
+                Date sessionDate = new Date(slots.get(slotPosition).getTime());
+
+                for (int i = 0; i < sessionsArrayList.size(); i++) {
+                    if (slots.get(slotPosition).getTime() == sessionsArrayList.get(i).getStart()) {
+
+//                        updateSessionDetails(i);
+                        showFinishDialog(i);
+                    }
+                }
+
+            }
+
+        });
+
+
+        slotAdapter.setOnItemClickListener(new SlotAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                slotPosition = position;
+                System.out.println("[TEST slot] position = " + position);
+                System.out.println("[TEST slot] position = " + slots.get(position));
+
+            }
+        });
+
+    }
+
+    private void updateSessionDetails(int i)  {
+        DatabaseReference sessionsReference;
+        sessionsReference = FirebaseDatabase.getInstance().getReference("providers").child(pid).child("services").child(String.valueOf(servicePosition)).child("dailySessions").child(dateFormatFireBase.format(currentDate)).child(String.valueOf(slotPosition));
+        Sessions s;
+        s = sessionsArrayList.get(i);
+        s.setUserUid(UsersUtils.getInstance().getCurrentUserUid());
+        s.setAvailable(false);
+        sessionsReference.setValue(s);
+    }
+
+    private void setEvents() {
+        for(int i=0; i<dates.size();i++) {
+            getSessions(dates.get(i));
+            Log.d(TAG_SET_APPOINTMENT_ACT,"Getting Evet data from date: " + dates.get(i) );
+        }
+    }
+
+    private void init() {
         //init Arrays
         dates = new ArrayList<>();
         slots = new ArrayList<>();
@@ -105,68 +199,20 @@ public class SetAppointmentTime extends BaseMenuActivity {
         serviceChoosen.setText(provider.getCompanyName() + " ⌘ " + service.getName());
         dailySessions = service.getDailySessions();
 
-        //Get dates
+
+        //Get dates from given HashMap object
         getDatesFromMap(dailySessions);
 
-        //Get Events for calendar:
-        for(int i=0; i<dates.size();i++) {
-            getSessions(dates.get(i));
-            Log.d(TAG_SET_APPOINTMENT_ACT,"Getting Evet data from date: " + dates.get(i) );
-        }
+        //Set Events for calendar:
+        setEvents();
 
-
+        //Init Recycleview
         recyclerViewSlots = (RecyclerView) findViewById(R.id.recycleview_available_slots);
         mLayout = new GridLayoutManager(this, 3);
         slotAdapter = new SlotAdapter(getApplicationContext(), slots);
         recyclerViewSlots.setLayoutManager(mLayout);
         recyclerViewSlots.setHasFixedSize(true);
         recyclerViewSlots.setAdapter(slotAdapter);
-
-        compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
-            @Override
-            public void onDayClick(Date dateClicked) {
-                Context context = getApplicationContext();
-                slots.clear();
-
-//                System.out.println("TEST: picked date: " + dateClicked.getTime());
-
-                for (int i = 0; i < sessionsArrayList.size(); i++) {
-                    Date date = new Date(sessionsArrayList.get(i).getStart());
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-                    if(dateFormat.format(dateClicked.getTime()).compareTo(dateFormat.format(date.getTime()))==0){
-                        slots.add(new Date(sessionsArrayList.get(i).getStart()));
-                    }
-                }
-
-                recyclerViewSlots.setAdapter(slotAdapter);
-            }
-
-            @Override
-            public void onMonthScroll(Date firstDayOfNewMonth) {
-                actionBar.setTitle(dateFormat.format(firstDayOfNewMonth));
-            }
-        });
-
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                    Toast.makeText(getApplicationContext(),"To be continued..." ,Toast.LENGTH_SHORT).show();
-                }
-
-
-
-        });
-
-
-        slotAdapter.setOnItemClickListener(new SlotAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                System.out.println("[TEST slot] position = " + position);
-            }
-        });
-
     }
 
 
@@ -232,6 +278,30 @@ public class SetAppointmentTime extends BaseMenuActivity {
             Log.d(TAG_SET_APPOINTMENT_ACT, "onCancellelled: Something went wrong..");
         }
     };
+
+
+    public void showFinishDialog(final int i){
+        Dialog dialog = new Dialog(SetAppointmentTime.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialod_finish_booking);
+        Button dialogBtn = dialog.findViewById(R.id.dialog_finish_btn);
+        TextView dialogText = dialog.findViewById(R.id.text_finish_detail);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd d hh:mm a");
+        dialogText.setText("You booked an appointment with: " + service.getName()+ "\nat: " + dateFormat.format(slots.get(slotPosition)));
+        dialogBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(SetAppointmentTime.this, "clicked", Toast.LENGTH_SHORT).show();
+                updateSessionDetails(i);
+                Intent intent = new Intent(SetAppointmentTime.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        next.setEnabled(false);
+        next.setBackgroundColor(getResources().getColor(R.color.colorClickedButton));
+
+        dialog.show();
+    }
 
 
 }

@@ -31,6 +31,13 @@ public class Sessions implements Parcelable {
 
     }
 
+    public Sessions(Sessions s){
+        this.start = s.getStart();
+        this.end = s.getEnd();
+        this.isAvailable = s.isAvailable();
+        this.userUid = s.getUserUid();
+    }
+
     protected Sessions(Parcel in) {
         start = in.readLong();
         end = in.readLong();
