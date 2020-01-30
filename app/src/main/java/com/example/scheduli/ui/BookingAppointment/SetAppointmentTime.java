@@ -1,11 +1,5 @@
 package com.example.scheduli.ui.BookingAppointment;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,13 +12,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.scheduli.BaseMenuActivity;
 import com.example.scheduli.R;
 import com.example.scheduli.data.Appointment;
 import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.Service;
 import com.example.scheduli.data.Sessions;
-import com.example.scheduli.data.User;
 import com.example.scheduli.data.repositories.UserDataRepository;
 import com.example.scheduli.ui.mainScreen.MainActivity;
 import com.example.scheduli.utils.UsersUtils;
@@ -44,7 +43,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 public class SetAppointmentTime extends BaseMenuActivity {
 
@@ -320,6 +318,7 @@ public class SetAppointmentTime extends BaseMenuActivity {
                 updateSessionDetails(i);
                 Intent intent = new Intent(SetAppointmentTime.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
         next.setEnabled(false);

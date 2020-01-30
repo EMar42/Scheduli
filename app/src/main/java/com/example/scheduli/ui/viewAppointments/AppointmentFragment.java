@@ -52,7 +52,7 @@ public class AppointmentFragment extends Fragment {
             UserDataRepository.getInstance().setLimitAmountOfAppointments(Integer.parseInt(limitValue));
         }
 
-        mViewModel = ViewModelProviders.of(getParentFragment()).get(AppointmentViewModel.class);
+        mViewModel = ViewModelProviders.of(getActivity()).get(AppointmentViewModel.class);
 
 
         mViewModel.getAllJoinedAppointments().observe(this, new Observer<ArrayList<JoinedAppointment>>() {
@@ -132,5 +132,7 @@ public class AppointmentFragment extends Fragment {
     public void onResume() {
         super.onResume();
         filterGroup.check(R.id.appointment_radio_filter_all);
+
+
     }
 }
