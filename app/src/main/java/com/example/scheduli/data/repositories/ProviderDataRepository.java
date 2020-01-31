@@ -99,7 +99,7 @@ public class ProviderDataRepository {
     }
 
     public void setSingleAppointmentValue(String provider_id, int serviceIndex, Date date, int sessionIndex, Sessions session) {
-        Log.i(TAG_PROVIDER_REPOSITORY, "Created new Session " + session);
+        Log.i(TAG_PROVIDER_REPOSITORY, "Updated session " + session);
 
          dataBaseReference.child(provider_id).child("services").child(String.valueOf(serviceIndex)).child("dailySessions").child(sessionFormat.format(date)).child(String.valueOf(sessionIndex)).setValue(session);
 

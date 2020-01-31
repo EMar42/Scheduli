@@ -22,7 +22,6 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.ViewHolder> {
     private Context context;
     private OnItemClickListener mListener;
 
-
     public SlotAdapter(Context context, List<Date> slotsList) {
 
         this.context = context;
@@ -59,10 +58,6 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.ViewHolder> {
         if (selectedItem == position ) {
             holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimaryServiceLight));
             holder.slotTime.setTextColor(context.getResources().getColor(R.color.white));
-
-        }
-        else {
-
         }
 
     }

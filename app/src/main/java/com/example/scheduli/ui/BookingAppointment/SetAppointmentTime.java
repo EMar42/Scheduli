@@ -99,7 +99,6 @@ public class SetAppointmentTime extends BaseMenuActivity {
         init();
 
 
-
         //On date change:
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
@@ -112,7 +111,7 @@ public class SetAppointmentTime extends BaseMenuActivity {
                 for (int i = 0; i < sessionsArrayList.size(); i++) {
                     Date date = new Date(sessionsArrayList.get(i).getStart());
 
-                    if(dateFormatFireBase.format(dateClicked.getTime()).compareTo(dateFormatFireBase.format(date.getTime()))==0){
+                    if (dateFormatFireBase.format(dateClicked.getTime()).compareTo(dateFormatFireBase.format(date.getTime())) == 0) {
                         slots.add(new Date(sessionsArrayList.get(i).getStart()));
                         currentDate = new Date(sessionsArrayList.get(i).getStart());
                         currentSession = new Sessions(sessionsArrayList.get(i));
@@ -134,17 +133,22 @@ public class SetAppointmentTime extends BaseMenuActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println(slots.get(slotPosition) + " " + "clicked"); /// TEST
-                System.out.println("[TEST] s.p: " + servicePosition + " date: " + dateFormatFireBase.format(currentDate) + " position: " + slotPosition);
-                Date sessionDate = new Date(slots.get(slotPosition).getTime());
+                if (!slots.isEmpty() && slotPosition < slots.size() && slotPosition >= 0) {
+                    System.out.println(slots.get(slotPosition) + " " + "clicked"); /// TEST
+                    System.out.println("[TEST] s.p: " + servicePosition + " date: " + dateFormatFireBase.format(currentDate) + " position: " + slotPosition);
+                    Date sessionDate = new Date(slots.get(slotPosition).getTime());
 
-                for (int i = 0; i < sessionsArrayList.size(); i++) {
-                    if (slots.get(slotPosition).getTime() == sessionsArrayList.get(i).getStart()) {
-                        showFinishDialog(i);
+                    for (int i = 0; i < sessionsArrayList.size(); i++) {
+                        if (slots.get(slotPosition).getTime() == sessionsArrayList.get(i).getStart()) {
+                            showFinishDialog(i);
+                        }
                     }
-                }
 
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please select item", Toast.LENGTH_SHORT).show();
+                }
             }
+
 
         });
 
@@ -167,13 +171,13 @@ public class SetAppointmentTime extends BaseMenuActivity {
 
     }
 
-    private void updateSessionDetails(int i)  {
+    private void updateSessionDetails(int i) {
         //insert session
         Sessions s;
         s = sessionsArrayList.get(i);
         s.setUserUid(UsersUtils.getInstance().getCurrentUserUid());
         s.setAvailable(false);
-        ProviderDataRepository.getInstance().setSingleAppointmentValue(pid,servicePosition,currentDate,slotPosition,s);
+        ProviderDataRepository.getInstance().setSingleAppointmentValue(pid, servicePosition, currentDate, slotPosition, s);
 
         //insert new appointment to current user
         appointment = new Appointment();
@@ -188,9 +192,9 @@ public class SetAppointmentTime extends BaseMenuActivity {
 
 
     private void setEvents() {
-        for(int i=0; i<dates.size();i++) {
+        for (int i = 0; i < dates.size(); i++) {
             getSessions(dates.get(i));
-            Log.d(TAG_SET_APPOINTMENT_ACT,"Getting Evet data from date: " + dates.get(i) );
+            Log.d(TAG_SET_APPOINTMENT_ACT, "Getting Evet data from date: " + dates.get(i));
         }
     }
 
@@ -211,7 +215,7 @@ public class SetAppointmentTime extends BaseMenuActivity {
         service = intent.getParcelableExtra("service");
         pid = intent.getStringExtra("pid");
         servicePosition = intent.getIntExtra("position", 0);
-        Log.d(TAG_SET_APPOINTMENT_ACT,"Got service: " + service.getName());
+        Log.d(TAG_SET_APPOINTMENT_ACT, "Got service: " + service.getName());
         Log.d(TAG_SET_APPOINTMENT_ACT, "Got service sessoins " + "[" + service.getDailySessions().size() + "] :" + service.getDailySessions());
         serviceChoosen.setText(provider.getCompanyName() + " ⌘ " + service.getName());
         dailySessions = service.getDailySessions();
@@ -269,7 +273,7 @@ public class SetAppointmentTime extends BaseMenuActivity {
 
                     Sessions sessions = snapshot.getValue(Sessions.class);
                     System.out.println("[TEST] sesions start: " + sessions.getStart()); //TEST
-                    if(sessions.isAvailable()) {
+                    if (sessions.isAvailable()) {
                         sessionsArrayList.add(sessions);
                         slots.add(new Date(sessions.getStart()));
 
@@ -280,12 +284,6 @@ public class SetAppointmentTime extends BaseMenuActivity {
                 }
 
 
-                if (!slots.isEmpty()) {
-//                    System.out.println(" [TEST] slots is not empty");
-//                    recyclerViewSlots.setAdapter(slotAdapter);
-                }
-            } else {
-                Log.d(TAG_SET_APPOINTMENT_ACT, "Snapshot is not exists");
             }
         }
 
@@ -297,16 +295,14 @@ public class SetAppointmentTime extends BaseMenuActivity {
     };
 
 
-
-
-    public void showFinishDialog(final int i){
+    public void showFinishDialog(final int i) {
         Dialog dialog = new Dialog(SetAppointmentTime.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialod_finish_booking);
         Button dialogBtn = dialog.findViewById(R.id.dialog_finish_btn);
         TextView dialogText = dialog.findViewById(R.id.text_finish_detail);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd d hh:mm a");
-        dialogText.setText("You booked an appointment with: " + service.getName()+ "\nat: " + dateFormat.format(slots.get(slotPosition)));
+        dialogText.setText("You booked an appointment with: " + service.getName() + "\nat: " + dateFormat.format(slots.get(slotPosition)));
         dialogBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -317,8 +313,6 @@ public class SetAppointmentTime extends BaseMenuActivity {
                 finish();
             }
         });
-        next.setEnabled(false);
-        next.setBackgroundColor(getResources().getColor(R.color.colorClickedButton));
 
         dialog.show();
     }
