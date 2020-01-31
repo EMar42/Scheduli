@@ -204,11 +204,10 @@ public class UserDataRepository {
         Log.i(TAG_USER_REPOSITORY, "deleteing appointment from " + currentUserUid + " appointment: " + appointment);
         this.dataBaseReference.child(currentUserUid).child("appointments").setValue(appointments);
 
-        //TODO add update to provider
         Calendar appointmentStartTime = Calendar.getInstance();
         appointmentStartTime.setTimeInMillis(appointment.getStart());
         if (Calendar.getInstance().before(appointmentStartTime)) {
-            //TODO need provider to change status of session to available
+            ProviderDataRepository.getInstance().changeSessionStatusFromByUser(appointment.getProviderUid(), appointment);
         }
     }
 }
