@@ -44,7 +44,15 @@ public class Provider implements Parcelable {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.services = new ArrayList<>();
+    }
 
+    //This constructor should be used for creating new Provider:
+    public Provider(String companyName, String profession, String phoneNumber, String address) {
+        this.companyName = companyName;
+        this.profession = profession;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.services = new ArrayList<>();
     }
 
 
