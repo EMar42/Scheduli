@@ -39,7 +39,7 @@ public class ProfileFragment extends Fragment {
     private TextView userPhoneNumberTv;
     private TextView userEmailTv;
     private Button providerButton;
-    private boolean providerFlagCallBack = false;
+    private boolean providerFlagCallBack;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -55,7 +55,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        providerFlagCallBack = false;
+        providerFlagCallBack = true;
         mViewModel = ViewModelProviders.of(getParentFragment()).get(ProfileViewModel.class);
         mViewModel.getUserProfileData().observe(this, new Observer<User>() {
             @Override
@@ -74,6 +74,7 @@ public class ProfileFragment extends Fragment {
                 providerButton.setEnabled(true);
                 providerButton.setAlpha(anableButtonColor);
                 if (provider == null) {
+                    providerButton.setText("Become Provider Today!");
                     providerFlagCallBack = false;
                 }
             }
@@ -90,17 +91,17 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (providerFlagCallBack) {
+                    //already Provider
+                    Intent intent = new Intent(getContext(), ProviderActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(getContext(), "Already Provider", Toast.LENGTH_SHORT).show();
+                } else {
+                    //singup
                     Log.i(PROFILEFRAGMENT, "clicked on providerButton");
                     Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
-
                     Intent intent = new Intent(getContext(), ProviderSingUpActivity.class);
                     startActivity(intent);
                     Log.i(PROFILEFRAGMENT, "Start successfully provider singup activity");
-
-                } else {
-                    Intent intent = new Intent(getContext(), ProviderActivity.class);
-                    startActivity(intent);
-                    Toast.makeText(getContext(), "Else Statement", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -116,7 +117,6 @@ public class ProfileFragment extends Fragment {
         providerButton.setAlpha(disableButtonColor);
         providerButton.setEnabled(false);
     }
-
 
 
 }

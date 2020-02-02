@@ -93,15 +93,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/ed_provider_profession" />
 
             <EditText
-                android:id="@+id/ed_provider_email"
+                android:id="@+id/ed_provider_address"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:inputType="textEmailAddress"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:ems="10"
-                android:hint="@string/ed_provider_email"
+                android:hint="@string/ed_provider_address"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -117,9 +116,10 @@
                 android:layout_marginEnd="32dp"
                 android:maxWidth="24dp"
                 android:maxHeight="24dp"
+                android:autofillHints="@string/profession"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ed_provider_email"
+                app:layout_constraintTop_toBottomOf="@+id/ed_provider_address"
                 tools:srcCompat="@tools:sample/avatars"
                 tools:visibility="visible" />
 

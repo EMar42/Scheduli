@@ -121,7 +121,7 @@
     <string name="business_phone_number">Business Phone Number</string>
     <string name="return_to_profile_screen">Return back to Profile screen</string>
     <string name="provider_sing_up_confirm">Let\'s Start</string>
-    <string name="ed_provider_email">Email Address</string>
+    <string name="ed_provider_address">Address</string>
 
     //Settings
     <array name="settingsLimitValues">

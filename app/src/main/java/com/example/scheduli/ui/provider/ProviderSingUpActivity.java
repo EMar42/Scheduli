@@ -12,11 +12,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.scheduli.BaseMenuActivity;
 import com.example.scheduli.R;
+import com.example.scheduli.data.Provider;
+import com.example.scheduli.data.repositories.ProviderDataRepository;
 import com.example.scheduli.ui.mainScreen.MainActivity;
 import com.example.scheduli.utils.UsersUtils;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class ProviderSingUpActivity extends BaseMenuActivity {
 
@@ -25,8 +30,10 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
     private static final int RESULT_LOAD_IMAGE = 1;
 
 
+    private FirebaseDatabase database;
+    private DatabaseReference ref;
 
-    private EditText providerCompanyName, providerProfession, providerPhoneNumber, providerEmailAddress;
+    private EditText providerCompanyName, providerProfession, providerPhoneNumber, providerAddress;
     private ImageView providerProfilePicture;
     private Button singUpProviderButton;
     private Button backToProfileButton;
@@ -52,6 +59,9 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
             @Override
             public void onClick(View v) {
                 singUpNewProvider();
+
+                Intent intent = new Intent(getBaseContext(), ProviderSingUpActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -78,7 +88,7 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
         providerCompanyName = findViewById(R.id.ed_provider_company_name);
         providerProfession = findViewById(R.id.ed_provider_profession);
         providerPhoneNumber = findViewById(R.id.ed_provider_phone_number);
-        providerEmailAddress = findViewById(R.id.ed_provider_email);
+        providerAddress = findViewById(R.id.ed_provider_address);
         providerProfilePicture = findViewById(R.id.im_provider_pic);
         singUpProviderButton = findViewById(R.id.btn_sign_up_create_provider);
         backToProfileButton = findViewById(R.id.btn_return_profile_screen);
@@ -89,13 +99,27 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
         Log.i(TAG_PROVIDER_SINGUP, "singUpNewProvider()");
         displayErrorToUserIfThereIsOne();
 
-        if (checkIfInputValid()) {
+        if (!checkIfInputValid()) {
             final String companyName = providerCompanyName.getText().toString();
             final String profession = providerProfession.getText().toString();
             final String phone = providerPhoneNumber.getText().toString();
-            final String email = providerEmailAddress.getText().toString();
-
+            final String address = providerAddress.getText().toString();
+            Provider provider = new Provider(companyName, profession, phone, address);
+            String id = UsersUtils.getInstance().getCurrentUserUid();
             //TODO sing up to server
+//            ref = FirebaseDatabase.getInstance().getReference().child("providers");
+//            ref.child("providers").child(UsersUtils.getInstance().getCurrentUserUid()).setValue(provider);
+            try {
+                ProviderDataRepository.getInstance().createNewProviderInApp(id, provider);
+            }catch (Exception e){
+                Toast.makeText(getBaseContext(), "Sing Up Didn't Complete duo to " + e, Toast.LENGTH_LONG).show();
+            }
+            Toast.makeText(getBaseContext(), "Sing Up Successfully\nRedirecting Please wait...", Toast.LENGTH_LONG).show();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
         }
     }
@@ -126,7 +150,13 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
     }
 
     private boolean checkIfInputValid() {
-        return checkIfEmpty(providerCompanyName) && checkIfEmpty(providerProfession) && checkIfEmpty(providerPhoneNumber) && !isPhoneValid(providerPhoneNumber.getText().toString()) && checkIfEmpty(providerEmailAddress) && !isEmailValid(providerEmailAddress.getText().toString());
+        Log.i("Checking Valid psua", "clicked on providerButton");
+        Log.i("asd", "company " + checkIfEmpty(providerCompanyName));
+        Log.i("asd", "profes " + checkIfEmpty(providerProfession));
+        Log.i("asd", "address " + checkIfEmpty(providerAddress));
+        Log.i("asd", "phone " + checkIfEmpty(providerPhoneNumber));
+
+        return checkIfEmpty(providerCompanyName) && checkIfEmpty(providerProfession) && checkIfEmpty(providerPhoneNumber) && !isPhoneValid(providerPhoneNumber.getText().toString()) && checkIfEmpty(providerAddress);
     }
 
     private void displayErrorToUserIfThereIsOne() {
@@ -134,20 +164,14 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
             providerCompanyName.setError("You must fill Provider Name");
         if (checkIfEmpty(providerProfession))
             providerProfession.setError("You must fill Profession for your business");
-        if (checkIfEmpty(providerEmailAddress))
-            providerEmailAddress.setError("You must add Email Address");
-        else if (!isEmailValid(providerEmailAddress.getText().toString()))
-            providerEmailAddress.setError("Your Email Address Is Incorrect form");
+        if (checkIfEmpty(providerAddress))
+            providerAddress.setError("You must add Your Business Address");
         if (checkIfEmpty(providerPhoneNumber))
             providerPhoneNumber.setError("You must fill Phone Number");
         else if (isPhoneValid(providerPhoneNumber.getText().toString()) && providerPhoneNumber.getText().toString().length() != 10)
             providerPhoneNumber.setError("Phone Number is Incorrect");
     }
 
-
-    private boolean isEmailValid(String email) {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
 
     private boolean isPhoneValid(String phoneNumber) {
         return PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber) || Patterns.PHONE.matcher(phoneNumber).matches();
@@ -158,7 +182,7 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
     }
 
     private boolean isFormClear() {
-        return checkIfEmpty(providerCompanyName) && checkIfEmpty(providerProfession) && checkIfEmpty(providerPhoneNumber) && checkIfEmpty(providerEmailAddress);
+        return checkIfEmpty(providerCompanyName) && checkIfEmpty(providerProfession) && checkIfEmpty(providerPhoneNumber) && checkIfEmpty(providerAddress);
     }
 
 
@@ -186,11 +210,11 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
         this.providerPhoneNumber = providerPhoneNumber;
     }
 
-    public EditText getProviderEmailAddress() {
-        return providerEmailAddress;
+    public EditText getProviderAddress() {
+        return providerAddress;
     }
 
-    public void setProviderEmailAddress(EditText providerEmailAddress) {
-        this.providerEmailAddress = providerEmailAddress;
+    public void setProviderAddress(EditText providerAddress) {
+        this.providerAddress = providerAddress;
     }
 }
