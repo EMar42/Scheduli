@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.scheduli.R;
 import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.User;
+import com.example.scheduli.ui.provider.ProviderActivity;
 import com.example.scheduli.ui.provider.ProviderSingUpActivity;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -29,6 +30,8 @@ public class ProfileFragment extends Fragment {
 
     private ProfileViewModel mViewModel;
 
+    private float disableButtonColor = 0.5f;
+    private float anableButtonColor = 1.0f;
 
     private ImageView userProfilePictureIv;
     private TextView userProfileNameTv;
@@ -36,7 +39,7 @@ public class ProfileFragment extends Fragment {
     private TextView userPhoneNumberTv;
     private TextView userEmailTv;
     private Button providerButton;
-    private Snackbar snackbar;
+    private boolean providerFlagCallBack = false;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -52,6 +55,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        providerFlagCallBack = false;
         mViewModel = ViewModelProviders.of(getParentFragment()).get(ProfileViewModel.class);
         mViewModel.getUserProfileData().observe(this, new Observer<User>() {
             @Override
@@ -66,10 +70,12 @@ public class ProfileFragment extends Fragment {
         mViewModel.getProviderProfileData().observe(this, new Observer<Provider>() {
             @Override
             public void onChanged(Provider provider) {
-                Log.i(PROFILEFRAGMENT, "Callback return from getProviderProfileData result" + provider );
-//                providerButton.setAlpha(buttonEnableColor);
-//                providerButton.setAlpha(buttonEnableColor);
+                Log.i(PROFILEFRAGMENT, "Callback return from getProviderProfileData result" + provider);
                 providerButton.setEnabled(true);
+                providerButton.setAlpha(anableButtonColor);
+                if (provider == null) {
+                    providerFlagCallBack = false;
+                }
             }
         });
     }
@@ -83,18 +89,18 @@ public class ProfileFragment extends Fragment {
         providerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO fix the true to check if null returned
-                Toast.makeText(getContext(),"isEnabled " + providerButton.isEnabled() + " is Clickable" + providerButton.isClickable(), Toast.LENGTH_LONG).show();
-                if (true) {
+                if (providerFlagCallBack) {
                     Log.i(PROFILEFRAGMENT, "clicked on providerButton");
-                    try {
-                        Intent intent = new Intent(getContext(), ProviderSingUpActivity.class);
-                        startActivity(intent);
-                        Log.i(PROFILEFRAGMENT, "Start successfully provider activity");
-                    } catch (Exception e) {
-                        System.err.println(e);
-                        Log.i(PROFILEFRAGMENT, "Error is creating activity");
-                    }
+                    Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(getContext(), ProviderSingUpActivity.class);
+                    startActivity(intent);
+                    Log.i(PROFILEFRAGMENT, "Start successfully provider singup activity");
+
+                } else {
+                    Intent intent = new Intent(getContext(), ProviderActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(getContext(), "Else Statement", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -107,13 +113,10 @@ public class ProfileFragment extends Fragment {
         userPhoneNumberTv = view.findViewById(R.id.tv_user_phonenumber);
         userEmailTv = view.findViewById(R.id.tv_user_email);
         providerButton = view.findViewById(R.id.btn_profile_provider);
-//        providerButton.setAlpha(buttonDisableButton);
+        providerButton.setAlpha(disableButtonColor);
         providerButton.setEnabled(false);
     }
 
-    private void getProviderSingUp() {
-
-    }
 
 
 }
