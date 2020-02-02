@@ -59,7 +59,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
                         Log.i(FORGOT_TAG, "Sent recovery password to client email " + userEmail.getText().toString());
-
+                        Toast.makeText(ForgotPasswordActivity.this, "password was sent to " + userEmail.getText(), Toast.LENGTH_LONG).show();
                     } else {
                         Log.i(FORGOT_TAG, "Sent recovery password to client email " + userEmail.getText().toString());
                         Toast.makeText(ForgotPasswordActivity.this, "Cannot send recovery mail", Toast.LENGTH_LONG).show();
