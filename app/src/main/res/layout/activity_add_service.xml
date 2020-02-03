@@ -110,7 +110,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:hint="in $"
                 app:layout_constraintStart_toEndOf="@+id/tv_service_cost"
                 app:layout_constraintHorizontal_bias="0.0"

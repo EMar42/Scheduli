@@ -15,6 +15,7 @@ import com.example.scheduli.data.Service;
 import com.example.scheduli.data.ServiceAdapter;
 import com.example.scheduli.data.repositories.ProviderDataRepository;
 import com.example.scheduli.ui.BookingAppointment.BookingAppointmentActivity;
+import com.example.scheduli.ui.service.AddServiceActivity;
 import com.example.scheduli.utils.UsersUtils;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class ProviderActivity extends BaseMenuActivity {
     private RecyclerView recyclerView;
     private ArrayList<Service> services;
     private Provider provider;
+    private int currentServicePosition;
 
 
     @Override
@@ -35,6 +37,17 @@ public class ProviderActivity extends BaseMenuActivity {
         setContentView(R.layout.activity_provider);
 
         initView();
+
+        mAdapter.setOnItemClickListener(new ServiceAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+
+                if (position == services.size()-1){
+                    Intent intent = new Intent(getBaseContext(), AddServiceActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
 
     }
 
@@ -50,6 +63,8 @@ public class ProviderActivity extends BaseMenuActivity {
 
         services = new ArrayList<>();
         services = provider.getServices();
+        services.add(new Service());
+
         mLayout = new GridLayoutManager(this,2);
         mAdapter = new ServiceAdapter(this, services);
         recyclerView.setHasFixedSize(true);

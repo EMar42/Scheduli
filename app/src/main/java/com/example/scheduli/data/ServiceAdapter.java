@@ -50,7 +50,6 @@ private OnItemClickListener mListener;
                 mListener.onItemClick(position);
                 notifyItemChanged(previousItem);
                 notifyItemChanged(position);
-
             }
         });
 
@@ -60,6 +59,9 @@ private OnItemClickListener mListener;
 
         }
 
+        if(currentItem.getName() == null){
+            holder.serviceIcon.setBackground(context.getResources().getDrawable(R.drawable.ic_add_service_icon));
+        }
     }
 
     @Override
