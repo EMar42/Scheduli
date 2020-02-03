@@ -1,24 +1,19 @@
 package com.example.scheduli.ui.SearchProvider;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,12 +23,8 @@ import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.ProvidersAdapter;
 import com.example.scheduli.data.joined.JoinedProvider;
 import com.example.scheduli.ui.BookingAppointment.BookingAppointmentActivity;
-import com.example.scheduli.utils.UsersUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,7 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchProviderActivity extends BaseMenuActivity implements ProvidersAdapter.OnProviderListener{
+public class SearchProviderActivity extends BaseMenuActivity implements ProvidersAdapter.OnProviderListener {
 
     BottomNavigationView bottomNavigationView;
     private Toolbar mainToolbar;
@@ -61,7 +52,7 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
     DatabaseReference ref;
     private static String PID = null;
 
-   private JoinedProvider joinedProvider = new JoinedProvider();
+    private JoinedProvider joinedProvider = new JoinedProvider();
 
 
     @Override
@@ -81,24 +72,19 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
             @Override
             public void onClick(View view) {
                 String search = searchField.getText().toString();
-                if(!TextUtils.isEmpty(search)) {
-//                    ref = FirebaseDatabase.getInstance().getReference().child("providers");
+                if (!TextUtils.isEmpty(search)) {
                     firebaseProviderSearchByCompany(search);
 
                     if (providersList.size() < 1) {
-//                        ref = FirebaseDatabase.getInstance().getReference().child("providers");
-
                         firebaseProviderSearchByProfession(search);
                     }
-                }
-                else {
+                } else {
                     getAllProviders();
                     Toast.makeText(SearchProviderActivity.this, "Empty search...", Toast.LENGTH_SHORT).show();
 
                 }
             }
         });
-//        getAllProviders();
 
     }
 
@@ -132,41 +118,40 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
     private void firebaseProviderSearchByProfession(String profession) {
 
         Query query = ref.orderByChild("profession").equalTo(profession);
-        query.addListenerForSingleValueEvent(valueEventListener);
+        query.addListenerForSingleValueEvent(eventListener);
 
     }
 
 
-    private void firebaseProviderSearchByCompany(String company){
+    private void firebaseProviderSearchByCompany(String company) {
 
         Query query = ref.orderByChild("companyName").equalTo(company);
-        query.addListenerForSingleValueEvent(valueEventListener);
+        query.addListenerForSingleValueEvent(eventListener);
     }
 
     //select * from providers
     private void getAllProviders() {
-        ref.addListenerForSingleValueEvent(valueEventListener);
+        ref.addListenerForSingleValueEvent(eventListener);
 
     }
 
 
-    ValueEventListener valueEventListener = new ValueEventListener() {
+    ValueEventListener eventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
             providersList.clear();
 
-            if(dataSnapshot.exists()){
+            if (dataSnapshot.exists()) {
 
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                     Provider provider = snapshot.getValue(Provider.class);
                     providersList.add(provider);
-
+                    System.out.println("ADDED: " + provider.getCompanyName());
                 }
 
-                if(!providersList.isEmpty()) {
-//                    adapter = new ProvidersAdapter(providersList);
+                if (!providersList.isEmpty()) {
                     recyclerView.setAdapter(adapter);
                 }
             }
@@ -203,18 +188,16 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
 
                         joinedProvider.setPid(item_snapshot.getKey());
 
-                        if (joinedProvider.getPid()!=null && joinedProvider.getCompanyName()!= null) {
+                        if (joinedProvider.getPid() != null && joinedProvider.getCompanyName() != null) {
                             Intent intent = new Intent(SearchProviderActivity.this, BookingAppointmentActivity.class);
-                            //TODO: refatoring data transaction
                             intent.putExtra("companyName", provider.getCompanyName());
                             intent.putExtra("pid", joinedProvider.getPid());
                             intent.putExtra("provider", provider);
-                            System.out.println("Got provider list of dailySessions: " + provider.getServices().get(1).getDailySessions()); // TEST
                             joinedProvider.setPid(null);
                             startActivity(intent);
                             finish();
                         } else {
-                            Toast.makeText(getApplicationContext(), "null pid", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Please Select provider", Toast.LENGTH_LONG).show();
                         }
                     }
 

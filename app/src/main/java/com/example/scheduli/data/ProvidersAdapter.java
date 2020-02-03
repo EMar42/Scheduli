@@ -16,13 +16,11 @@ import java.util.List;
 public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.ProviderViewHolder>{// implements Filterable {
 
     private  List<Provider> providerList;
-    private  List<Provider> providerListAll; // for dynamic search
     private OnProviderListener listener;
 
 
     public ProvidersAdapter(List<Provider> providerList, OnProviderListener onProviderListener) {
         this.providerList = providerList;
-        this.providerListAll = providerList;
         this.listener = onProviderListener;
     }
 
