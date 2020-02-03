@@ -22,16 +22,12 @@ import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.User;
 import com.example.scheduli.ui.provider.ProviderActivity;
 import com.example.scheduli.ui.provider.ProviderSingUpActivity;
-import com.google.android.material.snackbar.Snackbar;
 
 public class ProfileFragment extends Fragment {
 
     private static final String PROFILEFRAGMENT = "Profile Fragment";
-
     private ProfileViewModel mViewModel;
-
-    private float disableButtonColor = 0.5f;
-    private float anableButtonColor = 1.0f;
+    private Provider currentProvider;
 
     private ImageView userProfilePictureIv;
     private TextView userProfileNameTv;
@@ -40,6 +36,8 @@ public class ProfileFragment extends Fragment {
     private TextView userEmailTv;
     private Button providerButton;
     private boolean providerFlagCallBack;
+    private float disableButtonColor = 0.5f;
+    private float enableButtonColor = 1.0f;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -51,7 +49,7 @@ public class ProfileFragment extends Fragment {
         return inflater.inflate(R.layout.profile_fragment, container, false);
     }
 
-    //
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -71,8 +69,9 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onChanged(Provider provider) {
                 Log.i(PROFILEFRAGMENT, "Callback return from getProviderProfileData result" + provider);
+                currentProvider = provider;
                 providerButton.setEnabled(true);
-                providerButton.setAlpha(anableButtonColor);
+                providerButton.setAlpha(enableButtonColor);
                 if (provider == null) {
                     providerButton.setText("Become Provider Today!");
                     providerFlagCallBack = false;
@@ -93,6 +92,7 @@ public class ProfileFragment extends Fragment {
                 if (providerFlagCallBack) {
                     //already Provider
                     Intent intent = new Intent(getContext(), ProviderActivity.class);
+                    intent.putExtra("provider",currentProvider);
                     startActivity(intent);
                     Toast.makeText(getContext(), "Already Provider", Toast.LENGTH_SHORT).show();
                 } else {
@@ -117,6 +117,4 @@ public class ProfileFragment extends Fragment {
         providerButton.setAlpha(disableButtonColor);
         providerButton.setEnabled(false);
     }
-
-
 }

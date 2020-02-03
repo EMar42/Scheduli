@@ -30,9 +30,6 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
     private static final int RESULT_LOAD_IMAGE = 1;
 
 
-    private FirebaseDatabase database;
-    private DatabaseReference ref;
-
     private EditText providerCompanyName, providerProfession, providerPhoneNumber, providerAddress;
     private ImageView providerProfilePicture;
     private Button singUpProviderButton;

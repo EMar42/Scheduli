@@ -122,6 +122,9 @@
     <string name="return_to_profile_screen">Return back to Profile screen</string>
     <string name="provider_sing_up_confirm">Let\'s Start</string>
     <string name="ed_provider_address">Address</string>
+    <string name="add_new_service_headline">Add New Service</string>
+    <string name="add_new_service_instructions">Please fill the form</string>
+    <string name="service_duration">Service Duration</string>
 
     //Settings
     <array name="settingsLimitValues">

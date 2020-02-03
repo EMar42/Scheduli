@@ -29,6 +29,12 @@ public class Service implements Parcelable {
         this.dailySessions = dailySessions;
     }
 
+    public Service(String name, float cost, int singleSessionInMinutes){
+        this.name = name;
+        this.cost = cost;
+        this.singleSessionInMinutes = singleSessionInMinutes;
+    }
+
     protected Service(Parcel in) {
         name = in.readString();
         cost = in.readFloat();
