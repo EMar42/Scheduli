@@ -58,7 +58,7 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
         singUpProviderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                singUpNewProvider();
+                runActivity(singUpNewProvider());
 
                 Intent intent = new Intent(getBaseContext(), ProviderSingUpActivity.class);
                 startActivity(intent);
@@ -83,6 +83,8 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
             super.onBackPressed();
     }
 
+
+
     private void initView() {
         Log.i(TAG_PROVIDER_SINGUP, "initView()");
         providerCompanyName = findViewById(R.id.ed_provider_company_name);
@@ -95,7 +97,7 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
         Log.i(TAG_PROVIDER_SINGUP, "finished initView() ");
     }
 
-    private void singUpNewProvider() {
+    private boolean singUpNewProvider() {
         Log.i(TAG_PROVIDER_SINGUP, "singUpNewProvider()");
         displayErrorToUserIfThereIsOne();
 
@@ -106,21 +108,24 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
             final String address = providerAddress.getText().toString();
             Provider provider = new Provider(companyName, profession, phone, address);
             String id = UsersUtils.getInstance().getCurrentUserUid();
-            //TODO sing up to server
-//            ref = FirebaseDatabase.getInstance().getReference().child("providers");
-//            ref.child("providers").child(UsersUtils.getInstance().getCurrentUserUid()).setValue(provider);
             try {
                 ProviderDataRepository.getInstance().createNewProviderInApp(id, provider);
-            }catch (Exception e){
-                Toast.makeText(getBaseContext(), "Sing Up Didn't Complete duo to " + e, Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Sing Up Successfully\nRedirecting Please wait...", Toast.LENGTH_LONG).show();
+                return true;
+            } catch (Exception e) {
+                Toast.makeText(getBaseContext(), "Sing Up Didn't Complete duo to Error: " + e, Toast.LENGTH_LONG).show();
+                return false;
             }
-            Toast.makeText(getBaseContext(), "Sing Up Successfully\nRedirecting Please wait...", Toast.LENGTH_LONG).show();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        }
+        return false;
+    }
 
+    private void runActivity(boolean singUpNewProvider) {
+        if (singUpNewProvider) {
+            Intent intent = new Intent(getBaseContext(), ProviderActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getBaseContext(),"Error occurred, Contact support team",Toast.LENGTH_LONG);
         }
     }
 
@@ -150,12 +155,6 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
     }
 
     private boolean checkIfInputValid() {
-        Log.i("Checking Valid psua", "clicked on providerButton");
-        Log.i("asd", "company " + checkIfEmpty(providerCompanyName));
-        Log.i("asd", "profes " + checkIfEmpty(providerProfession));
-        Log.i("asd", "address " + checkIfEmpty(providerAddress));
-        Log.i("asd", "phone " + checkIfEmpty(providerPhoneNumber));
-
         return checkIfEmpty(providerCompanyName) && checkIfEmpty(providerProfession) && checkIfEmpty(providerPhoneNumber) && !isPhoneValid(providerPhoneNumber.getText().toString()) && checkIfEmpty(providerAddress);
     }
 
