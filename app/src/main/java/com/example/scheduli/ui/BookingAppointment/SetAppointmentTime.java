@@ -67,7 +67,7 @@ public class SetAppointmentTime extends BaseMenuActivity {
 
     //Calendar view
     CompactCalendarView compactCalendarView;
-    private SimpleDateFormat dateFormatPrimarry = new SimpleDateFormat("MMMM - yyyy", Locale.getDefault());
+    private SimpleDateFormat dateFormatCalendar = new SimpleDateFormat("MMMM - yyyy", Locale.getDefault());
     private DateFormat dateFormatFireBase = new SimpleDateFormat("yyyy-MM-dd");
 
     //cycleview (Item)
@@ -92,7 +92,7 @@ public class SetAppointmentTime extends BaseMenuActivity {
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         final Date date = new Date();
-        actionBar.setTitle(dateFormatPrimarry.format(date));
+        actionBar.setTitle(dateFormatCalendar.format(date));
         compactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
         compactCalendarView.setUseThreeLetterAbbreviation(true);
 
@@ -105,8 +105,6 @@ public class SetAppointmentTime extends BaseMenuActivity {
             public void onDayClick(Date dateClicked) {
                 Context context = getApplicationContext();
                 slots.clear();
-
-//                System.out.println("TEST: picked date: " + dateClicked.getTime());
 
                 for (int i = 0; i < sessionsArrayList.size(); i++) {
                     Date date = new Date(sessionsArrayList.get(i).getStart());
@@ -125,7 +123,7 @@ public class SetAppointmentTime extends BaseMenuActivity {
 
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
-                actionBar.setTitle(dateFormatPrimarry.format(firstDayOfNewMonth));
+                actionBar.setTitle(dateFormatCalendar.format(firstDayOfNewMonth));
             }
         });
 
@@ -134,9 +132,7 @@ public class SetAppointmentTime extends BaseMenuActivity {
             @Override
             public void onClick(View view) {
                 if (!slots.isEmpty() && slotPosition < slots.size() && slotPosition >= 0) {
-                    System.out.println(slots.get(slotPosition) + " " + "clicked"); /// TEST
-                    System.out.println("[TEST] s.p: " + servicePosition + " date: " + dateFormatFireBase.format(currentDate) + " position: " + slotPosition);
-                    Date sessionDate = new Date(slots.get(slotPosition).getTime());
+                    Log.d(TAG_SET_APPOINTMENT_ACT, "[TEST] service position: " + servicePosition + " date: " + dateFormatFireBase.format(currentDate) + " position: " + slotPosition);
 
                     for (int i = 0; i < sessionsArrayList.size(); i++) {
                         if (slots.get(slotPosition).getTime() == sessionsArrayList.get(i).getStart()) {
@@ -145,7 +141,7 @@ public class SetAppointmentTime extends BaseMenuActivity {
                     }
 
                 } else {
-                    Toast.makeText(getApplicationContext(), "Please select item", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please select Slot", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -163,8 +159,7 @@ public class SetAppointmentTime extends BaseMenuActivity {
             @Override
             public void onItemClick(int position) {
                 slotPosition = position;
-                System.out.println("[TEST slot] position = " + position);
-                System.out.println("[TEST slot] position = " + slots.get(position));
+                Log.d(TAG_SET_APPOINTMENT_ACT, "[TEST] Slot position = " + position + " , " + slots.get(position).getTime());
 
             }
         });
@@ -243,7 +238,7 @@ public class SetAppointmentTime extends BaseMenuActivity {
             Iterator it = map.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();
-//                System.out.println(pair.getKey() + " : " + pair.getValue()); //TEST
+                Log.d(TAG_SET_APPOINTMENT_ACT,"[TEST] Daily session map values:" + pair.getKey() + " : " + pair.getValue());
                 dates.add(pair.getKey().toString());
                 it.remove();
             }
@@ -277,12 +272,14 @@ public class SetAppointmentTime extends BaseMenuActivity {
                         sessionsArrayList.add(sessions);
                         slots.add(new Date(sessions.getStart()));
 
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd d hh:mm a");
+                        Log.d(TAG_SET_APPOINTMENT_ACT,"[TEST] got session: " + dateFormat.format(sessions.getStart()));
+
                         Event event = new Event(Color.GREEN, sessions.getStart(), service.getName() + " slot");
                         compactCalendarView.addEvent(event);
                     }
 
                 }
-
 
             }
         }
@@ -306,7 +303,6 @@ public class SetAppointmentTime extends BaseMenuActivity {
         dialogBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(SetAppointmentTime.this, "clicked", Toast.LENGTH_SHORT).show();
                 updateSessionDetails(i);
                 Intent intent = new Intent(SetAppointmentTime.this, MainActivity.class);
                 startActivity(intent);

@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +28,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.ValueEventListener;
 
-import java.time.Instant;
 import java.util.ArrayList;
 
 @IgnoreExtraProperties
@@ -47,9 +45,7 @@ public class BookingAppointmentActivity extends BaseMenuActivity {
     private String pid;
     Provider provider;
     private int servicePosition = -1;
-
     TextView company_txt;
-    TextView serviceName;
     RecyclerView recyclerView;
     private Toolbar mainToolbar;
 
@@ -130,54 +126,40 @@ public class BookingAppointmentActivity extends BaseMenuActivity {
         });
     }
 
+    /* enable if wanted to get services from DB
     private void getServices() {
-//        databaseReference.addListenerForSingleValueEvent(valueEventListener);
+        databaseReference.addListenerForSingleValueEvent(valueEventListener);
     }
 
-//    ValueEventListener valueEventListener = new ValueEventListener() {
-//        @Override
-//        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//            servicesList.clear();
-//
-//            if(dataSnapshot.exists()) {
-//
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//
-//                    Service service = snapshot.getValue(Service.class);
-////                    System.out.println("[TEST] service name: " + service.getName()); //TEST
-//                    servicesList.add(service);
-//
-//                }
-//                Log.d(TAG_BOOKING_ACT, "got " + servicesList.size() + " services.");
-//                /********************************************************/
-//                //TEST: for testing the recycle view
-////                Service service1 = new Service();
-////                service1.setName("test1");
-////                Service service2 = new Service();
-////                service2.setName("test2");
-////                Service service3 = new Service();
-////                service3.setName("test3");
-////                Service service4 = new Service();
-////                service4.setName("test4");
-////                Service service5 = new Service();
-////                service5.setName("test5");
-////                servicesList.add(service1);
-////                servicesList.add(service2);
-////                servicesList.add(service3);
-////                servicesList.add(service4);
-////                servicesList.add(service5);
-//                /********************************************************/
-//
-//                if (!servicesList.isEmpty()) {
-//                    recyclerView.setAdapter(mAdapter);
-//                }
-//            }
-//        }
-//
-//        @Override
-//        public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            Log.e(TAG_BOOKING_ACT,"Something went wrong.. ");
-//        }
-//    };
+    ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            servicesList.clear();
+
+            if(dataSnapshot.exists()) {
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                    Service service = snapshot.getValue(Service.class);
+//                    System.out.println("[TEST] service name: " + service.getName()); //TEST
+                    servicesList.add(service);
+
+                }
+                Log.d(TAG_BOOKING_ACT, "got " + servicesList.size() + " services.");
+
+
+                if (!servicesList.isEmpty()) {
+                    recyclerView.setAdapter(mAdapter);
+                }
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            Log.e(TAG_BOOKING_ACT,"Something went wrong.. ");
+        }
+    };
+     */
+
 }

@@ -46,7 +46,7 @@ public class Provider implements Parcelable {
         this.services = new ArrayList<>();
     }
 
-    //This constructor should be used for creating new Provider:
+    //This constructor should be used for creating new Provider without image:
     public Provider(String companyName, String profession, String phoneNumber, String address) {
         this.companyName = companyName;
         this.profession = profession;
