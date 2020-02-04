@@ -71,19 +71,22 @@ public class AddServiceActivity extends AppCompatActivity {
     }
 
     private void createNewService() {
-        Log.i(TAG_ADD_SERVICE, "Creating new service");
+        Log.i(TAG_ADD_SERVICE, "creating new service");
         displayErrorToUserIfThereIsOne();
 
         if (!checkifInputValid()) {
             String name = serviceName.getText().toString();
             float cost = Float.parseFloat(serviceCost.getText().toString());
+            int minutes = Integer.parseInt(serviceDuration.getText().toString());
+            Service service = new Service(name,cost,minutes);
 
-            Service service = new Service();
-
+            Intent intent = new Intent(getBaseContext(), SetServiceScheduleActivity.class);
+            intent.putExtra("serviceToFill",service);
+            startActivity(intent);
         }
 
 
-        Log.i(TAG_ADD_SERVICE, "New Service created successfully");
+        Log.i(TAG_ADD_SERVICE, "Pass info to schedule service successfully");
 
     }
 
@@ -123,7 +126,7 @@ public class AddServiceActivity extends AppCompatActivity {
         serviceName = findViewById(R.id.ed_service_name);
         serviceCost = findViewById(R.id.ed_service_cost);
         serviceDuration = findViewById(R.id.et_service_duration);
-        serviceContinueButton = findViewById(R.id.btn_create_service);
+        serviceContinueButton = findViewById(R.id.btn_continue_to_schedule);
         serviceBackButton = findViewById(R.id.btn_back_service);
 
         Log.i(TAG_ADD_SERVICE, "finished initView() ");
