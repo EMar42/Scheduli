@@ -2,6 +2,9 @@ package com.example.scheduli.ui.service;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,12 +14,14 @@ import android.widget.EditText;
 
 import com.example.scheduli.R;
 import com.example.scheduli.data.Service;
+import com.example.scheduli.ui.mainScreen.MainActivity;
+import com.example.scheduli.ui.provider.ProviderActivity;
 
 public class AddServiceActivity extends AppCompatActivity {
 
     private static final String TAG_ADD_SERVICE = "ADD_SERVICE";
     private EditText serviceName, serviceCost, serviceDuration;
-    private Button serviceButton;
+    private Button serviceContinueButton, serviceBackButton;
 
 
     @Override
@@ -26,12 +31,43 @@ public class AddServiceActivity extends AppCompatActivity {
 
         initView();
 
-        serviceButton.setOnClickListener(new View.OnClickListener() {
+        serviceContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createNewService();
             }
         });
+
+        serviceBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goBackToServices();
+            }
+        });
+    }
+
+    private void goBackToServices() {
+        if (!isFormClear()){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setMessage("If you Quit now your data wont be saved")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(getApplicationContext(), ProviderActivity.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
     }
 
     private void createNewService() {
@@ -87,7 +123,13 @@ public class AddServiceActivity extends AppCompatActivity {
         serviceName = findViewById(R.id.ed_service_name);
         serviceCost = findViewById(R.id.ed_service_cost);
         serviceDuration = findViewById(R.id.et_service_duration);
-        serviceButton = findViewById(R.id.btn_create_service);
+        serviceContinueButton = findViewById(R.id.btn_create_service);
+        serviceBackButton = findViewById(R.id.btn_back_service);
+
         Log.i(TAG_ADD_SERVICE, "finished initView() ");
+    }
+
+    private boolean isFormClear() {
+        return checkIfEmpty(serviceName) && checkIfEmpty(serviceCost) && checkIfEmpty(serviceDuration);
     }
 }

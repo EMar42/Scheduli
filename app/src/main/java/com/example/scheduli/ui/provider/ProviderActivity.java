@@ -28,7 +28,6 @@ public class ProviderActivity extends BaseMenuActivity {
     private RecyclerView recyclerView;
     private ArrayList<Service> services;
     private Provider provider;
-    private int currentServicePosition;
 
 
     @Override
@@ -48,23 +47,16 @@ public class ProviderActivity extends BaseMenuActivity {
                 }
             }
         });
-
     }
-
-
-
 
 
     private void initView() {
         recyclerView = findViewById(R.id.rv_provider_services);
-
         Intent intent = getIntent();
         provider = intent.getParcelableExtra("provider");
-
         services = new ArrayList<>();
         services = provider.getServices();
         services.add(new Service());
-
         mLayout = new GridLayoutManager(this,2);
         mAdapter = new ServiceAdapter(this, services);
         recyclerView.setHasFixedSize(true);

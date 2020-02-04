@@ -131,7 +131,7 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
         if (!isFormClear()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-            builder.setMessage("If you Quit now you data wont be saved")
+            builder.setMessage("If you Quit now your data wont be saved")
                     .setCancelable(false)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override

@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.service.SetServiceScheduleActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="30dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="77dp"
+        android:layout_marginEnd="32dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/im_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:contentDescription="@string/app_icon_description"
+                android:src="@drawable/ic_scheduli_app_icon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_set_scheduli_timelines"
+                style="@style/headLine"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="120dp"
+                android:layout_marginEnd="32dp"
+                android:text="@string/set_your_schedule"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="@+id/im_logo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_instruc_set_service_schedule"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="32dp"
+                android:text="@string/set_schedule_instruc"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_set_scheduli_timelines" />
+
+            <Switch
+                android:id="@+id/switch_sunday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="280dp"
+                android:text="@string/day_sunday"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_instruc_set_service_schedule" />
+
+            <Switch
+                android:id="@+id/switch_monday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="19dp"
+                android:layout_marginEnd="280dp"
+                android:text="@string/day_monday"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/switch_sunday" />
+
+            <Switch
+                android:id="@+id/switch_tuesday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="19dp"
+                android:layout_marginEnd="280dp"
+                android:text="@string/day_tuesday"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/switch_monday" />
+
+            <Switch
+                android:id="@+id/switch_wednesday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="19dp"
+                android:layout_marginEnd="280dp"
+                android:text="@string/day_wednesday"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/switch_tuesday" />
+
+            <Switch
+                android:id="@+id/switch_thursday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="19dp"
+                android:layout_marginEnd="280dp"
+                android:text="@string/day_thursday"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/switch_wednesday" />
+
+            <Switch
+                android:id="@+id/switch_friday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="19dp"
+                android:layout_marginEnd="280dp"
+                android:text="@string/day_friday"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/switch_thursday" />
+
+            <Switch
+                android:id="@+id/switch_saturday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="19dp"
+                android:layout_marginEnd="280dp"
+                android:text="@string/day_saturday"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/switch_friday" />
+
+            <TextView
+                android:id="@+id/from1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="230dp"
+                android:paddingStart="10dp"
+                android:text="@string/from"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/switch_sunday"
+                app:layout_constraintTop_toBottomOf="@id/tv_instruc_set_service_schedule" />
+
+            <EditText
+                android:id="@+id/ed_from_sunday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="150dp"
+                android:gravity="center"
+                android:text="@string/midnight_time"
+                android:inputType="time"
+                android:paddingTop="19dp"
+                app:layout_constraintBottom_toBottomOf="@+id/switch_sunday"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/from1"
+                app:layout_constraintTop_toBottomOf="@id/tv_instruc_set_service_schedule" />
+
+            <TextView
+                android:id="@+id/to1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:gravity="center"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/to"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintBottom_toBottomOf="@id/from1"
+                app:layout_constraintStart_toEndOf="@+id/ed_from_sunday" />
+
+            <EditText
+                android:id="@+id/ed_to_sunday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="40dp"
+                android:gravity="center"
+                android:text="@string/midnight_time"
+                android:inputType="time"
+                android:paddingTop="19dp"
+                app:layout_constraintBottom_toBottomOf="@+id/switch_sunday"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/to1"
+                app:layout_constraintTop_toBottomOf="@id/tv_instruc_set_service_schedule" />
+
+            <TextView
+                android:id="@+id/from2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="230dp"
+                android:paddingStart="10dp"
+                android:text="@string/from"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/switch_monday"
+                app:layout_constraintTop_toBottomOf="@id/from1" />
+
+            <EditText
+                android:id="@+id/ed_from_monday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="11dp"
+                android:gravity="center"
+                android:text="@string/midnight_time"
+                android:inputType="time"
+                app:layout_constraintBottom_toBottomOf="@+id/switch_monday"
+                app:layout_constraintEnd_toEndOf="@id/ed_from_sunday"
+                app:layout_constraintStart_toEndOf="@+id/from2"
+                app:layout_constraintTop_toBottomOf="@id/ed_from_sunday" />
+
+            <TextView
+                android:id="@+id/to2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:gravity="center"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/to"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintBottom_toBottomOf="@id/from2"
+                app:layout_constraintStart_toEndOf="@+id/ed_from_sunday" />
+
+            <EditText
+                android:id="@+id/ed_to_monday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="11dp"
+                android:text="@string/midnight_time"
+                android:inputType="time"
+                app:layout_constraintBottom_toBottomOf="@id/switch_monday"
+                app:layout_constraintEnd_toEndOf="@id/ed_to_sunday"
+                app:layout_constraintStart_toEndOf="@+id/to2"
+                app:layout_constraintTop_toBottomOf="@id/ed_from_sunday" />
+
+            <TextView
+                android:id="@+id/from3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="27dp"
+                android:layout_marginEnd="230dp"
+                android:paddingStart="10dp"
+                android:text="@string/from"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/switch_tuesday"
+                app:layout_constraintTop_toBottomOf="@id/from2" />
+
+            <EditText
+                android:id="@+id/ed_from_tuesday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="11dp"
+                android:gravity="center"
+                android:text="@string/midnight_time"
+                android:inputType="time"
+                app:layout_constraintBottom_toBottomOf="@+id/switch_tuesday"
+                app:layout_constraintEnd_toEndOf="@id/ed_from_monday"
+                app:layout_constraintStart_toEndOf="@+id/from3"
+                app:layout_constraintTop_toBottomOf="@id/ed_from_monday" />
+
+            <TextView
+                android:id="@+id/to3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:gravity="center"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/to"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintBottom_toBottomOf="@id/from3"
+                app:layout_constraintStart_toEndOf="@+id/ed_from_tuesday" />
+
+            <EditText
+                android:id="@+id/ed_to_tuesday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                android:gravity="center"
+                android:hint="@string/midnight_time"
+                android:inputType="time"
+                app:layout_constraintBottom_toBottomOf="@+id/ed_from_tuesday"
+                app:layout_constraintEnd_toEndOf="@id/ed_to_monday"
+                app:layout_constraintStart_toEndOf="@+id/to3"
+                app:layout_constraintTop_toBottomOf="@id/ed_from_monday" />
+
+            <TextView
+                android:id="@+id/from4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:layout_marginEnd="230dp"
+                android:paddingStart="10dp"
+                android:text="@string/from"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/switch_wednesday"
+                app:layout_constraintTop_toBottomOf="@id/from3" />
+
+            <EditText
+                android:id="@+id/ed_from_wednesday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:text="@string/midnight_time"
+                android:inputType="time"
+                app:layout_constraintBottom_toBottomOf="@+id/switch_wednesday"
+                app:layout_constraintEnd_toEndOf="@id/ed_from_tuesday"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/from4"
+                app:layout_constraintTop_toBottomOf="@id/ed_from_tuesday" />
+
+            <TextView
+                android:id="@+id/to4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:gravity="center"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/to"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintBottom_toBottomOf="@+id/from4"
+                app:layout_constraintStart_toEndOf="@+id/ed_from_wednesday" />
+
+            <EditText
+                android:id="@+id/ed_to_wednesday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:gravity="center"
+                android:text="@string/midnight_time"
+                android:inputType="time"
+                app:layout_constraintBottom_toBottomOf="@+id/ed_from_wednesday"
+                app:layout_constraintEnd_toEndOf="@id/ed_to_tuesday"
+                app:layout_constraintStart_toEndOf="@+id/to4"
+                app:layout_constraintTop_toBottomOf="@id/ed_from_tuesday" />
+
+            <TextView
+                android:id="@+id/from5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:layout_marginEnd="230dp"
+                android:paddingStart="10dp"
+                android:text="@string/from"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/switch_thursday"
+                app:layout_constraintTop_toBottomOf="@id/from4" />
+
+            <EditText
+                android:id="@+id/ed_from_thursday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/midnight_time"
+                android:layout_marginTop="7dp"
+                android:inputType="time"
+                app:layout_constraintBottom_toBottomOf="@+id/switch_thursday"
+                app:layout_constraintEnd_toEndOf="@id/ed_from_wednesday"
+                app:layout_constraintStart_toEndOf="@+id/from5"
+                app:layout_constraintTop_toBottomOf="@id/ed_from_wednesday" />
+
+            <TextView
+                android:id="@+id/to5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:gravity="center"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/to"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintBottom_toBottomOf="@id/from5"
+                app:layout_constraintStart_toEndOf="@+id/ed_from_thursday" />
+
+            <EditText
+                android:id="@+id/ed_to_thursday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="7dp"
+                android:text="@string/midnight_time"
+                android:inputType="time"
+                app:layout_constraintBottom_toBottomOf="@+id/switch_thursday"
+                app:layout_constraintEnd_toEndOf="@id/ed_to_wednesday"
+                app:layout_constraintStart_toEndOf="@+id/to5"
+                app:layout_constraintTop_toBottomOf="@id/ed_from_wednesday" />
+
+            <TextView
+                android:id="@+id/from6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="230dp"
+                android:paddingStart="10dp"
+                android:text="@string/from"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/switch_friday"
+                app:layout_constraintTop_toBottomOf="@id/from5" />
+
+            <EditText
+                android:id="@+id/ed_from_friday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="7dp"
+                android:text="@string/midnight_time"
+                android:inputType="time"
+                app:layout_constraintBottom_toBottomOf="@+id/switch_friday"
+                app:layout_constraintEnd_toEndOf="@id/ed_from_thursday"
+                app:layout_constraintStart_toEndOf="@+id/from6"
+                app:layout_constraintTop_toBottomOf="@id/ed_from_thursday" />
+
+            <TextView
+                android:id="@+id/to6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:gravity="center"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/to"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintBottom_toBottomOf="@id/from6"
+                app:layout_constraintStart_toEndOf="@+id/ed_from_friday" />
+
+            <EditText
+                android:id="@+id/ed_to_friday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/midnight_time"
+                android:inputType="time"
+                app:layout_constraintBottom_toBottomOf="@+id/ed_from_friday"
+                app:layout_constraintEnd_toEndOf="@id/ed_to_thursday"
+                app:layout_constraintStart_toEndOf="@+id/to6"
+                app:layout_constraintTop_toBottomOf="@id/ed_from_thursday" />
+
+            <TextView
+                android:id="@+id/from7"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:layout_marginEnd="230dp"
+                android:paddingStart="10dp"
+                android:text="@string/from"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/switch_saturday"
+                app:layout_constraintTop_toBottomOf="@id/from6" />
+
+            <EditText
+                android:id="@+id/ed_from_saturday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="7dp"
+                android:text="@string/midnight_time"
+                android:inputType="time"
+                app:layout_constraintBottom_toBottomOf="@+id/switch_saturday"
+                app:layout_constraintEnd_toEndOf="@id/ed_from_friday"
+                app:layout_constraintStart_toEndOf="@+id/from7"
+                app:layout_constraintTop_toBottomOf="@id/ed_from_friday" />
+
+            <TextView
+                android:id="@+id/to7"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:gravity="center"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/to"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintBottom_toBottomOf="@id/from7"
+                app:layout_constraintStart_toEndOf="@+id/ed_from_saturday" />
+
+            <EditText
+                android:id="@+id/ed_to_saturday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/midnight_time"
+                android:inputType="time"
+                app:layout_constraintBottom_toBottomOf="@+id/ed_from_saturday"
+                app:layout_constraintEnd_toEndOf="@id/ed_to_friday"
+                app:layout_constraintStart_toEndOf="@+id/to7"
+                app:layout_constraintTop_toBottomOf="@id/ed_from_friday" />
+
+
+
+
+            <Button
+                android:id="@+id/btn_create_service"
+                style="@style/appCompactButtons"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:text="@string/provider_sing_up_confirm"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_service_duration" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

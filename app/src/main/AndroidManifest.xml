@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_app_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.service.AddServiceActivity"></activity>
+        <activity android:name=".ui.service.SetServiceScheduleActivity"></activity>
+        <activity android:name=".ui.service.AddServiceActivity" />
         <activity android:name=".ui.provider.ProviderActivity" />
         <activity
             android:name=".ui.BookingAppointment.SetAppointmentTime"

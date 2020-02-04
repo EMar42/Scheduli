@@ -39,7 +39,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="130dp"
+                android:layout_marginTop="120dp"
                 android:layout_marginEnd="32dp"
                 android:text="@string/add_new_service_headline"
                 android:textAlignment="center"
@@ -126,12 +126,9 @@
                 android:hint="In Minutes"
                 app:layout_constraintStart_toEndOf="@+id/tv_service_cost"
                 app:layout_constraintHorizontal_bias="0.0"
-
                 app:layout_constraintEnd_toEndOf="@+id/ed_service_cost"
                 app:layout_constraintTop_toBottomOf="@+id/ed_service_cost"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_service_duration" />
-
-
 
             <Button
                 android:id="@+id/btn_create_service"
@@ -141,11 +138,25 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
-                android:text="@string/provider_sing_up_confirm"
+                android:text="@string/continue_to_set_service_schedule"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_service_duration" />
+
+            <Button
+                android:id="@+id/btn_back_service"
+                style="@style/appCompactButtons"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:text="@string/cancel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_create_service" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
