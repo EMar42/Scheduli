@@ -45,6 +45,11 @@ public class ProviderActivity extends BaseMenuActivity {
                     Intent intent = new Intent(getBaseContext(), AddServiceActivity.class);
                     startActivity(intent);
                 }
+                else{
+                    Intent intent = new Intent(getBaseContext(), AddServiceActivity.class);
+                    intent.putExtra("service",services.get(position));
+                    startActivity(intent);
+                }
             }
         });
     }

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.scheduli.R;
 import com.example.scheduli.data.Service;
@@ -22,6 +23,9 @@ public class AddServiceActivity extends AppCompatActivity {
     private static final String TAG_ADD_SERVICE = "ADD_SERVICE";
     private EditText serviceName, serviceCost, serviceDuration;
     private Button serviceContinueButton, serviceBackButton;
+    private Service service;
+    private Intent intent;
+    private boolean editMode = false;
 
 
     @Override
@@ -34,6 +38,15 @@ public class AddServiceActivity extends AppCompatActivity {
         serviceContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(editMode){
+                    service.setName(String.valueOf(serviceName.getText()));
+                    service.setSingleSessionInMinutes(serviceDuration.getTextAlignment());
+//                    service.setCost(Float.parseFloat(serviceCost.toString()));
+
+                    intent = new Intent(AddServiceActivity.this, SetServiceScheduleActivity.class);
+                    intent.putExtra("service",service);
+                    startActivity(intent);
+                }
                 createNewService();
             }
         });
@@ -129,7 +142,26 @@ public class AddServiceActivity extends AppCompatActivity {
         serviceContinueButton = findViewById(R.id.btn_continue_to_schedule);
         serviceBackButton = findViewById(R.id.btn_back_service);
 
+        intent = getIntent();
+        service = intent.getParcelableExtra("service");
+        if(service.getName() != null){ // not a strong condition
+            editMode = true;
+            editExistingService();
+        }
+
         Log.i(TAG_ADD_SERVICE, "finished initView() ");
+    }
+
+    private void editExistingService() {
+        TextView header =(TextView) findViewById(R.id.tv_add_new_service_headline) ;
+        TextView intruct =(TextView) findViewById(R.id.tv_instruc_addservice) ;
+        header.setText("Edit your service");
+        intruct.setText("Please edit the requested rows");
+
+        serviceName.setText(service.getName());
+        serviceCost.setText(String.valueOf(service.getCost()));
+        serviceDuration.setText(String.valueOf(service.getSingleSessionInMinutes()));
+
     }
 
     private boolean isFormClear() {
