@@ -61,6 +61,8 @@ private OnItemClickListener mListener;
 
         if(currentItem.getName() == null){
             holder.serviceIcon.setBackground(context.getResources().getDrawable(R.drawable.ic_add_service_icon));
+            holder.serviceIcon.getLayoutParams().width = 500;
+            holder.serviceIcon.getLayoutParams().height = 500;
         }
     }
 
