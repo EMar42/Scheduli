@@ -2,7 +2,9 @@ package com.example.scheduli.ui.service;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,18 +12,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.scheduli.R;
+import com.example.scheduli.data.TimeValidator;
 import com.example.scheduli.data.Service;
+import com.example.scheduli.ui.provider.ProviderActivity;
 
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class SetServiceScheduleActivity extends AppCompatActivity implements View.OnClickListener {
+public class SetServiceScheduleActivity extends AppCompatActivity {
 
+    private String SET_SERVICE_SCHEDULE_TAG = "SERVICE_SCHEDULE";
 
     private EditText from1, from2, from3, from4, from5, from6, from7, to1, to2, to3, to4, to5, to6, to7;
     private Button singupButton, backButton;
@@ -33,6 +37,9 @@ public class SetServiceScheduleActivity extends AppCompatActivity implements Vie
     private TimePickerDialog timePickerDialog;
     private int currentMinutes, currentHours;
     private Calendar calendar;
+
+
+    private TimeValidator timeValidator = new TimeValidator();
 
 
     @Override
@@ -61,21 +68,153 @@ public class SetServiceScheduleActivity extends AppCompatActivity implements Vie
 
 
     private void goBackToProvider() {
-        //TODO: finish back
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage("If you Quit now your data wont be saved")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(), AddServiceActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private void updateService() {
         //TODO : submit new service
-        Toast.makeText(getBaseContext(), "Toggle state " + getToggleState(sw1), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getBaseContext(), "" + dateValidator.isValid(from1.getText().toString()), Toast.LENGTH_SHORT).show();
+
+        displayErrorToUserIfThereIsOne();
+
+        if (formValid()) {
+
+        }
+    }
+
+    private boolean formValid() {
+        if (sw1.isChecked() && !checkIfEmpty(from1) && !checkIfEmpty(to1) && timeValidator.isValid(from1.getText().toString())
+                && timeValidator.isValid(to1.getText().toString()) && timeValidator.compareDates(from1.getText().toString(), to1.getText().toString())) {
+
+        }
+        if (sw2.isChecked() && !checkIfEmpty(from2) && !checkIfEmpty(to2) && timeValidator.isValid(from2.getText().toString())
+                && timeValidator.isValid(to2.getText().toString()) && timeValidator.compareDates(from2.getText().toString(), to2.getText().toString())) {
+
+        }
+
+        if (sw3.isChecked() && !checkIfEmpty(from3) && !checkIfEmpty(to3) && timeValidator.isValid(from3.getText().toString())
+                && timeValidator.isValid(to3.getText().toString()) && timeValidator.compareDates(from3.getText().toString(), to3.getText().toString())) {
+
+        }
+
+        if (sw4.isChecked() && !checkIfEmpty(from4) && !checkIfEmpty(to4) && timeValidator.isValid(from4.getText().toString())
+                && timeValidator.isValid(to4.getText().toString()) && timeValidator.compareDates(from4.getText().toString(), to4.getText().toString())) {
+
+        }
+
+        if (sw5.isChecked() && !checkIfEmpty(from5) && !checkIfEmpty(to5) && timeValidator.isValid(from5.getText().toString())
+                && timeValidator.isValid(to5.getText().toString()) && timeValidator.compareDates(from5.getText().toString(), to5.getText().toString())) {
+
+        }
+
+        if (sw6.isChecked() && !checkIfEmpty(from6) && !checkIfEmpty(to6) && timeValidator.isValid(from6.getText().toString())
+                && timeValidator.isValid(to6.getText().toString()) && timeValidator.compareDates(from6.getText().toString(), to6.getText().toString())) {
+
+        }
+
+        if (sw7.isChecked() && !checkIfEmpty(from7) && !checkIfEmpty(to7) && timeValidator.isValid(from7.getText().toString())
+                && timeValidator.isValid(to7.getText().toString()) && timeValidator.compareDates(from7.getText().toString(), to7.getText().toString())) {
+
+        }
+
+
+    }
+
+    private void displayErrorToUserIfThereIsOne() {
+        Log.i(SET_SERVICE_SCHEDULE_TAG, "From :" + from1.getText() + " " + from1.getText().toString());
+        if (sw1.isChecked()) {
+            if (checkIfEmpty(from1) && checkIfEmpty(to1))
+                sw1.setError("You must enter Time");
+            else if (!timeValidator.isValid(from1.getText().toString()))
+                from1.setError("Time is Invalid");
+            else if (!timeValidator.isValid(to1.getText().toString()))
+                from1.setError("Time is Invalid");
+            else if (!timeValidator.compareDates(from1.getText().toString(), to1.getText().toString()))
+                to1.setError("Must be smaller then before time");
+        }
+        if (sw2.isChecked()) {
+            if (checkIfEmpty(from2) && checkIfEmpty(to2))
+                sw2.setError("You must enter Time");
+            else if (!timeValidator.isValid(from2.getText().toString()))
+                from2.setError("Time is Invalid");
+            else if (!timeValidator.isValid(to2.getText().toString()))
+                from2.setError("Time is Invalid");
+            else if (!timeValidator.compareDates(from2.getText().toString(), to2.getText().toString()))
+                to2.setError("Must be smaller then before time");
+        }
+        if (sw3.isChecked()) {
+            if (checkIfEmpty(from3) && checkIfEmpty(to3))
+                sw3.setError("You must enter Time");
+            else if (!timeValidator.isValid(from3.getText().toString()))
+                from3.setError("Time is Invalid");
+            else if (!timeValidator.isValid(to3.getText().toString()))
+                from3.setError("Time is Invalid");
+            else if (!timeValidator.compareDates(from3.getText().toString(), to3.getText().toString()))
+                to3.setError("Must be smaller then before time");
+        }
+        if (sw4.isChecked()) {
+            if (checkIfEmpty(from4) && checkIfEmpty(to4))
+                sw4.setError("You must enter Time");
+            else if (!timeValidator.isValid(from4.getText().toString()))
+                from4.setError("Time is Invalid");
+            else if (!timeValidator.isValid(to4.getText().toString()))
+                from4.setError("Time is Invalid");
+            else if (!timeValidator.compareDates(from4.getText().toString(), to4.getText().toString()))
+                to4.setError("Must be smaller then before time");
+        }
+        if (sw5.isChecked()) {
+            if (checkIfEmpty(from5) && checkIfEmpty(to5))
+                sw5.setError("You must enter Time");
+            else if (!timeValidator.isValid(from5.getText().toString()))
+                from5.setError("Time is Invalid");
+            else if (!timeValidator.isValid(to5.getText().toString()))
+                from5.setError("Time is Invalid");
+            else if (!timeValidator.compareDates(from5.getText().toString(), to5.getText().toString()))
+                to5.setError("Must be smaller then before time");
+        }
+        if (sw6.isChecked()) {
+            if (checkIfEmpty(from6) && checkIfEmpty(to6))
+                sw6.setError("You must enter Time");
+            else if (!timeValidator.isValid(from6.getText().toString()))
+                from6.setError("Time is Invalid");
+            else if (!timeValidator.isValid(to6.getText().toString()))
+                from6.setError("Time is Invalid");
+            else if (!timeValidator.compareDates(from6.getText().toString(), to6.getText().toString()))
+                to6.setError("Must be smaller then before time");
+        }
+        if (sw7.isChecked()) {
+            if (checkIfEmpty(from7) && checkIfEmpty(to7))
+                sw7.setError("You must enter Time");
+            else if (!timeValidator.isValid(from7.getText().toString()))
+                from7.setError("Time is Invalid");
+            else if (!timeValidator.isValid(to7.getText().toString()))
+                from7.setError("Time is Invalid");
+            else if (!timeValidator.compareDates(from7.getText().toString(), to7.getText().toString()))
+                to7.setError("Must be smaller then before time");
+        }
     }
 
 
     private boolean getToggleState(Switch sw) {
         return sw.isChecked();
-    }
-
-    private void state() {
-
     }
 
 
@@ -116,32 +255,81 @@ public class SetServiceScheduleActivity extends AppCompatActivity implements Vie
         }
     }
 
-    private void getFormInfo() {
+    private String getFromBySwitch(Switch sw) {
+        if (sw1.equals(sw)) {
+            return from1.toString();
+        } else if (sw2.equals(sw)) {
+            return from2.toString();
+        } else if (sw3.equals(sw)) {
+            return from3.toString();
+        } else if (sw4.equals(sw)) {
+            return from4.toString();
+        } else if (sw5.equals(sw)) {
+            return from5.toString();
+        } else if (sw6.equals(sw)) {
+            return from6.toString();
+        } else if (sw7.equals(sw)) {
+            return from7.toString();
+        }
+        return null;
+    }
+
+    private String getToBySwitch(Switch sw) {
+        if (sw1.equals(sw)) {
+            return to1.toString();
+        } else if (sw2.equals(sw)) {
+            return to2.toString();
+        } else if (sw3.equals(sw)) {
+            return to3.toString();
+        } else if (sw4.equals(sw)) {
+            return to4.toString();
+        } else if (sw5.equals(sw)) {
+            return to5.toString();
+        } else if (sw6.equals(sw)) {
+            return to6.toString();
+        } else if (sw7.equals(sw)) {
+            return to7.toString();
+        }
+        return null;
+    }
+
+    private void getToggleFromAndTo() {
+        String from, to;
         for (Switch s : switchesOnToggle) {
-            //TODO : check out from[x] and to[x]
+            from = getFromBySwitch(s);
+            to = getToBySwitch(s);
         }
     }
 
 
-    @Override
-    public void onClick(View v) {
-        calendar = Calendar.getInstance();
-        currentHours = calendar.get(Calendar.HOUR_OF_DAY);
-        currentMinutes = calendar.get(Calendar.MINUTE);
-        Log.i("blablabla", "This is current id : " + v.getId());
-        switch (v.getId()) {
-            case R.id.from1:
-                timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        from1.setText(String.format("%02d:%02d", hourOfDay, minute));
-                    }
-                }, currentHours, currentMinutes, true);
-
+    private boolean inputTimeValid(EditText from, EditText to) {
+        TimeValidator timeValidator = new TimeValidator();
+        if (timeValidator.isValid(from.getText().toString()) && timeValidator.isValid(to.getText().toString())) {
+            return true;
         }
-        timePickerDialog.show();
-
+        return false;
     }
+
+
+//    @Override
+//    public void onClick(View v) {
+//        calendar = Calendar.getInstance();
+//        currentHours = calendar.get(Calendar.HOUR_OF_DAY);
+//        currentMinutes = calendar.get(Calendar.MINUTE);
+//        Log.i("blablabla", "This is current id : " + v.getId());
+//        switch (v.getId()) {
+//            case R.id.from1:
+//                timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+//                    @Override
+//                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//                        from1.setText(String.format("%02d:%02d", hourOfDay, minute));
+//                    }
+//                }, currentHours, currentMinutes, true);
+//
+//        }
+//        timePickerDialog.show();
+//    }
+
 
     private void initView() {
 
@@ -155,19 +343,12 @@ public class SetServiceScheduleActivity extends AppCompatActivity implements Vie
         from6 = findViewById(R.id.ed_from_friday);
         from7 = findViewById(R.id.ed_from_saturday);
         to1 = findViewById(R.id.ed_to_sunday);
-        to1.setEnabled(false);
         to2 = findViewById(R.id.ed_to_monday);
-        to2.setEnabled(false);
         to3 = findViewById(R.id.ed_to_tuesday);
-        to3.setEnabled(false);
         to4 = findViewById(R.id.ed_to_wednesday);
-        to4.setEnabled(false);
         to5 = findViewById(R.id.ed_to_thursday);
-        to5.setEnabled(false);
         to6 = findViewById(R.id.ed_to_friday);
-        to6.setEnabled(false);
         to7 = findViewById(R.id.ed_to_saturday);
-        to7.setEnabled(false);
         sw1 = findViewById(R.id.switch_sunday);
         sw2 = findViewById(R.id.switch_monday);
         sw3 = findViewById(R.id.switch_tuesday);
@@ -176,10 +357,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity implements Vie
         sw6 = findViewById(R.id.switch_friday);
         sw7 = findViewById(R.id.switch_saturday);
         singupButton = findViewById(R.id.btn_schedule_service);
-        singupButton.setOnClickListener(this);
         backButton = findViewById(R.id.btn_back_service);
-
     }
-
 
 }
