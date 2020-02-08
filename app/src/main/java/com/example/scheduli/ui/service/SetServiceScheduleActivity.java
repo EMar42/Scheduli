@@ -135,7 +135,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 
         }
 
-
+        return false;
     }
 
     private void displayErrorToUserIfThereIsOne() {
