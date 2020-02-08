@@ -34,20 +34,21 @@ import java.util.ArrayList;
 
 public class BookingAppointmentActivity extends BaseMenuActivity {
 
-    DatabaseReference databaseReference ;
-    Button btn_next;
-    Button btn_back;
-
     private static final String TAG_BOOKING_ACT = "BookingAppointmentActiv";
+
+    private Toolbar mainToolbar;
+    private Button btn_next;
+    private Button btn_back;
+    private TextView company_txt;
+
+    private RecyclerView recyclerView;
     private RecyclerView.LayoutManager mLayout;
     private ServiceAdapter mAdapter;
+
     private ArrayList<Service> servicesList;
-    private String pid;
-    Provider provider;
     private int servicePosition = -1;
-    TextView company_txt;
-    RecyclerView recyclerView;
-    private Toolbar mainToolbar;
+    private String pid;
+    private Provider provider;
 
 
     @Override
@@ -61,8 +62,6 @@ public class BookingAppointmentActivity extends BaseMenuActivity {
         init();
 
 
-        btn_next = (Button) findViewById(R.id.btn_next_2);
-        btn_back = (Button) findViewById(R.id.btn_back_2);
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,7 +72,6 @@ public class BookingAppointmentActivity extends BaseMenuActivity {
                     intent.putExtra("position" , servicePosition);
                     intent.putExtra("pid", pid);
                     startActivity(intent);
-                    finish();
                 }
                 else {
                     Toast.makeText(getApplicationContext(),"Select service first." ,Toast.LENGTH_SHORT).show();
@@ -93,6 +91,11 @@ public class BookingAppointmentActivity extends BaseMenuActivity {
 
     private void init() {
 
+        btn_next = (Button) findViewById(R.id.btn_next_2);
+        btn_back = (Button) findViewById(R.id.btn_back_2);
+        company_txt = (TextView) findViewById(R.id.set_appointment_time_act_chosen_service);
+        recyclerView = (RecyclerView) findViewById(R.id.services_recycleview);
+
         Intent intent = getIntent();
         pid = intent.getStringExtra("pid");
         provider = intent.getParcelableExtra("provider");
@@ -100,66 +103,26 @@ public class BookingAppointmentActivity extends BaseMenuActivity {
         System.out.println("Got provider: " + provider.getCompanyName()); // TEST
         System.out.println("Got provider services: " + provider.getServices()); // TEST
 
-        company_txt = (TextView) findViewById(R.id.set_appointment_time_act_chosen_service);
         company_txt.setText(intent.getStringExtra("companyName"));
         servicesList = new ArrayList<>();
         servicesList = provider.getServices();
 
-        databaseReference =  FirebaseDatabase.getInstance().getReference("providers").child(pid).child("services");
         mLayout = new GridLayoutManager(this,2);
         mAdapter = new ServiceAdapter(BookingAppointmentActivity.this, servicesList);
-        recyclerView = (RecyclerView) findViewById(R.id.services_recycleview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLayout);
         recyclerView.setAdapter(mAdapter);
-//        getServices();
 
         mAdapter.setOnItemClickListener(new ServiceAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 //TODO: why the app didnt provide the position? ()
-                System.out.println("[TEST] position = " + position);
+                Log.d(TAG_BOOKING_ACT, "Clicked position = " + position);
                 servicePosition = position;
                 servicesList.get(position);
                 Log.d(TAG_BOOKING_ACT, "User choose service: [" + position + "] - " + servicesList.get(position).getName());
             }
         });
     }
-
-    /* enable if wanted to get services from DB
-    private void getServices() {
-        databaseReference.addListenerForSingleValueEvent(valueEventListener);
-    }
-
-    ValueEventListener valueEventListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            servicesList.clear();
-
-            if(dataSnapshot.exists()) {
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-                    Service service = snapshot.getValue(Service.class);
-//                    System.out.println("[TEST] service name: " + service.getName()); //TEST
-                    servicesList.add(service);
-
-                }
-                Log.d(TAG_BOOKING_ACT, "got " + servicesList.size() + " services.");
-
-
-                if (!servicesList.isEmpty()) {
-                    recyclerView.setAdapter(mAdapter);
-                }
-            }
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            Log.e(TAG_BOOKING_ACT,"Something went wrong.. ");
-        }
-    };
-     */
 
 }
