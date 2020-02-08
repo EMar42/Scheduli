@@ -47,38 +47,38 @@ import java.util.Map;
 
 public class SetAppointmentTime extends BaseMenuActivity {
 
-    DatabaseReference databaseReference;
-    private Toolbar mainToolbar;
     private static final String TAG_SET_APPOINTMENT_ACT = "SetAppointmentTime";
 
-
-    private Service service;
-    private Provider provider;
-    private Map<String, ArrayList<Sessions>> dailySessions; // key is a date (day/month/year).
-    private ArrayList<Sessions> sessionsArrayList;
-    private RecyclerView.LayoutManager mLayout;
-
-    private String pid;
-    private int servicePosition;
+    DatabaseReference databaseReference;
+    private Toolbar mainToolbar;
 
     private Button next;
     private Button back;
     private TextView serviceChoosen;
+
+    private Date currentDate = new Date();
+    private Sessions currentSession;
+    private Appointment appointment;
+    private Service service;
+    private Provider provider;
+    private Map<String, ArrayList<Sessions>> dailySessions; // key is a date (day/month/year).
+    private ArrayList<Sessions> sessionsArrayList;
+    private String pid;
+    private int servicePosition;
+
 
     //Calendar view
     CompactCalendarView compactCalendarView;
     private SimpleDateFormat dateFormatCalendar = new SimpleDateFormat("MMMM - yyyy", Locale.getDefault());
     private DateFormat dateFormatFireBase = new SimpleDateFormat("yyyy-MM-dd");
 
-    //cycleview (Item)
+    //Recycleview (Item)
+    private RecyclerView.LayoutManager mLayout;
     private RecyclerView recyclerViewSlots;
     private List<String> dates;
     private SlotAdapter slotAdapter;
     private List<Date> slots;
     private int slotPosition = -1;
-    private Date currentDate = new Date();
-    private Sessions currentSession;
-    private Appointment appointment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,8 +113,6 @@ public class SetAppointmentTime extends BaseMenuActivity {
                         slots.add(new Date(sessionsArrayList.get(i).getStart()));
                         currentDate = new Date(sessionsArrayList.get(i).getStart());
                         currentSession = new Sessions(sessionsArrayList.get(i));
-
-
                     }
                 }
 
@@ -159,7 +157,7 @@ public class SetAppointmentTime extends BaseMenuActivity {
             @Override
             public void onItemClick(int position) {
                 slotPosition = position;
-                Log.d(TAG_SET_APPOINTMENT_ACT, "[TEST] Slot position = " + position + " , " + slots.get(position).getTime());
+                Log.d(TAG_SET_APPOINTMENT_ACT, "User select slot: " + position + " , " + slots.get(position).getTime());
 
             }
         });
@@ -238,7 +236,7 @@ public class SetAppointmentTime extends BaseMenuActivity {
             Iterator it = map.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();
-                Log.d(TAG_SET_APPOINTMENT_ACT,"[TEST] Daily session map values:" + pair.getKey() + " : " + pair.getValue());
+                Log.d(TAG_SET_APPOINTMENT_ACT,"Got Daily session map values:" + pair.getKey() + " : " + pair.getValue());
                 dates.add(pair.getKey().toString());
                 it.remove();
             }
@@ -267,13 +265,13 @@ public class SetAppointmentTime extends BaseMenuActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                     Sessions sessions = snapshot.getValue(Sessions.class);
-                    System.out.println("[TEST] sesions start: " + sessions.getStart()); //TEST
+                    Log.d(TAG_SET_APPOINTMENT_ACT,"Got from DB session value = " + sessions.getStart() + " , availability = " + sessions.isAvailable());
                     if (sessions.isAvailable()) {
                         sessionsArrayList.add(sessions);
                         slots.add(new Date(sessions.getStart()));
 
                         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd d hh:mm a");
-                        Log.d(TAG_SET_APPOINTMENT_ACT,"[TEST] got session: " + dateFormat.format(sessions.getStart()));
+                        Log.d(TAG_SET_APPOINTMENT_ACT,"Got available session: " + dateFormat.format(sessions.getStart()));
 
                         Event event = new Event(Color.GREEN, sessions.getStart(), service.getName() + " slot");
                         compactCalendarView.addEvent(event);
@@ -304,9 +302,7 @@ public class SetAppointmentTime extends BaseMenuActivity {
             @Override
             public void onClick(View view) {
                 updateSessionDetails(i);
-                Intent intent = new Intent(SetAppointmentTime.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                finishAffinity();
             }
         });
 

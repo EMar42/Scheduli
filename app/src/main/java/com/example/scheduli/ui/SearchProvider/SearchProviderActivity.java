@@ -37,20 +37,19 @@ import java.util.List;
 
 public class SearchProviderActivity extends BaseMenuActivity implements ProvidersAdapter.OnProviderListener {
 
-    BottomNavigationView bottomNavigationView;
-    private Toolbar mainToolbar;
-    private FloatingActionButton searchProviderButton;
-    private AppBarConfiguration appBarConfiguration;
-    private NavController navController;
     private static final String TAG_SEARCH_ACT = "SearchProviderActivity";
+
+    private BottomNavigationView bottomNavigationView;
+
+    private Toolbar mainToolbar;
+    private AppBarConfiguration appBarConfiguration;
     private EditText searchField;
     private ImageButton searchBtn;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager mLayout;
     private List<Provider> providersList;
-    ProvidersAdapter adapter;
-    DatabaseReference ref;
-    private static String PID = null;
+    private ProvidersAdapter adapter;
+    private DatabaseReference ref;
 
     private JoinedProvider joinedProvider = new JoinedProvider();
 
@@ -195,7 +194,7 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
                             intent.putExtra("provider", provider);
                             joinedProvider.setPid(null);
                             startActivity(intent);
-                            finish();
+//                            finish();
                         } else {
                             Toast.makeText(getApplicationContext(), "Please Select provider", Toast.LENGTH_LONG).show();
                         }
