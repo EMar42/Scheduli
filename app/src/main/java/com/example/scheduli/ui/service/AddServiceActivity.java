@@ -38,16 +38,16 @@ public class AddServiceActivity extends AppCompatActivity {
         serviceContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(editMode){
+                if (editMode) {
                     service.setName(String.valueOf(serviceName.getText()));
-                    service.setSingleSessionInMinutes(serviceDuration.getTextAlignment());
-//                    service.setCost(Float.parseFloat(serviceCost.toString()));
+                    service.setSingleSessionInMinutes(Integer.parseInt(serviceDuration.getText().toString()));
+                    service.setCost(Float.parseFloat(serviceCost.getText().toString()));
 
                     intent = new Intent(AddServiceActivity.this, SetServiceScheduleActivity.class);
-                    intent.putExtra("service",service);
+                    intent.putExtra("service", service);
                     startActivity(intent);
-                }
-                createNewService();
+                } else
+                    createNewService();
             }
         });
 
@@ -60,7 +60,7 @@ public class AddServiceActivity extends AppCompatActivity {
     }
 
     private void goBackToServices() {
-        if (!isFormClear()){
+        if (!isFormClear()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             builder.setMessage("If you Quit now your data wont be saved")
@@ -91,10 +91,10 @@ public class AddServiceActivity extends AppCompatActivity {
             String name = serviceName.getText().toString();
             float cost = Float.parseFloat(serviceCost.getText().toString());
             int minutes = Integer.parseInt(serviceDuration.getText().toString());
-            Service service = new Service(name,cost,minutes);
+            Service service = new Service(name, cost, minutes);
 
             Intent intent = new Intent(getBaseContext(), SetServiceScheduleActivity.class);
-            intent.putExtra("serviceToFill",service);
+            intent.putExtra("serviceToFill", service);
             startActivity(intent);
         }
 
@@ -144,7 +144,7 @@ public class AddServiceActivity extends AppCompatActivity {
 
         intent = getIntent();
         service = intent.getParcelableExtra("service");
-        if(service.getName() != null){ // not a strong condition
+        if (service.getName() != null) { // not a strong condition
             editMode = true;
             editExistingService();
         }
@@ -153,8 +153,8 @@ public class AddServiceActivity extends AppCompatActivity {
     }
 
     private void editExistingService() {
-        TextView header =(TextView) findViewById(R.id.tv_add_new_service_headline) ;
-        TextView intruct =(TextView) findViewById(R.id.tv_instruc_addservice) ;
+        TextView header = (TextView) findViewById(R.id.tv_add_new_service_headline);
+        TextView intruct = (TextView) findViewById(R.id.tv_instruc_addservice);
         header.setText("Edit your service");
         intruct.setText("Please edit the requested rows");
 

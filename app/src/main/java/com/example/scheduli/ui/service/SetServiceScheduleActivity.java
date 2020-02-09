@@ -15,13 +15,18 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.scheduli.R;
+import com.example.scheduli.data.Sessions;
 import com.example.scheduli.data.TimeValidator;
 import com.example.scheduli.data.Service;
+import com.example.scheduli.data.WorkDay;
 import com.example.scheduli.ui.provider.ProviderActivity;
 
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
 
 public class SetServiceScheduleActivity extends AppCompatActivity {
 
@@ -38,6 +43,9 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
     private int currentMinutes, currentHours;
     private Calendar calendar;
 
+    private Map<String, WorkDay> workingDays; // key is of type DayOfWeek enum
+    private Map<String, ArrayList<Sessions>> dailySessions; // key is a date (day/month/year).
+
 
     private TimeValidator timeValidator = new TimeValidator();
 
@@ -49,14 +57,12 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 
         initView();
 
-
         singupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateService();
             }
         });
-
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +74,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 
 
     private void goBackToProvider() {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setMessage("If you Quit now your data wont be saved")
@@ -91,68 +98,121 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 
     private void updateService() {
         //TODO : submit new service
-        //Toast.makeText(getBaseContext(), "" + dateValidator.isValid(from1.getText().toString()), Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(getBaseContext(), "string : " + from1.getText().toString(), Toast.LENGTH_SHORT).show();
+        getAllToggleState();
         displayErrorToUserIfThereIsOne();
+
 
         if (formValid()) {
 
         }
     }
 
+    private boolean checkDurationIsValid(String from, String to, int duration) {
+
+        Date d1 = null;
+        Date d2 = null;
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+
+        try {
+            d1 = format.parse(from);
+            Log.i(SET_SERVICE_SCHEDULE_TAG, "This is D1 : " + d1);
+
+            d2 = format.parse(to);
+            Log.i(SET_SERVICE_SCHEDULE_TAG, "This is D2 : " + d2);
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+
+        long diff = d2.getTime() - d1.getTime();
+        long diffMinutes = diff / (60 * 1000) % 60;
+        long diffHours = diff / (60 * 60 * 1000) % 24;
+
+        Log.i(SET_SERVICE_SCHEDULE_TAG, "Hours : " + diffHours + " Minutes : " + diffMinutes);
+
+        long result = diffHours * 60 + diffMinutes;
+        Log.i(SET_SERVICE_SCHEDULE_TAG, "This is diff : " + diff);
+        Log.i(SET_SERVICE_SCHEDULE_TAG, "This is result : " + result);
+        Log.i(SET_SERVICE_SCHEDULE_TAG, "resualt : " + result + " duration : " + service.getSingleSessionInMinutes());
+        if (result > duration) {
+            return true;
+        }
+        return false;
+    }
+
+
+
     private boolean formValid() {
-        if (sw1.isChecked() && !checkIfEmpty(from1) && !checkIfEmpty(to1) && timeValidator.isValid(from1.getText().toString())
-                && timeValidator.isValid(to1.getText().toString()) && timeValidator.compareDates(from1.getText().toString(), to1.getText().toString())) {
 
+        if (switchesOnToggle.size() > 0) {
+            if (sw1.isChecked()) {
+                if (!checkIfEmpty(from1) && !checkIfEmpty(to1) && timeValidator.isValid(from1.getText().toString())
+                        && timeValidator.isValid(to1.getText().toString()) && timeValidator.compareDates(from1.getText().toString(), to1.getText().toString())
+                        && checkDurationIsValid(from1.getText().toString(), to1.getText().toString(), service.getSingleSessionInMinutes())) {
+
+                } else
+                    return false;
+            }
+            if (sw2.isChecked()) {
+                if (!checkIfEmpty(from2) && !checkIfEmpty(to2) && timeValidator.isValid(from2.getText().toString())
+                        && timeValidator.isValid(to2.getText().toString()) && timeValidator.compareDates(from2.getText().toString(), to2.getText().toString())) {
+                } else
+                    return false;
+            }
+            if (sw3.isChecked()) {
+                if (!checkIfEmpty(from3) && !checkIfEmpty(to3) && timeValidator.isValid(from3.getText().toString())
+                        && timeValidator.isValid(to3.getText().toString()) && timeValidator.compareDates(from3.getText().toString(), to3.getText().toString())) {
+                } else
+                    return false;
+            }
+            if (sw4.isChecked()) {
+                if (!checkIfEmpty(from4) && !checkIfEmpty(to4) && timeValidator.isValid(from4.getText().toString())
+                        && timeValidator.isValid(to4.getText().toString()) && timeValidator.compareDates(from4.getText().toString(), to4.getText().toString())) {
+                } else
+                    return false;
+            }
+            if (sw5.isChecked()) {
+                if (!checkIfEmpty(from5) && !checkIfEmpty(to5) && timeValidator.isValid(from5.getText().toString())
+                        && timeValidator.isValid(to5.getText().toString()) && timeValidator.compareDates(from5.getText().toString(), to5.getText().toString())) {
+                } else
+                    return false;
+            }
+            if (sw6.isChecked()) {
+                if (!checkIfEmpty(from6) && !checkIfEmpty(to6) && timeValidator.isValid(from6.getText().toString())
+                        && timeValidator.isValid(to6.getText().toString()) && timeValidator.compareDates(from6.getText().toString(), to6.getText().toString())) {
+                } else
+                    return false;
+            }
+            if (sw7.isChecked()) {
+                if (!checkIfEmpty(from7) && !checkIfEmpty(to7) && timeValidator.isValid(from7.getText().toString())
+                        && timeValidator.isValid(to7.getText().toString()) && timeValidator.compareDates(from7.getText().toString(), to7.getText().toString())) {
+                } else
+                    return false;
+            }
         }
-        if (sw2.isChecked() && !checkIfEmpty(from2) && !checkIfEmpty(to2) && timeValidator.isValid(from2.getText().toString())
-                && timeValidator.isValid(to2.getText().toString()) && timeValidator.compareDates(from2.getText().toString(), to2.getText().toString())) {
-
-        }
-
-        if (sw3.isChecked() && !checkIfEmpty(from3) && !checkIfEmpty(to3) && timeValidator.isValid(from3.getText().toString())
-                && timeValidator.isValid(to3.getText().toString()) && timeValidator.compareDates(from3.getText().toString(), to3.getText().toString())) {
-
-        }
-
-        if (sw4.isChecked() && !checkIfEmpty(from4) && !checkIfEmpty(to4) && timeValidator.isValid(from4.getText().toString())
-                && timeValidator.isValid(to4.getText().toString()) && timeValidator.compareDates(from4.getText().toString(), to4.getText().toString())) {
-
-        }
-
-        if (sw5.isChecked() && !checkIfEmpty(from5) && !checkIfEmpty(to5) && timeValidator.isValid(from5.getText().toString())
-                && timeValidator.isValid(to5.getText().toString()) && timeValidator.compareDates(from5.getText().toString(), to5.getText().toString())) {
-
-        }
-
-        if (sw6.isChecked() && !checkIfEmpty(from6) && !checkIfEmpty(to6) && timeValidator.isValid(from6.getText().toString())
-                && timeValidator.isValid(to6.getText().toString()) && timeValidator.compareDates(from6.getText().toString(), to6.getText().toString())) {
-
-        }
-
-        if (sw7.isChecked() && !checkIfEmpty(from7) && !checkIfEmpty(to7) && timeValidator.isValid(from7.getText().toString())
-                && timeValidator.isValid(to7.getText().toString()) && timeValidator.compareDates(from7.getText().toString(), to7.getText().toString())) {
-
-        }
-
         return false;
     }
 
     private void displayErrorToUserIfThereIsOne() {
         Log.i(SET_SERVICE_SCHEDULE_TAG, "From :" + from1.getText() + " " + from1.getText().toString());
         if (sw1.isChecked()) {
-            if (checkIfEmpty(from1) && checkIfEmpty(to1))
-                sw1.setError("You must enter Time");
+            if (checkIfEmpty(from1))
+                from1.setError("You must enter Time");
+            else if (checkIfEmpty(to1))
+                to1.setError("You must enter Time");
             else if (!timeValidator.isValid(from1.getText().toString()))
                 from1.setError("Time is Invalid");
             else if (!timeValidator.isValid(to1.getText().toString()))
                 from1.setError("Time is Invalid");
             else if (!timeValidator.compareDates(from1.getText().toString(), to1.getText().toString()))
-                to1.setError("Must be smaller then before time");
+                to1.setError("Must be Higher then before time");
+            else if (!checkDurationIsValid(from1.getText().toString(), to1.getText().toString(), service.getSingleSessionInMinutes())) {
+                to1.setError("The time can't be shorter then Service Duration");
+            }
         }
         if (sw2.isChecked()) {
             if (checkIfEmpty(from2) && checkIfEmpty(to2))
-                sw2.setError("You must enter Time");
+                from2.setError("You must enter Time");
             else if (!timeValidator.isValid(from2.getText().toString()))
                 from2.setError("Time is Invalid");
             else if (!timeValidator.isValid(to2.getText().toString()))
@@ -162,7 +222,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
         }
         if (sw3.isChecked()) {
             if (checkIfEmpty(from3) && checkIfEmpty(to3))
-                sw3.setError("You must enter Time");
+                from3.setError("You must enter Time");
             else if (!timeValidator.isValid(from3.getText().toString()))
                 from3.setError("Time is Invalid");
             else if (!timeValidator.isValid(to3.getText().toString()))
@@ -172,7 +232,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
         }
         if (sw4.isChecked()) {
             if (checkIfEmpty(from4) && checkIfEmpty(to4))
-                sw4.setError("You must enter Time");
+                from4.setError("You must enter Time");
             else if (!timeValidator.isValid(from4.getText().toString()))
                 from4.setError("Time is Invalid");
             else if (!timeValidator.isValid(to4.getText().toString()))
@@ -182,7 +242,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
         }
         if (sw5.isChecked()) {
             if (checkIfEmpty(from5) && checkIfEmpty(to5))
-                sw5.setError("You must enter Time");
+                from5.setError("You must enter Time");
             else if (!timeValidator.isValid(from5.getText().toString()))
                 from5.setError("Time is Invalid");
             else if (!timeValidator.isValid(to5.getText().toString()))
@@ -192,7 +252,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
         }
         if (sw6.isChecked()) {
             if (checkIfEmpty(from6) && checkIfEmpty(to6))
-                sw6.setError("You must enter Time");
+                from6.setError("You must enter Time");
             else if (!timeValidator.isValid(from6.getText().toString()))
                 from6.setError("Time is Invalid");
             else if (!timeValidator.isValid(to6.getText().toString()))
@@ -202,7 +262,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
         }
         if (sw7.isChecked()) {
             if (checkIfEmpty(from7) && checkIfEmpty(to7))
-                sw7.setError("You must enter Time");
+                from7.setError("You must enter Time");
             else if (!timeValidator.isValid(from7.getText().toString()))
                 from7.setError("Time is Invalid");
             else if (!timeValidator.isValid(to7.getText().toString()))
@@ -210,6 +270,13 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
             else if (!timeValidator.compareDates(from7.getText().toString(), to7.getText().toString()))
                 to7.setError("Must be smaller then before time");
         }
+    }
+
+    private boolean checkSessionInMinutesValid(EditText from, EditText to, int singleSessionInMinutes) {
+        String ssim = Integer.toString(singleSessionInMinutes);
+
+
+        return false;
     }
 
 
@@ -232,6 +299,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 
 
     private void getAllToggleState() {
+        switchesOnToggle = new ArrayList<>();
         if (getToggleState(sw1)) {
             switchesOnToggle.add(sw1);
         }
