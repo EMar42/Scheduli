@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -19,9 +20,8 @@ import com.example.scheduli.data.Sessions;
 import com.example.scheduli.data.TimeValidator;
 import com.example.scheduli.data.Service;
 import com.example.scheduli.data.WorkDay;
-import com.example.scheduli.ui.provider.ProviderActivity;
 
-import java.sql.Time;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,8 +39,6 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 
     private Service service;
     private ArrayList<Switch> switchesOnToggle;
-    private TimePickerDialog timePickerDialog;
-    private int currentMinutes, currentHours;
     private Calendar calendar;
 
     private Map<String, WorkDay> workingDays; // key is of type DayOfWeek enum
@@ -75,38 +73,60 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 
     private void goBackToProvider() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (!isFormClear()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setMessage("If you Quit now your data wont be saved")
-                .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getApplicationContext(), AddServiceActivity.class);
-                        startActivity(intent);
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+            builder.setMessage("If you Quit now your data wont be saved")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(getApplicationContext(), AddServiceActivity.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
     }
+
 
     private void updateService() {
         //TODO : submit new service
-        Toast.makeText(getBaseContext(), "string : " + from1.getText().toString(), Toast.LENGTH_SHORT).show();
+
         getAllToggleState();
         displayErrorToUserIfThereIsOne();
+        Log.i(SET_SERVICE_SCHEDULE_TAG, "get minutes from D " + switchesOnToggle);
+        int min = getMinutesFromEditText(from1);
+        int hou = getHoursFromEditText(from1);
+        Toast.makeText(getBaseContext(), "min : " + min + " hour : " + hou, Toast.LENGTH_SHORT).show();
+        getMinutesFromEditText(from1);
 
 
-        if (formValid()) {
+
+        if (isFormValid()) {
+            for (Switch s : switchesOnToggle) {
+
+//                createTimeSpans(s);
+//                createWorkingDays(s);
+            }
+        }
+    }
+
+    private void createWorkingDays(Switch s) {
+        switch (s.getText().toString()) {
+            case "Sun":
+                System.out.println("This is sunday on create working days method");
 
         }
     }
+
 
     private boolean checkDurationIsValid(String from, String to, int duration) {
 
@@ -134,64 +154,92 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
         Log.i(SET_SERVICE_SCHEDULE_TAG, "This is diff : " + diff);
         Log.i(SET_SERVICE_SCHEDULE_TAG, "This is result : " + result);
         Log.i(SET_SERVICE_SCHEDULE_TAG, "resualt : " + result + " duration : " + service.getSingleSessionInMinutes());
-        if (result > duration) {
+        if (result >= duration) {
             return true;
         }
         return false;
     }
 
+    private int getMinutesFromEditText(EditText et) {
+
+        Date d = null;
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        try {
+            d = format.parse(et.getText().toString());
+
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+        long minutes = d.getTime() / (60 * 1000) % 60;
+
+        return (int) minutes;
+    }
+
+    private int getHoursFromEditText(EditText et) {
+        Date d = null;
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        try {
+            d = format.parse(et.getText().toString());
+
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+        long hours = d.getTime() / (60 * 60 * 1000) % 24;
+
+        return (int) hours;
+    }
 
 
-    private boolean formValid() {
+    private boolean isFormValid() {
 
         if (switchesOnToggle.size() > 0) {
             if (sw1.isChecked()) {
-                if (!checkIfEmpty(from1) && !checkIfEmpty(to1) && timeValidator.isValid(from1.getText().toString())
+                if (!(!checkIfEmpty(from1) && !checkIfEmpty(to1) && timeValidator.isValid(from1.getText().toString())
                         && timeValidator.isValid(to1.getText().toString()) && timeValidator.compareDates(from1.getText().toString(), to1.getText().toString())
-                        && checkDurationIsValid(from1.getText().toString(), to1.getText().toString(), service.getSingleSessionInMinutes())) {
-
-                } else
+                        && checkDurationIsValid(from1.getText().toString(), to1.getText().toString(), service.getSingleSessionInMinutes())))
                     return false;
             }
             if (sw2.isChecked()) {
-                if (!checkIfEmpty(from2) && !checkIfEmpty(to2) && timeValidator.isValid(from2.getText().toString())
-                        && timeValidator.isValid(to2.getText().toString()) && timeValidator.compareDates(from2.getText().toString(), to2.getText().toString())) {
-                } else
+                if (!(!checkIfEmpty(from2) && !checkIfEmpty(to2) && timeValidator.isValid(from2.getText().toString())
+                        && timeValidator.isValid(to2.getText().toString()) && timeValidator.compareDates(from2.getText().toString(), to2.getText().toString())
+                        && checkDurationIsValid(from2.getText().toString(), to2.getText().toString(), service.getSingleSessionInMinutes())))
                     return false;
             }
             if (sw3.isChecked()) {
-                if (!checkIfEmpty(from3) && !checkIfEmpty(to3) && timeValidator.isValid(from3.getText().toString())
-                        && timeValidator.isValid(to3.getText().toString()) && timeValidator.compareDates(from3.getText().toString(), to3.getText().toString())) {
-                } else
+                if (!(!checkIfEmpty(from3) && !checkIfEmpty(to3) && timeValidator.isValid(from3.getText().toString())
+                        && timeValidator.isValid(to3.getText().toString()) && timeValidator.compareDates(from3.getText().toString(), to3.getText().toString())
+                        && checkDurationIsValid(from3.getText().toString(), to3.getText().toString(), service.getSingleSessionInMinutes())))
                     return false;
             }
             if (sw4.isChecked()) {
-                if (!checkIfEmpty(from4) && !checkIfEmpty(to4) && timeValidator.isValid(from4.getText().toString())
-                        && timeValidator.isValid(to4.getText().toString()) && timeValidator.compareDates(from4.getText().toString(), to4.getText().toString())) {
-                } else
+                if (!(!checkIfEmpty(from4) && !checkIfEmpty(to4) && timeValidator.isValid(from4.getText().toString())
+                        && timeValidator.isValid(to4.getText().toString()) && timeValidator.compareDates(from4.getText().toString(), to4.getText().toString())
+                        && checkDurationIsValid(from4.getText().toString(), to4.getText().toString(), service.getSingleSessionInMinutes())))
                     return false;
             }
             if (sw5.isChecked()) {
-                if (!checkIfEmpty(from5) && !checkIfEmpty(to5) && timeValidator.isValid(from5.getText().toString())
-                        && timeValidator.isValid(to5.getText().toString()) && timeValidator.compareDates(from5.getText().toString(), to5.getText().toString())) {
-                } else
+                if (!(!checkIfEmpty(from5) && !checkIfEmpty(to5) && timeValidator.isValid(from5.getText().toString())
+                        && timeValidator.isValid(to5.getText().toString()) && timeValidator.compareDates(from5.getText().toString(), to5.getText().toString())
+                        && checkDurationIsValid(from5.getText().toString(), to5.getText().toString(), service.getSingleSessionInMinutes())))
                     return false;
             }
             if (sw6.isChecked()) {
-                if (!checkIfEmpty(from6) && !checkIfEmpty(to6) && timeValidator.isValid(from6.getText().toString())
-                        && timeValidator.isValid(to6.getText().toString()) && timeValidator.compareDates(from6.getText().toString(), to6.getText().toString())) {
-                } else
+                if (!(!checkIfEmpty(from6) && !checkIfEmpty(to6) && timeValidator.isValid(from6.getText().toString())
+                        && timeValidator.isValid(to6.getText().toString()) && timeValidator.compareDates(from6.getText().toString(), to6.getText().toString())
+                        && checkDurationIsValid(from6.getText().toString(), to6.getText().toString(), service.getSingleSessionInMinutes())))
                     return false;
             }
             if (sw7.isChecked()) {
-                if (!checkIfEmpty(from7) && !checkIfEmpty(to7) && timeValidator.isValid(from7.getText().toString())
-                        && timeValidator.isValid(to7.getText().toString()) && timeValidator.compareDates(from7.getText().toString(), to7.getText().toString())) {
-                } else
+                if (!(!checkIfEmpty(from7) && !checkIfEmpty(to7) && timeValidator.isValid(from7.getText().toString())
+                        && timeValidator.isValid(to7.getText().toString()) && timeValidator.compareDates(from7.getText().toString(), to7.getText().toString())
+                        && checkDurationIsValid(from7.getText().toString(), to7.getText().toString(), service.getSingleSessionInMinutes())))
                     return false;
             }
+            return true;
         }
         return false;
     }
+
 
     private void displayErrorToUserIfThereIsOne() {
         Log.i(SET_SERVICE_SCHEDULE_TAG, "From :" + from1.getText() + " " + from1.getText().toString());
@@ -205,78 +253,129 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
             else if (!timeValidator.isValid(to1.getText().toString()))
                 from1.setError("Time is Invalid");
             else if (!timeValidator.compareDates(from1.getText().toString(), to1.getText().toString()))
-                to1.setError("Must be Higher then before time");
+                to1.setError("Must be Later then before time");
             else if (!checkDurationIsValid(from1.getText().toString(), to1.getText().toString(), service.getSingleSessionInMinutes())) {
                 to1.setError("The time can't be shorter then Service Duration");
             }
         }
         if (sw2.isChecked()) {
-            if (checkIfEmpty(from2) && checkIfEmpty(to2))
+            if (checkIfEmpty(from2))
                 from2.setError("You must enter Time");
+            else if (checkIfEmpty(to2))
+                to2.setError("You must enter Time");
             else if (!timeValidator.isValid(from2.getText().toString()))
                 from2.setError("Time is Invalid");
             else if (!timeValidator.isValid(to2.getText().toString()))
                 from2.setError("Time is Invalid");
             else if (!timeValidator.compareDates(from2.getText().toString(), to2.getText().toString()))
-                to2.setError("Must be smaller then before time");
+                to2.setError("Must be Later then before time");
+            else if (!checkDurationIsValid(from2.getText().toString(), to2.getText().toString(), service.getSingleSessionInMinutes())) {
+                to2.setError("The time can't be shorter then Service Duration");
+            }
         }
         if (sw3.isChecked()) {
-            if (checkIfEmpty(from3) && checkIfEmpty(to3))
+            if (checkIfEmpty(from3))
                 from3.setError("You must enter Time");
+            else if (checkIfEmpty(to3))
+                to3.setError("You must enter Time");
             else if (!timeValidator.isValid(from3.getText().toString()))
                 from3.setError("Time is Invalid");
             else if (!timeValidator.isValid(to3.getText().toString()))
                 from3.setError("Time is Invalid");
             else if (!timeValidator.compareDates(from3.getText().toString(), to3.getText().toString()))
-                to3.setError("Must be smaller then before time");
+                to3.setError("Must be Later then before time");
+            else if (!checkDurationIsValid(from3.getText().toString(), to3.getText().toString(), service.getSingleSessionInMinutes())) {
+                to3.setError("The time can't be shorter then Service Duration");
+            }
         }
         if (sw4.isChecked()) {
-            if (checkIfEmpty(from4) && checkIfEmpty(to4))
+            if (checkIfEmpty(from4))
                 from4.setError("You must enter Time");
+            else if (checkIfEmpty(to4))
+                to4.setError("You must enter Time");
             else if (!timeValidator.isValid(from4.getText().toString()))
                 from4.setError("Time is Invalid");
             else if (!timeValidator.isValid(to4.getText().toString()))
                 from4.setError("Time is Invalid");
             else if (!timeValidator.compareDates(from4.getText().toString(), to4.getText().toString()))
-                to4.setError("Must be smaller then before time");
+                to4.setError("Must be Later then before time");
+            else if (!checkDurationIsValid(from4.getText().toString(), to4.getText().toString(), service.getSingleSessionInMinutes())) {
+                to4.setError("The time can't be shorter then Service Duration");
+            }
         }
         if (sw5.isChecked()) {
-            if (checkIfEmpty(from5) && checkIfEmpty(to5))
+            if (checkIfEmpty(from5))
                 from5.setError("You must enter Time");
+            else if (checkIfEmpty(to5))
+                to4.setError("You must enter Time");
             else if (!timeValidator.isValid(from5.getText().toString()))
                 from5.setError("Time is Invalid");
             else if (!timeValidator.isValid(to5.getText().toString()))
                 from5.setError("Time is Invalid");
             else if (!timeValidator.compareDates(from5.getText().toString(), to5.getText().toString()))
-                to5.setError("Must be smaller then before time");
+                to5.setError("Must be Later then before time");
+            else if (!checkDurationIsValid(from5.getText().toString(), to5.getText().toString(), service.getSingleSessionInMinutes())) {
+                to5.setError("The time can't be shorter then Service Duration");
+            }
         }
         if (sw6.isChecked()) {
-            if (checkIfEmpty(from6) && checkIfEmpty(to6))
+            if (checkIfEmpty(from6))
                 from6.setError("You must enter Time");
+            else if (checkIfEmpty(to6))
+                to6.setError("You must enter Time");
             else if (!timeValidator.isValid(from6.getText().toString()))
                 from6.setError("Time is Invalid");
             else if (!timeValidator.isValid(to6.getText().toString()))
                 from6.setError("Time is Invalid");
             else if (!timeValidator.compareDates(from6.getText().toString(), to6.getText().toString()))
-                to6.setError("Must be smaller then before time");
+                to6.setError("Must be Later then before time");
+            else if (!checkDurationIsValid(from6.getText().toString(), to6.getText().toString(), service.getSingleSessionInMinutes())) {
+                to6.setError("The time can't be shorter then Service Duration");
+            }
         }
         if (sw7.isChecked()) {
-            if (checkIfEmpty(from7) && checkIfEmpty(to7))
+            if (checkIfEmpty(from7))
                 from7.setError("You must enter Time");
+            else if (checkIfEmpty(to7))
+                to7.setError("You must enter Time");
             else if (!timeValidator.isValid(from7.getText().toString()))
                 from7.setError("Time is Invalid");
             else if (!timeValidator.isValid(to7.getText().toString()))
                 from7.setError("Time is Invalid");
             else if (!timeValidator.compareDates(from7.getText().toString(), to7.getText().toString()))
-                to7.setError("Must be smaller then before time");
+                to7.setError("Must be Later then before time");
+            else if (!checkDurationIsValid(from7.getText().toString(), to7.getText().toString(), service.getSingleSessionInMinutes())) {
+                to7.setError("The time can't be shorter then Service Duration");
+            }
         }
     }
 
-    private boolean checkSessionInMinutesValid(EditText from, EditText to, int singleSessionInMinutes) {
-        String ssim = Integer.toString(singleSessionInMinutes);
+
+    public void createTimeSpans(Switch s) {
+
+        System.out.println("checking gettext to string " + s.getText().toString());
+        calendar = Calendar.getInstance();
 
 
-        return false;
+        switch (s.getText().toString()) {
+            case "Sun":
+                System.out.println("This is sunday on create Time Spans");
+
+
+            case "Mon":
+
+            case "Tue":
+
+            case "Wed":
+
+            case "Thu":
+
+            case "Fri":
+
+            case "Sat":
+
+        }
+
     }
 
 
@@ -288,6 +387,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
     private boolean checkIfEmpty(EditText editText) {
         return editText.getText().toString().isEmpty();
     }
+
 
     private boolean isFormClear() {
         return checkIfEmpty(from1) && checkIfEmpty(from2) && checkIfEmpty(from3) && checkIfEmpty(from4) && checkIfEmpty(from5)
@@ -323,6 +423,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
         }
     }
 
+
     private String getFromBySwitch(Switch sw) {
         if (sw1.equals(sw)) {
             return from1.toString();
@@ -342,6 +443,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
         return null;
     }
 
+
     private String getToBySwitch(Switch sw) {
         if (sw1.equals(sw)) {
             return to1.toString();
@@ -360,43 +462,6 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
         }
         return null;
     }
-
-    private void getToggleFromAndTo() {
-        String from, to;
-        for (Switch s : switchesOnToggle) {
-            from = getFromBySwitch(s);
-            to = getToBySwitch(s);
-        }
-    }
-
-
-    private boolean inputTimeValid(EditText from, EditText to) {
-        TimeValidator timeValidator = new TimeValidator();
-        if (timeValidator.isValid(from.getText().toString()) && timeValidator.isValid(to.getText().toString())) {
-            return true;
-        }
-        return false;
-    }
-
-
-//    @Override
-//    public void onClick(View v) {
-//        calendar = Calendar.getInstance();
-//        currentHours = calendar.get(Calendar.HOUR_OF_DAY);
-//        currentMinutes = calendar.get(Calendar.MINUTE);
-//        Log.i("blablabla", "This is current id : " + v.getId());
-//        switch (v.getId()) {
-//            case R.id.from1:
-//                timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-//                    @Override
-//                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//                        from1.setText(String.format("%02d:%02d", hourOfDay, minute));
-//                    }
-//                }, currentHours, currentMinutes, true);
-//
-//        }
-//        timePickerDialog.show();
-//    }
 
 
     private void initView() {
