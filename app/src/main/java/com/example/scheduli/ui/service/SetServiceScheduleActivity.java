@@ -493,7 +493,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
         Log.i(SET_SERVICE_SCHEDULE_TAG, "toggle name : " + s.getText().toString());
 
         switch (s.getText().toString()) {
-            case "Sun": {
+            case "Sun":
                 System.out.println("SUNDAYYYYYYYYYYYYYYYYYYYYYYYY");
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from1));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(from1));
@@ -551,11 +551,11 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                             "  end date: " + formatter1.format(s1.getEnd()));
 
                 }
-            }
-            break;
 
+                break;
 
             case "Mon": {
+
                 System.out.println("MONDAYYYYYYYYYYYYYYYYYYYYYYYY");
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from2));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(from2));
@@ -572,7 +572,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 
                 formatter.setTimeZone(TimeZone.getTimeZone("UTC+2"));
                 ArrayList<Date> monDates = new ArrayList<>();
-                int i = 0;
+                i = 0;
 
                 while (i < monNumOfSlots) {
                     long startSessionLong = monStart;
@@ -608,8 +608,10 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                             "  end date: " + formatter1.format(s1.getEnd()));
 
                 }
+
             }
             break;
+
             case "Tue": {
                 System.out.println("MONDAYYYYYYYYYYYYYYYYYYYYYYYY");
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from2));
@@ -664,8 +666,9 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 
                 }
             }
+            break;
 
-            case "Wed":
+            case "Wed": {
                 System.out.println("TUEDAYYYYYYYYYYYYYYYYYYYYYYYY");
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from3));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(from3));
@@ -718,75 +721,23 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                             "  end date: " + formatter1.format(s1.getEnd()));
                 }
 
+            }
+            break;
 
             case "Thu":
-                System.out.println("MONDAYYYYYYYYYYYYYYYYYYYYYYYY");
-                cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from2));
-                cal.set(Calendar.MINUTE, getMinutesFromEditText(from2));
-                long monStart = cal.getTimeInMillis();
-                cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(to2));
-                cal.set(Calendar.MINUTE, getMinutesFromEditText(to2));
-
-                long monEnd = cal.getTimeInMillis();
-                Date monSessionsSpanDate = new Date(TimeUnit.MINUTES.toMillis(sessionSpan));
-                Date monWorkingHours = new Date(monEnd - monStart);
-                System.out.println(monWorkingHours.getTime());
-
-                int monNumOfSlots = (int) ((monWorkingHours.getTime() / (1000 * 60)) / sessionSpan);
-
-                formatter.setTimeZone(TimeZone.getTimeZone("UTC+2"));
-                ArrayList<Date> monDates = new ArrayList<>();
-                i = 0;
-
-                while (i < monNumOfSlots) {
-                    long startSessionLong = monStart;
-                    long endSessionLong;
-                    Date date = new Date(monStart);
-                    monDates.add(date);
-//                    System.out.print("Start "+start);
-//                    System.out.print(" adding " + sessionsSpanDate.getTime());
-                    monStart += monSessionsSpanDate.getTime();
-                    endSessionLong = monStart;
-//                    System.out.print(" end " + endSessionLong + "\n");
-
-
-                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, true);
-                    //System.out.println("tempSession start: " + tempSession.getStart() + " tempSession end: " + tempSession.getEnd());
-                    System.out.println("tempSession start date: " + formatter1.format(tempSession.getStart()) +
-                            " tempSession end: date " + formatter1.format(tempSession.getEnd()));
-
-                    monDaySessions.add(tempSession);
-                    i++;
-
-//                    String sloTime = formatter.format(dates.get(i).getTime());
-//                    System.out.println(formatter1.format(new Date(date.getTime())));
-//                    System.out.println("long of time in mili " + date.getTime());
-                    //System.out.println("slot from: " + sloTime);
-                }
-//                System.out.println(" ");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                for (Sessions s1 : monDaySessions) {
-                    //System.out.println("Printing sessions : " + s1.getStart() + " " + s1.getEnd());
-                    System.out.println("start date: " + formatter1.format(s1.getStart()) +
-                            "  end date: " + formatter1.format(s1.getEnd()));
-
-                }
                 break;
-
 
             case "Fri":
-
-
-            case "Sat":
-
-
-            default:
                 break;
 
-        }
-    }
+            case "Sat":
+                break;
 
+
+        }
+
+
+    }
 
 
     private boolean getToggleState(Switch sw) {
