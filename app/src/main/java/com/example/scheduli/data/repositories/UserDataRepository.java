@@ -221,16 +221,18 @@ public class UserDataRepository {
         final DataBaseCallBackOperation callBackOperation = new DataBaseCallBackOperation() {
             @Override
             public void callBack(Object object) {
-                ArrayList<Appointment> appointments = (ArrayList<Appointment>) object;
-                ArrayList<Appointment> editedAppointments = new ArrayList<>();
+                if (object != null) {
+                    ArrayList<Appointment> appointments = (ArrayList<Appointment>) object;
+                    ArrayList<Appointment> editedAppointments = new ArrayList<>();
 
-                for (Appointment appointment : appointments) {
-                    if (!(appointment.getProviderUid().equals(providerUid) && appointment.getStart() == start)) {
-                        editedAppointments.add(appointment);
+                    for (Appointment appointment : appointments) {
+                        if (!(appointment.getProviderUid().equals(providerUid) && appointment.getStart() == start)) {
+                            editedAppointments.add(appointment);
+                        }
                     }
-                }
 
-                UserDataRepository.getInstance().addAppointmentsListToUser(userUid, editedAppointments);
+                    UserDataRepository.getInstance().addAppointmentsListToUser(userUid, editedAppointments);
+                }
             }
         };
 
