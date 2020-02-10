@@ -22,6 +22,7 @@ import com.example.scheduli.data.Service;
 import com.example.scheduli.data.WorkDay;
 
 import java.text.DateFormat;
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -467,9 +468,11 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                     dates.add(date);
                     start += sessionsSpanDate.getTime();
                     String sloTime = formatter.format(dates.get(i).getTime());
+                    System.out.println(formatter1.format(new Date(date.getTime())));
+                    System.out.println("long of time in mili " + date.getTime());
 
                     i++;
-                    System.out.println("slot from: " + sloTime);
+                    //System.out.println("slot from: " + sloTime);
                 }
 
 
