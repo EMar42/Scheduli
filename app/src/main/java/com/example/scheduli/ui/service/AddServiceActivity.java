@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.example.scheduli.R;
 import com.example.scheduli.data.Service;
-import com.example.scheduli.ui.mainScreen.MainActivity;
 import com.example.scheduli.ui.provider.ProviderActivity;
 
 public class AddServiceActivity extends AppCompatActivity {

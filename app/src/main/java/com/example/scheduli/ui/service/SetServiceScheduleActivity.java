@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.se.omapi.Session;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,7 @@ import com.example.scheduli.data.Sessions;
 import com.example.scheduli.data.TimeValidator;
 import com.example.scheduli.data.Service;
 import com.example.scheduli.data.WorkDay;
+import com.example.scheduli.utils.UsersUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -47,6 +49,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
     private Map<String, ArrayList<Sessions>> dailySessions; // key is a date (day/month/year).
     private ArrayList<Sessions> currentSession = new ArrayList<>();
     SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+    DateFormat formatter = new SimpleDateFormat("HH:mm");
 
     private ArrayList<Sessions> sunDaySessions = new ArrayList<>();
     private ArrayList<Sessions> monDaySessions = new ArrayList<>();
@@ -55,7 +58,6 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
     private ArrayList<Sessions> thuDaySessions = new ArrayList<>();
     private ArrayList<Sessions> friDaySessions = new ArrayList<>();
     private ArrayList<Sessions> satDaySessions = new ArrayList<>();
-
 
 
     private TimeValidator timeValidator = new TimeValidator();
@@ -125,9 +127,11 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
         if (isFormValid()) {
             int i = 0;
             for (Switch s : switchesOnToggle) {
+                Log.i(SET_SERVICE_SCHEDULE_TAG, "This is switch at isValid method  " + s.getText().toString());
+
                 createWorkingDays(s);
                 createDailySessions(s);
-                i++;
+                //multiplyDailySessions(sunDaySessions);
 
             }
         }
@@ -219,10 +223,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 
         try {
             d1 = format.parse(from);
-//            Log.i(SET_SERVICE_SCHEDULE_TAG, "This is D1 : " + d1);
-
             d2 = format.parse(to);
-//            Log.i(SET_SERVICE_SCHEDULE_TAG, "This is D2 : " + d2);
         } catch (Exception e) {
             System.err.println(e);
         }
@@ -436,55 +437,103 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
     }
 
 
+    public void multiplyDailySessions(ArrayList<Sessions> ses) {
+        Calendar startCal = Calendar.getInstance();
+        Calendar endCal = Calendar.getInstance();
+
+        System.out.println("sunday sessions before");
+        System.out.println(sunDaySessions);
+
+
+        for (Sessions s : ses) {             //adding next week daily sessions
+            Date startDate = new Date(s.getStart());
+            Date endDate = new Date(s.getEnd());
+            boolean isValid = s.isAvailable();
+            startCal.setTime(startDate);
+            endCal.setTime(endDate);
+            startCal.add(Calendar.WEEK_OF_MONTH, 1);
+            endCal.add(Calendar.WEEK_OF_MONTH, 1);
+            Sessions tempSession = new Sessions(startCal.getTimeInMillis(), endCal.getTimeInMillis(), isValid);
+            ses.add(tempSession);
+
+        }
+        System.out.println("sunday sessions after");
+        System.out.println(sunDaySessions);
+
+//
+//        Sessions startSession = ses.get(0);
+//        Sessions endSession = ses.get(ses.size() - 1);
+//        Date startDate = new Date(startSession.getStart());
+//        Date endDate = new Date(endSession.getEnd());
+//        Calendar startCal = Calendar.getInstance();
+//        Calendar endCal = Calendar.getInstance();
+//        endCal.add(Calendar.MONTH, 6);
+//
+//        while (endCal.getTimeInMillis() > startCal.getTimeInMillis()) {
+//            startCal.add(Calendar.WEEK_OF_MONTH, 1);
+//
+//        }
+
+
+    }
+
+
     public void createDailySessions(Switch s) {
 
         int sessionSpan = service.getSingleSessionInMinutes();
-        SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+
         Calendar halfYearCal = Calendar.getInstance();
         halfYearCal.add(Calendar.MONTH, 6);
         Calendar startCal = Calendar.getInstance();
 
+
         Calendar cal = Calendar.getInstance();
 
 
+        Log.i(SET_SERVICE_SCHEDULE_TAG, "toggle name : " + s.getText().toString());
+
         switch (s.getText().toString()) {
-            case "Sun":
+            case "Sun": {
+                System.out.println("SUNDAYYYYYYYYYYYYYYYYYYYYYYYY");
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from1));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(from1));
-                long start = cal.getTimeInMillis();
+                long sundayStart = cal.getTimeInMillis();
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(to1));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(to1));
 
-                long end = cal.getTimeInMillis();
-                Date sessionsSpanDate = new Date(TimeUnit.MINUTES.toMillis(sessionSpan));
-                Date workingHours = new Date(end - start);
-                System.out.println(workingHours.getTime());
+                long sundayEnd = cal.getTimeInMillis();
+                Date sunSessionsSpanDate = new Date(TimeUnit.MINUTES.toMillis(sessionSpan));
+                Date sunWorkingHours = new Date(sundayEnd - sundayStart);
+                System.out.println(sunWorkingHours.getTime());
 
-                int numOfSlots = (int) ((workingHours.getTime() / (1000 * 60)) / sessionSpan);
+                int sunNumOfSlots = (int) ((sunWorkingHours.getTime() / (1000 * 60)) / sessionSpan);
 
-                DateFormat formatter = new SimpleDateFormat("HH:mm");
+
                 formatter.setTimeZone(TimeZone.getTimeZone("UTC+2"));
-                ArrayList<Date> dates = new ArrayList<>();
+                ArrayList<Date> sunDates = new ArrayList<>();
 
                 int i = 0;
 
                 Log.i(SET_SERVICE_SCHEDULE_TAG, "start month : " + startCal.get(Calendar.MONTH) +
                         " halfYear month " + halfYearCal.get(Calendar.MONTH));
 
-                while (i <= numOfSlots) {
-                    long startSessionLong = start;
+                while (i < sunNumOfSlots) {
+                    long startSessionLong = sundayStart;
                     long endSessionLong;
-                    Date date = new Date(start);
-                    dates.add(date);
+                    Date date = new Date(sundayStart);
+                    sunDates.add(date);
 //                    System.out.print("Start "+start);
 //                    System.out.print(" adding " + sessionsSpanDate.getTime());
-                    start += sessionsSpanDate.getTime();
-                    endSessionLong = start;
+                    sundayStart += sunSessionsSpanDate.getTime();
+                    endSessionLong = sundayStart;
 //                    System.out.print(" end " + endSessionLong + "\n");
 
 
-                    Sessions tempSession = new Sessions(startSessionLong , endSessionLong, true);
-                    System.out.println("tempSession start: " + tempSession.getStart() + " tempSession end: " + tempSession.getEnd());
+                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, true);
+                    //System.out.println("tempSession start: " + tempSession.getStart() + " tempSession end: " + tempSession.getEnd());
+                    System.out.println("tempSession start date: " + formatter1.format(tempSession.getStart()) +
+                            " tempSession end: date " + formatter1.format(tempSession.getEnd()));
+
                     sunDaySessions.add(tempSession);
                     i++;
 
@@ -494,27 +543,250 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                     //System.out.println("slot from: " + sloTime);
                 }
 //                System.out.println(" ");
-//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-//                for (Sessions s1:currentSession) {
-//                    System.out.println("Printing sessions : " +s1.getStart()+ " " + s1.getEnd());
-//
-//                }
+                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                for (Sessions s1 : sunDaySessions) {
+                    //System.out.println("Printing sessions : " + s1.getStart() + " " + s1.getEnd());
+                    System.out.println("start date: " + formatter1.format(s1.getStart()) +
+                            "  end date: " + formatter1.format(s1.getEnd()));
+
+                }
+            }
+            break;
 
 
-            case "Mon":
+            case "Mon": {
+                System.out.println("MONDAYYYYYYYYYYYYYYYYYYYYYYYY");
+                cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from2));
+                cal.set(Calendar.MINUTE, getMinutesFromEditText(from2));
+                long monStart = cal.getTimeInMillis();
+                cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(to2));
+                cal.set(Calendar.MINUTE, getMinutesFromEditText(to2));
 
-            case "Tue":
+                long monEnd = cal.getTimeInMillis();
+                Date monSessionsSpanDate = new Date(TimeUnit.MINUTES.toMillis(sessionSpan));
+                Date monWorkingHours = new Date(monEnd - monStart);
+                System.out.println(monWorkingHours.getTime());
+
+                int monNumOfSlots = (int) ((monWorkingHours.getTime() / (1000 * 60)) / sessionSpan);
+
+                formatter.setTimeZone(TimeZone.getTimeZone("UTC+2"));
+                ArrayList<Date> monDates = new ArrayList<>();
+                int i = 0;
+
+                while (i < monNumOfSlots) {
+                    long startSessionLong = monStart;
+                    long endSessionLong;
+                    Date date = new Date(monStart);
+                    monDates.add(date);
+//                    System.out.print("Start "+start);
+//                    System.out.print(" adding " + sessionsSpanDate.getTime());
+                    monStart += monSessionsSpanDate.getTime();
+                    endSessionLong = monStart;
+//                    System.out.print(" end " + endSessionLong + "\n");
+
+
+                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, true);
+                    //System.out.println("tempSession start: " + tempSession.getStart() + " tempSession end: " + tempSession.getEnd());
+                    System.out.println("tempSession start date: " + formatter1.format(tempSession.getStart()) +
+                            " tempSession end: date " + formatter1.format(tempSession.getEnd()));
+
+                    monDaySessions.add(tempSession);
+                    i++;
+
+//                    String sloTime = formatter.format(dates.get(i).getTime());
+//                    System.out.println(formatter1.format(new Date(date.getTime())));
+//                    System.out.println("long of time in mili " + date.getTime());
+                    //System.out.println("slot from: " + sloTime);
+                }
+//                System.out.println(" ");
+                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                for (Sessions s1 : monDaySessions) {
+                    //System.out.println("Printing sessions : " + s1.getStart() + " " + s1.getEnd());
+                    System.out.println("start date: " + formatter1.format(s1.getStart()) +
+                            "  end date: " + formatter1.format(s1.getEnd()));
+
+                }
+            }
+            break;
+            case "Tue": {
+                System.out.println("MONDAYYYYYYYYYYYYYYYYYYYYYYYY");
+                cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from2));
+                cal.set(Calendar.MINUTE, getMinutesFromEditText(from2));
+                long monStart = cal.getTimeInMillis();
+                cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(to2));
+                cal.set(Calendar.MINUTE, getMinutesFromEditText(to2));
+
+                long monEnd = cal.getTimeInMillis();
+                Date monSessionsSpanDate = new Date(TimeUnit.MINUTES.toMillis(sessionSpan));
+                Date monWorkingHours = new Date(monEnd - monStart);
+                System.out.println(monWorkingHours.getTime());
+
+                int monNumOfSlots = (int) ((monWorkingHours.getTime() / (1000 * 60)) / sessionSpan);
+
+                formatter.setTimeZone(TimeZone.getTimeZone("UTC+2"));
+                ArrayList<Date> monDates = new ArrayList<>();
+                i = 0;
+
+                while (i < monNumOfSlots) {
+                    long startSessionLong = monStart;
+                    long endSessionLong;
+                    Date date = new Date(monStart);
+                    monDates.add(date);
+//                    System.out.print("Start "+start);
+//                    System.out.print(" adding " + sessionsSpanDate.getTime());
+                    monStart += monSessionsSpanDate.getTime();
+                    endSessionLong = monStart;
+//                    System.out.print(" end " + endSessionLong + "\n");
+
+
+                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, true);
+                    //System.out.println("tempSession start: " + tempSession.getStart() + " tempSession end: " + tempSession.getEnd());
+                    System.out.println("tempSession start date: " + formatter1.format(tempSession.getStart()) +
+                            " tempSession end: date " + formatter1.format(tempSession.getEnd()));
+
+                    monDaySessions.add(tempSession);
+                    i++;
+
+//                    String sloTime = formatter.format(dates.get(i).getTime());
+//                    System.out.println(formatter1.format(new Date(date.getTime())));
+//                    System.out.println("long of time in mili " + date.getTime());
+                    //System.out.println("slot from: " + sloTime);
+                }
+//                System.out.println(" ");
+                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                for (Sessions s1 : monDaySessions) {
+                    //System.out.println("Printing sessions : " + s1.getStart() + " " + s1.getEnd());
+                    System.out.println("start date: " + formatter1.format(s1.getStart()) +
+                            "  end date: " + formatter1.format(s1.getEnd()));
+
+                }
+            }
 
             case "Wed":
+                System.out.println("TUEDAYYYYYYYYYYYYYYYYYYYYYYYY");
+                cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from3));
+                cal.set(Calendar.MINUTE, getMinutesFromEditText(from3));
+                long tueStart = cal.getTimeInMillis();
+                cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(to3));
+                cal.set(Calendar.MINUTE, getMinutesFromEditText(to3));
+
+                long tueEnd = cal.getTimeInMillis();
+                Date tueSessionsSpanDate = new Date(TimeUnit.MINUTES.toMillis(sessionSpan));
+                Date tueWorkingHours = new Date(tueEnd - tueStart);
+                System.out.println(tueWorkingHours.getTime());
+
+                int tueNumOfSlots = (int) ((tueWorkingHours.getTime() / (1000 * 60)) / sessionSpan);
+
+                formatter.setTimeZone(TimeZone.getTimeZone("UTC+2"));
+                ArrayList<Date> tueDates = new ArrayList<>();
+                i = 0;
+
+                while (i < tueNumOfSlots) {
+                    long startSessionLong = tueStart;
+                    long endSessionLong;
+                    Date date = new Date(tueStart);
+                    tueDates.add(date);
+//                    System.out.print("Start "+start);
+//                    System.out.print(" adding " + sessionsSpanDate.getTime());
+                    tueStart += tueSessionsSpanDate.getTime();
+                    endSessionLong = tueStart;
+//                    System.out.print(" end " + endSessionLong + "\n");
+
+
+                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, true);
+                    //System.out.println("tempSession start: " + tempSession.getStart() + " tempSession end: " + tempSession.getEnd());
+                    System.out.println("tempSession start date: " + formatter1.format(tempSession.getStart()) +
+                            " tempSession end: date " + formatter1.format(tempSession.getEnd()));
+
+                    tueDaySessions.add(tempSession);
+                    i++;
+
+//                    String sloTime = formatter.format(dates.get(i).getTime());
+//                    System.out.println(formatter1.format(new Date(date.getTime())));
+//                    System.out.println("long of time in mili " + date.getTime());
+                    //System.out.println("slot from: " + sloTime);
+                }
+//                System.out.println(" ");
+                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                for (Sessions s1 : tueDaySessions) {
+                    //System.out.println("Printing sessions : " + s1.getStart() + " " + s1.getEnd());
+                    System.out.println("start date: " + formatter1.format(s1.getStart()) +
+                            "  end date: " + formatter1.format(s1.getEnd()));
+                }
+
 
             case "Thu":
+                System.out.println("MONDAYYYYYYYYYYYYYYYYYYYYYYYY");
+                cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from2));
+                cal.set(Calendar.MINUTE, getMinutesFromEditText(from2));
+                long monStart = cal.getTimeInMillis();
+                cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(to2));
+                cal.set(Calendar.MINUTE, getMinutesFromEditText(to2));
+
+                long monEnd = cal.getTimeInMillis();
+                Date monSessionsSpanDate = new Date(TimeUnit.MINUTES.toMillis(sessionSpan));
+                Date monWorkingHours = new Date(monEnd - monStart);
+                System.out.println(monWorkingHours.getTime());
+
+                int monNumOfSlots = (int) ((monWorkingHours.getTime() / (1000 * 60)) / sessionSpan);
+
+                formatter.setTimeZone(TimeZone.getTimeZone("UTC+2"));
+                ArrayList<Date> monDates = new ArrayList<>();
+                i = 0;
+
+                while (i < monNumOfSlots) {
+                    long startSessionLong = monStart;
+                    long endSessionLong;
+                    Date date = new Date(monStart);
+                    monDates.add(date);
+//                    System.out.print("Start "+start);
+//                    System.out.print(" adding " + sessionsSpanDate.getTime());
+                    monStart += monSessionsSpanDate.getTime();
+                    endSessionLong = monStart;
+//                    System.out.print(" end " + endSessionLong + "\n");
+
+
+                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, true);
+                    //System.out.println("tempSession start: " + tempSession.getStart() + " tempSession end: " + tempSession.getEnd());
+                    System.out.println("tempSession start date: " + formatter1.format(tempSession.getStart()) +
+                            " tempSession end: date " + formatter1.format(tempSession.getEnd()));
+
+                    monDaySessions.add(tempSession);
+                    i++;
+
+//                    String sloTime = formatter.format(dates.get(i).getTime());
+//                    System.out.println(formatter1.format(new Date(date.getTime())));
+//                    System.out.println("long of time in mili " + date.getTime());
+                    //System.out.println("slot from: " + sloTime);
+                }
+//                System.out.println(" ");
+                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                for (Sessions s1 : monDaySessions) {
+                    //System.out.println("Printing sessions : " + s1.getStart() + " " + s1.getEnd());
+                    System.out.println("start date: " + formatter1.format(s1.getStart()) +
+                            "  end date: " + formatter1.format(s1.getEnd()));
+
+                }
+                break;
+
 
             case "Fri":
 
+
             case "Sat":
+
+
+            default:
+                break;
 
         }
     }
+
 
 
     private boolean getToggleState(Switch sw) {
