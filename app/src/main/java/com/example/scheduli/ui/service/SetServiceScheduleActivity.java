@@ -467,7 +467,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                     Date date = new Date(start);
                     dates.add(date);
                     start += sessionsSpanDate.getTime();
-                    String sloTime = formatter.format(dates.get(i).getTime());
+                    //String sloTime = formatter.format(dates.get(i).getTime());
                     System.out.println(formatter1.format(new Date(date.getTime())));
                     System.out.println("long of time in mili " + date.getTime());
 
