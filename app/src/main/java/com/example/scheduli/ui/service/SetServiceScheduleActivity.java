@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.util.ArrayMap;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +21,6 @@ import com.example.scheduli.data.Service;
 import com.example.scheduli.data.WorkDay;
 
 import java.text.DateFormat;
-import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,8 +45,17 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 
     private Map<String, WorkDay> workingDays = new HashMap<>(); // key is of type DayOfWeek enum
     private Map<String, ArrayList<Sessions>> dailySessions; // key is a date (day/month/year).
-    private ArrayList<Sessions> currentSession;
+    private ArrayList<Sessions> currentSession = new ArrayList<>();
     SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+
+    private ArrayList<Sessions> sunDaySessions = new ArrayList<>();
+    private ArrayList<Sessions> monDaySessions = new ArrayList<>();
+    private ArrayList<Sessions> tueDaySessions = new ArrayList<>();
+    private ArrayList<Sessions> wedDaySessions = new ArrayList<>();
+    private ArrayList<Sessions> thuDaySessions = new ArrayList<>();
+    private ArrayList<Sessions> friDaySessions = new ArrayList<>();
+    private ArrayList<Sessions> satDaySessions = new ArrayList<>();
+
 
 
     private TimeValidator timeValidator = new TimeValidator();
@@ -116,10 +123,12 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 
 
         if (isFormValid()) {
+            int i = 0;
             for (Switch s : switchesOnToggle) {
-
-                createDailySessions(s);
                 createWorkingDays(s);
+                createDailySessions(s);
+                i++;
+
             }
         }
     }
@@ -463,17 +472,33 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                         " halfYear month " + halfYearCal.get(Calendar.MONTH));
 
                 while (i <= numOfSlots) {
-
+                    long startSessionLong = start;
+                    long endSessionLong;
                     Date date = new Date(start);
                     dates.add(date);
+//                    System.out.print("Start "+start);
+//                    System.out.print(" adding " + sessionsSpanDate.getTime());
                     start += sessionsSpanDate.getTime();
-                    //String sloTime = formatter.format(dates.get(i).getTime());
-                    System.out.println(formatter1.format(new Date(date.getTime())));
-                    System.out.println("long of time in mili " + date.getTime());
+                    endSessionLong = start;
+//                    System.out.print(" end " + endSessionLong + "\n");
 
+
+                    Sessions tempSession = new Sessions(startSessionLong , endSessionLong, true);
+                    System.out.println("tempSession start: " + tempSession.getStart() + " tempSession end: " + tempSession.getEnd());
+                    sunDaySessions.add(tempSession);
                     i++;
+
+//                    String sloTime = formatter.format(dates.get(i).getTime());
+//                    System.out.println(formatter1.format(new Date(date.getTime())));
+//                    System.out.println("long of time in mili " + date.getTime());
                     //System.out.println("slot from: " + sloTime);
                 }
+//                System.out.println(" ");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                for (Sessions s1:currentSession) {
+//                    System.out.println("Printing sessions : " +s1.getStart()+ " " + s1.getEnd());
+//
+//                }
 
 
             case "Mon":
@@ -489,7 +514,6 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
             case "Sat":
 
         }
-
     }
 
 
