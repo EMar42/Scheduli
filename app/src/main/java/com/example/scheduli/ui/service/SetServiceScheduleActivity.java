@@ -3,15 +3,15 @@ package com.example.scheduli.ui.service;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+
+import android.util.ArrayMap;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -26,7 +26,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 public class SetServiceScheduleActivity extends AppCompatActivity {
 
@@ -39,10 +42,12 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 
     private Service service;
     private ArrayList<Switch> switchesOnToggle;
-    private Calendar calendar;
+    private Calendar calendar = Calendar.getInstance();
 
-    private Map<String, WorkDay> workingDays; // key is of type DayOfWeek enum
+    private Map<String, WorkDay> workingDays = new HashMap<>(); // key is of type DayOfWeek enum
     private Map<String, ArrayList<Sessions>> dailySessions; // key is a date (day/month/year).
+    private ArrayList<Sessions> currentSession;
+    SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
 
     private TimeValidator timeValidator = new TimeValidator();
@@ -109,21 +114,89 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
         getMinutesFromEditText(from1);
 
 
-
         if (isFormValid()) {
             for (Switch s : switchesOnToggle) {
 
-//                createTimeSpans(s);
-//                createWorkingDays(s);
+                createDailySessions(s);
+                createWorkingDays(s);
             }
         }
     }
 
+
     private void createWorkingDays(Switch s) {
+        Calendar cal1, cal2;
+
         switch (s.getText().toString()) {
             case "Sun":
-                System.out.println("This is sunday on create working days method");
+                Date d = Calendar.getInstance().getTime();
+                cal1 = Calendar.getInstance();
+                cal2 = Calendar.getInstance();
+                cal1.set(Calendar.HOUR, getHoursFromEditText(from1));
+                cal1.set(Calendar.MINUTE, getMinutesFromEditText(from1));
+                cal2.set(Calendar.HOUR, getHoursFromEditText(to1));
+                cal2.set(Calendar.MINUTE, getMinutesFromEditText(to1));
+                workingDays.put("1", new WorkDay(cal1.getTimeInMillis(), cal2.getTimeInMillis()));
+                break;
+            case "Mon":
+                cal1 = Calendar.getInstance();
+                cal2 = Calendar.getInstance();
+                cal1.set(Calendar.HOUR, getHoursFromEditText(from2));
+                cal1.set(Calendar.MINUTE, getMinutesFromEditText(from2));
+                cal2.set(Calendar.HOUR, getHoursFromEditText(to2));
+                cal2.set(Calendar.MINUTE, getMinutesFromEditText(to2));
+                workingDays.put("2", new WorkDay(cal1.getTimeInMillis(), cal2.getTimeInMillis()));
+                break;
 
+            case "Tue":
+                cal1 = Calendar.getInstance();
+                cal2 = Calendar.getInstance();
+                cal1.set(Calendar.HOUR, getHoursFromEditText(from3));
+                cal1.set(Calendar.MINUTE, getMinutesFromEditText(from3));
+                cal2.set(Calendar.HOUR, getHoursFromEditText(to3));
+                cal2.set(Calendar.MINUTE, getMinutesFromEditText(to3));
+                workingDays.put("3", new WorkDay(cal1.getTimeInMillis(), cal2.getTimeInMillis()));
+                break;
+
+            case "Wed":
+                cal1 = Calendar.getInstance();
+                cal2 = Calendar.getInstance();
+                cal1.set(Calendar.HOUR, getHoursFromEditText(from4));
+                cal1.set(Calendar.MINUTE, getMinutesFromEditText(from4));
+                cal2.set(Calendar.HOUR, getHoursFromEditText(to4));
+                cal2.set(Calendar.MINUTE, getMinutesFromEditText(to4));
+                workingDays.put("4", new WorkDay(cal1.getTimeInMillis(), cal2.getTimeInMillis()));
+                break;
+
+            case "Thu":
+                cal1 = Calendar.getInstance();
+                cal2 = Calendar.getInstance();
+                cal1.set(Calendar.HOUR, getHoursFromEditText(from5));
+                cal1.set(Calendar.MINUTE, getMinutesFromEditText(from5));
+                cal2.set(Calendar.HOUR, getHoursFromEditText(to5));
+                cal2.set(Calendar.MINUTE, getMinutesFromEditText(to5));
+                workingDays.put("5", new WorkDay(cal1.getTimeInMillis(), cal2.getTimeInMillis()));
+                break;
+
+            case "Fri":
+                cal1 = Calendar.getInstance();
+                cal2 = Calendar.getInstance();
+                cal1.set(Calendar.HOUR, getHoursFromEditText(from6));
+                cal1.set(Calendar.MINUTE, getMinutesFromEditText(from6));
+                cal2.set(Calendar.HOUR, getHoursFromEditText(to6));
+                cal2.set(Calendar.MINUTE, getMinutesFromEditText(to6));
+                workingDays.put("6", new WorkDay(cal1.getTimeInMillis(), cal2.getTimeInMillis()));
+                break;
+
+            case "Sat":
+                cal1 = Calendar.getInstance();
+                cal2 = Calendar.getInstance();
+                cal1.set(Calendar.HOUR, getHoursFromEditText(from7));
+                cal1.set(Calendar.MINUTE, getMinutesFromEditText(from7));
+                cal2.set(Calendar.HOUR, getHoursFromEditText(to7));
+                cal2.set(Calendar.MINUTE, getMinutesFromEditText(to7));
+                workingDays.put("7", new WorkDay(cal1.getTimeInMillis(), cal2.getTimeInMillis()));
+                break;
         }
     }
 
@@ -136,10 +209,10 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 
         try {
             d1 = format.parse(from);
-            Log.i(SET_SERVICE_SCHEDULE_TAG, "This is D1 : " + d1);
+//            Log.i(SET_SERVICE_SCHEDULE_TAG, "This is D1 : " + d1);
 
             d2 = format.parse(to);
-            Log.i(SET_SERVICE_SCHEDULE_TAG, "This is D2 : " + d2);
+//            Log.i(SET_SERVICE_SCHEDULE_TAG, "This is D2 : " + d2);
         } catch (Exception e) {
             System.err.println(e);
         }
@@ -148,17 +221,18 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
         long diffMinutes = diff / (60 * 1000) % 60;
         long diffHours = diff / (60 * 60 * 1000) % 24;
 
-        Log.i(SET_SERVICE_SCHEDULE_TAG, "Hours : " + diffHours + " Minutes : " + diffMinutes);
+//        Log.i(SET_SERVICE_SCHEDULE_TAG, "Hours : " + diffHours + " Minutes : " + diffMinutes);
 
         long result = diffHours * 60 + diffMinutes;
-        Log.i(SET_SERVICE_SCHEDULE_TAG, "This is diff : " + diff);
-        Log.i(SET_SERVICE_SCHEDULE_TAG, "This is result : " + result);
-        Log.i(SET_SERVICE_SCHEDULE_TAG, "resualt : " + result + " duration : " + service.getSingleSessionInMinutes());
+//        Log.i(SET_SERVICE_SCHEDULE_TAG, "This is diff : " + diff);
+//        Log.i(SET_SERVICE_SCHEDULE_TAG, "This is result : " + result);
+//        Log.i(SET_SERVICE_SCHEDULE_TAG, "resualt : " + result + " duration : " + service.getSingleSessionInMinutes());
         if (result >= duration) {
             return true;
         }
         return false;
     }
+
 
     private int getMinutesFromEditText(EditText et) {
 
@@ -175,16 +249,17 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
         return (int) minutes;
     }
 
+
     private int getHoursFromEditText(EditText et) {
         Date d = null;
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+
         try {
             d = format.parse(et.getText().toString());
-
         } catch (Exception e) {
             System.err.println(e);
         }
-        long hours = d.getTime() / (60 * 60 * 1000) % 24;
+        long hours = (d.getTime() / (60 * 60 * 1000)) % 24;
 
         return (int) hours;
     }
@@ -351,15 +426,51 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
     }
 
 
-    public void createTimeSpans(Switch s) {
+    public void createDailySessions(Switch s) {
 
-        System.out.println("checking gettext to string " + s.getText().toString());
-        calendar = Calendar.getInstance();
+        int sessionSpan = service.getSingleSessionInMinutes();
+        SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        Calendar halfYearCal = Calendar.getInstance();
+        halfYearCal.add(Calendar.MONTH, 6);
+        Calendar startCal = Calendar.getInstance();
+
+        Calendar cal = Calendar.getInstance();
 
 
         switch (s.getText().toString()) {
             case "Sun":
-                System.out.println("This is sunday on create Time Spans");
+                cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from1));
+                cal.set(Calendar.MINUTE, getMinutesFromEditText(from1));
+                long start = cal.getTimeInMillis();
+                cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(to1));
+                cal.set(Calendar.MINUTE, getMinutesFromEditText(to1));
+
+                long end = cal.getTimeInMillis();
+                Date sessionsSpanDate = new Date(TimeUnit.MINUTES.toMillis(sessionSpan));
+                Date workingHours = new Date(end - start);
+                System.out.println(workingHours.getTime());
+
+                int numOfSlots = (int) ((workingHours.getTime() / (1000 * 60)) / sessionSpan);
+
+                DateFormat formatter = new SimpleDateFormat("HH:mm");
+                formatter.setTimeZone(TimeZone.getTimeZone("UTC+2"));
+                ArrayList<Date> dates = new ArrayList<>();
+
+                int i = 0;
+
+                Log.i(SET_SERVICE_SCHEDULE_TAG, "start month : " + startCal.get(Calendar.MONTH) +
+                        " halfYear month " + halfYearCal.get(Calendar.MONTH));
+
+                while (i <= numOfSlots) {
+
+                    Date date = new Date(start);
+                    dates.add(date);
+                    start += sessionsSpanDate.getTime();
+                    String sloTime = formatter.format(dates.get(i).getTime());
+
+                    i++;
+                    System.out.println("slot from: " + sloTime);
+                }
 
 
             case "Mon":
