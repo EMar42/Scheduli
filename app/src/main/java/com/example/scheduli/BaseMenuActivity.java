@@ -48,6 +48,7 @@ public class BaseMenuActivity extends AppCompatActivity {
         returnToLoginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         UserDataRepository.getInstance().clearEventsOfAppointments();
         startActivity(returnToLoginIntent);
+        finish();
     }
 
     private void startAppSettings() {

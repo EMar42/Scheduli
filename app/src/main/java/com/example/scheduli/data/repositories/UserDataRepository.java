@@ -210,4 +210,52 @@ public class UserDataRepository {
             ProviderDataRepository.getInstance().changeSessionStatusFromByUser(appointment.getProviderUid(), appointment);
         }
     }
+
+    // This deletes an appointment from a user if the start time is not after the current date time of current calendar
+    // Just pass user uid , the provider uid, and the start time for the user.
+    public void deleteAppointmentFromUser(final String userUid, final String providerUid, final long start) {
+        Calendar current = Calendar.getInstance();
+        Calendar startDate = Calendar.getInstance();
+        System.out.println(current.getTimeInMillis());
+        startDate.setTimeInMillis(start);
+        final DataBaseCallBackOperation callBackOperation = new DataBaseCallBackOperation() {
+            @Override
+            public void callBack(Object object) {
+                ArrayList<Appointment> appointments = (ArrayList<Appointment>) object;
+                ArrayList<Appointment> editedAppointments = new ArrayList<>();
+
+                for (Appointment appointment : appointments) {
+                    if (!(appointment.getProviderUid().equals(providerUid) && appointment.getStart() == start)) {
+                        editedAppointments.add(appointment);
+                    }
+                }
+
+                UserDataRepository.getInstance().addAppointmentsListToUser(userUid, editedAppointments);
+            }
+        };
+
+        if (current.before(startDate)) {
+            this.dataBaseReference.child(userUid).child("appointments").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Log.i(TAG_USER_REPOSITORY, "Getting user " + userUid + " appointments for updating");
+                    ArrayList<Appointment> appointments = new ArrayList<>();
+                    Iterable<DataSnapshot> appoinmentIndex = dataSnapshot.getChildren();
+                    for (DataSnapshot appointmentData : appoinmentIndex) {
+                        Appointment appointment = appointmentData.getValue(Appointment.class);
+                        appointments.add(appointment);
+                    }
+
+                    callBackOperation.callBack(appointments);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e(TAG_USER_REPOSITORY, "Failed with appointment updating data base error " + databaseError);
+                }
+            });
+        }
+
+
+    }
 }
