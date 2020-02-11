@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -90,10 +91,10 @@ public class ProviderDataRepository {
     }
 
 
-    public void setServices(String uid, Service service) {
+    public void setServices(String uid, ArrayList<Service> service) {
 
         dataBaseReference.child(uid).child("services").setValue(service);
-        Log.d(TAG_PROVIDER_REPOSITORY, "Services updated. " + service.getName());
+        Log.d(TAG_PROVIDER_REPOSITORY, "Services updated. ");
 
 
     }
