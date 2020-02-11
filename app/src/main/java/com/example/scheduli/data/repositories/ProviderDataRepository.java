@@ -19,7 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -91,10 +90,10 @@ public class ProviderDataRepository {
     }
 
 
-    public void setServices(String uid, ArrayList<Service> service) {
+    public void setProviderServices(String uid, ArrayList<Service> services) {
 
-        dataBaseReference.child(uid).child("services").setValue(service);
-        Log.d(TAG_PROVIDER_REPOSITORY, "Services updated. ");
+        dataBaseReference.child(uid).child("services").setValue(services);
+        Log.d(TAG_PROVIDER_REPOSITORY, "Services updated. " + uid);
 
 
     }
@@ -133,6 +132,46 @@ public class ProviderDataRepository {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e(TAG_PROVIDER_REPOSITORY, "Data base error " + databaseError.getMessage());
+            }
+        });
+    }
+
+    // insert a new Service to a provider to use.
+    public void insertServiceToProvider(final String providerUid, final Service newService) {
+        final DataBaseCallBackOperation insertService = new DataBaseCallBackOperation() {
+            @Override
+            public void callBack(Object object) {
+                ArrayList<Service> services;
+
+                if (object != null) {
+                    services = (ArrayList<Service>) object;
+                } else {
+                    services = new ArrayList<>();
+                }
+
+                services.add(newService);
+                ProviderDataRepository.getInstance().setProviderServices(providerUid, services);
+            }
+        };
+
+        this.dataBaseReference.child(providerUid).child("services").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<Service> services = new ArrayList<>();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Service service = snapshot.getValue(Service.class);
+                    if (service != null) {
+                        services.add(service);
+                    }
+                }
+
+                insertService.callBack(services);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG_PROVIDER_REPOSITORY, "Problem with database operation on service list fetch " + databaseError);
             }
         });
     }
