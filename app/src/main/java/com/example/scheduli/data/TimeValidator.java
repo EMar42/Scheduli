@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TimeValidator {
     private String dateFormat;
@@ -13,6 +15,8 @@ public class TimeValidator {
     }
 
     public boolean isValid(String dateStr) {
+        Pattern p = Pattern.compile(".*([01]?[0-9]|2[0-3]):[0-5][0-9].*");
+        Matcher m = p.matcher(dateStr);
         DateFormat sdf = new SimpleDateFormat(this.dateFormat);
         sdf.setLenient(false);
         try {
@@ -20,7 +24,11 @@ public class TimeValidator {
         } catch (ParseException e) {
             return false;
         }
-        return true;
+        if (m.matches()){
+            return true;
+        }
+        else
+            return false;
     }
 
     public boolean compareDates(String d1, String d2) {
