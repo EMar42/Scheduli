@@ -126,7 +126,7 @@
     <string name="add_new_service_instructions">Please fill the form</string>
     <string name="service_duration">Service Duration</string>
     <string name="set_your_schedule">Set your schedule</string>
-    <string name="set_schedule_instruc">Toggle On the days you want work on and select the start time and the end time for the current day from 00:00 to 00:00</string>
+    <string name="set_schedule_instruc">Toggle On the days you want work on and select the start time and the end time for the current day from 00:00 to 23:59</string>
     <string name="day_sunday">Sun</string>
     <string name="day_monday">Mon</string>
     <string name="day_tuesday">Tue</string>
