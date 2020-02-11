@@ -86,7 +86,8 @@ public class AddServiceActivity extends AppCompatActivity {
         Log.i(TAG_ADD_SERVICE, "creating new service");
         displayErrorToUserIfThereIsOne();
 
-        if (!checkifInputValid()) {
+        Log.i(TAG_ADD_SERVICE, "" + checkIfInputValid());
+        if (checkIfInputValid()) {
             String name = serviceName.getText().toString();
             float cost = Float.parseFloat(serviceCost.getText().toString());
             int minutes = Integer.parseInt(serviceDuration.getText().toString());
@@ -102,8 +103,8 @@ public class AddServiceActivity extends AppCompatActivity {
 
     }
 
-    private boolean checkifInputValid() {
-        return checkIfEmpty(serviceCost) && checkIfEmpty(serviceDuration) && checkIfEmpty(serviceName) && checkIfNumberLegal(serviceCost) && checkIfNumberLegal(serviceDuration);
+    private boolean checkIfInputValid() {
+        return !checkIfEmpty(serviceCost) && !checkIfEmpty(serviceDuration) && !checkIfEmpty(serviceName) && checkIfNumberLegal(serviceCost) && checkIfNumberLegal(serviceDuration);
     }
 
     private boolean checkIfEmpty(EditText editText) {
@@ -143,17 +144,22 @@ public class AddServiceActivity extends AppCompatActivity {
 
         intent = getIntent();
         service = intent.getParcelableExtra("service");
-        if (service.getName() != null) { // not a strong condition
-            editMode = true;
-            editExistingService();
+        try {
+            if (service.getName() != null) { // not a strong condition
+                editMode = true;
+                editExistingService();
+            }
+        }
+        catch (Exception e){
+            System.err.println(e);
         }
 
         Log.i(TAG_ADD_SERVICE, "finished initView() ");
     }
 
     private void editExistingService() {
-        TextView header = (TextView) findViewById(R.id.tv_add_new_service_headline);
-        TextView intruct = (TextView) findViewById(R.id.tv_instruc_addservice);
+        TextView header = findViewById(R.id.tv_add_new_service_headline);
+        TextView intruct = findViewById(R.id.tv_instruc_addservice);
         header.setText("Edit your service");
         intruct.setText("Please edit the requested rows");
 
