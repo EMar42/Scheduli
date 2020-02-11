@@ -86,7 +86,6 @@ public class AddServiceActivity extends AppCompatActivity {
         Log.i(TAG_ADD_SERVICE, "creating new service");
         displayErrorToUserIfThereIsOne();
 
-        Log.i(TAG_ADD_SERVICE, "" + checkIfInputValid());
         if (checkIfInputValid()) {
             String name = serviceName.getText().toString();
             float cost = Float.parseFloat(serviceCost.getText().toString());
@@ -94,12 +93,9 @@ public class AddServiceActivity extends AppCompatActivity {
             Service service = new Service(name, cost, minutes);
 
             Intent intent = new Intent(getBaseContext(), SetServiceScheduleActivity.class);
-            intent.putExtra("serviceToFill", service);
+            intent.putExtra("service", service);
             startActivity(intent);
         }
-
-
-        Log.i(TAG_ADD_SERVICE, "Pass info to schedule service successfully");
 
     }
 
