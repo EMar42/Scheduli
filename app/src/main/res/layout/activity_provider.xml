@@ -7,44 +7,51 @@
     tools:context=".ui.provider.ProviderActivity">
 
 
+
+
     <ImageView
-        android:id="@+id/forgot_pass_image_view"
+        android:id="@+id/im_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
+        android:layout_marginTop="20dp"
         android:contentDescription="@string/app_icon_description"
         android:src="@drawable/ic_scheduli_app_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
 
     <TextView
-        android:id="@+id/booking_frg_header"
-        android:layout_width="328dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="sans-serif-black"
-        android:text="Book Appointment"
-        android:textAlignment="textStart"
-        android:textAllCaps="false"
-        android:textColor="@android:color/background_dark"
-        android:textSize="36sp"
+        android:id="@+id/tv_add_new_service_headline"
+        style="@style/headLine"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/my_services"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/im_logo"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_main_toolbar" />
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/set_appointment_time_act_chosen_service"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:fontFamily="sans-serif-medium"
-        android:text="Option choose"
+        android:layout_marginTop="90dp"
+        android:text="Please select the relevant service or select on Plus service to create a new service"
+        android:textAlignment="center"
+
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/booking_frg_header" />
+        app:layout_constraintBottom_toBottomOf="@+id/im_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_add_new_service_headline" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -65,7 +72,7 @@
             android:layout_height="match_parent"
             android:layout_marginVertical="10dp"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="24dp"
             android:clipToPadding="true"
@@ -79,23 +86,11 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn1"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="20dp"
-        android:background="@color/colorPrimaryButton"
-        android:text="NEXT"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/btn2"
-        android:layout_width="120dp"
+        android:id="@+id/btn_back_addservice"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/ic_btn_back"
         android:text="BACK"

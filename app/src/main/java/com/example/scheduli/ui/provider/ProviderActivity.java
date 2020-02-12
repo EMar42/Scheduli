@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 
 import com.example.scheduli.BaseMenuActivity;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 
 public class ProviderActivity extends BaseMenuActivity {
 
+    private static final String TAG_PROVIDER_ACTIVITY = "Provider Activity";
 
     private RecyclerView.LayoutManager mLayout;
     private ServiceAdapter mAdapter;
@@ -40,14 +42,12 @@ public class ProviderActivity extends BaseMenuActivity {
         mAdapter.setOnItemClickListener(new ServiceAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-
-                if (position == services.size()-1){
+                if (position == services.size() - 1 ) {
                     Intent intent = new Intent(getBaseContext(), AddServiceActivity.class);
                     startActivity(intent);
-                }
-                else{
+                } else {
                     Intent intent = new Intent(getBaseContext(), AddServiceActivity.class);
-                    intent.putExtra("service",services.get(position));
+                    intent.putExtra("service", services.get(position));
                     startActivity(intent);
                 }
             }
@@ -60,16 +60,22 @@ public class ProviderActivity extends BaseMenuActivity {
         Intent intent = getIntent();
         provider = intent.getParcelableExtra("provider");
         services = new ArrayList<>();
-        services = provider.getServices();
-        services.add(new Service());
-        mLayout = new GridLayoutManager(this,2);
+        try {
+            services = provider.getServices();
+        }catch (Exception e){
+            Log.i(TAG_PROVIDER_ACTIVITY, "no service currently");
+        }
+
+        if (services == null || services.size() == 0) {
+            services = new ArrayList<>();
+            services.add(new Service());
+        }
+
+        mLayout = new GridLayoutManager(this, 1);
         mAdapter = new ServiceAdapter(this, services);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLayout);
         recyclerView.setAdapter(mAdapter);
-
-
-
     }
 
 }

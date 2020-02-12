@@ -21,6 +21,7 @@ import com.example.scheduli.data.TimeValidator;
 import com.example.scheduli.data.Service;
 import com.example.scheduli.data.WorkDay;
 import com.example.scheduli.data.repositories.ProviderDataRepository;
+import com.example.scheduli.ui.provider.ProviderActivity;
 import com.example.scheduli.utils.UsersUtils;
 
 import java.sql.SQLOutput;
@@ -42,11 +43,9 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
     private Button singupButton, backButton;
     private Switch sw1, sw2, sw3, sw4, sw5, sw6, sw7;
     private boolean providerHaveScheduledActivity = false;
-    private int serviceDuration;
 
     private Service service;
     private ArrayList<Switch> switchesOnToggle;
-    private Calendar calendar = Calendar.getInstance();
 
     private Map<String, WorkDay> workingDays = new HashMap<>(); // key is of type DayOfWeek enum
     private Map<String, ArrayList<Sessions>> dailySessions = new HashMap<>(); // key is a date (day/month/year).
@@ -133,6 +132,8 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 
             service.setDailySessions(dailySessions);
             service.setWorkingDays(workingDays);
+            Intent intent = new Intent(getBaseContext(), ProviderActivity.class);
+            startActivity(intent);
 
 
             ProviderDataRepository.getInstance().insertServiceToProvider(UsersUtils.getInstance().getCurrentUserUid(), service);
@@ -456,7 +457,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                 startCalSession.add(Calendar.WEEK_OF_MONTH, i);
                 endCalSession.add(Calendar.WEEK_OF_MONTH, i);
                 Sessions tempSessions = new Sessions(startCalSession.getTimeInMillis(), endCalSession.getTimeInMillis(),
-                        true);
+                        "noUser",true);
                 tempDailySessions.add(tempSessions);
             }
 
@@ -466,8 +467,6 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
             startCal.add(Calendar.WEEK_OF_MONTH, 1);
             i++;
         }
-
-
     }
 
 
@@ -513,7 +512,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                     endSessionLong = sundayStart;
 
 
-                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, true);
+                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, "noUser" , true);
                     tempArrayList.add(tempSession);
 
                     i++;
@@ -554,7 +553,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                     monDates.add(date);
                     mondayStart += monSessionsSpanDate.getTime();
                     endSessionLong = mondayStart;
-                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, true);
+                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, "noUser" , true);
                     tempArrayList.add(tempSession);
                     i++;
                 }
@@ -595,7 +594,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                     tueDates.add(date);
                     tuedayStart += tueSessionsSpanDate.getTime();
                     endSessionLong = tuedayStart;
-                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, true);
+                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, "noUser" , true);
                     tempArrayList.add(tempSession);
                     i++;
                 }
@@ -635,7 +634,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                     wedDates.add(date);
                     weddayStart += wedSessionsSpanDate.getTime();
                     endSessionLong = weddayStart;
-                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, true);
+                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, "noUser", true);
                     tempArrayList.add(tempSession);
                     i++;
                 }
@@ -675,7 +674,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                     thuDates.add(date);
                     thudayStart += thuSessionsSpanDate.getTime();
                     endSessionLong = thudayStart;
-                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, true);
+                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, "noUser" , true);
                     tempArrayList.add(tempSession);
                     i++;
                 }
@@ -713,7 +712,8 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                     friDates.add(date);
                     fridayStart += friSessionsSpanDate.getTime();
                     endSessionLong = fridayStart;
-                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, true);
+                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, "noUser"
+                            , true);
                     tempArrayList.add(tempSession);
                     i++;
                 }
@@ -751,7 +751,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                     satDates.add(date);
                     satdayStart += satSessionsSpanDate.getTime();
                     endSessionLong = satdayStart;
-                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, true);
+                    Sessions tempSession = new Sessions(startSessionLong, endSessionLong, "noUser" , true);
                     tempArrayList.add(tempSession);
                     i++;
                 }
@@ -857,7 +857,6 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
         formatter1.setTimeZone(TimeZone.getTimeZone("UTC+2"));
         Intent intent = getIntent();
         service = intent.getParcelableExtra("service");
-        serviceDuration = service.getSingleSessionInMinutes();
         from1 = findViewById(R.id.ed_from_sunday);
         from2 = findViewById(R.id.ed_from_monday);
         from3 = findViewById(R.id.ed_from_tuesday);

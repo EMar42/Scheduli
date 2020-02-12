@@ -15,13 +15,15 @@ import android.widget.TextView;
 
 import com.example.scheduli.R;
 import com.example.scheduli.data.Service;
+import com.example.scheduli.data.repositories.ProviderDataRepository;
 import com.example.scheduli.ui.provider.ProviderActivity;
 
 public class AddServiceActivity extends AppCompatActivity {
 
     private static final String TAG_ADD_SERVICE = "ADD_SERVICE";
+    private TextView serviceHeadLine;
     private EditText serviceName, serviceCost, serviceDuration;
-    private Button serviceContinueButton, serviceBackButton;
+    private Button serviceContinueButton, serviceBackButton, deleteServiceButton;
     private Service service;
     private Intent intent;
     private boolean editMode = false;
@@ -38,6 +40,7 @@ public class AddServiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (editMode) {
+                    serviceHeadLine.setText("Edit Service");
                     service.setName(String.valueOf(serviceName.getText()));
                     service.setSingleSessionInMinutes(Integer.parseInt(serviceDuration.getText().toString()));
                     service.setCost(Float.parseFloat(serviceCost.getText().toString()));
@@ -54,6 +57,13 @@ public class AddServiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 goBackToServices();
+            }
+        });
+
+        deleteServiceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: delete service method
             }
         });
     }
@@ -136,7 +146,9 @@ public class AddServiceActivity extends AppCompatActivity {
         serviceCost = findViewById(R.id.ed_service_cost);
         serviceDuration = findViewById(R.id.et_service_duration);
         serviceContinueButton = findViewById(R.id.btn_continue_to_schedule);
+        serviceHeadLine = findViewById(R.id.tv_add_new_service_headline);
         serviceBackButton = findViewById(R.id.btn_back_service);
+        deleteServiceButton = findViewById(R.id.btn_delete_service);
 
         intent = getIntent();
         service = intent.getParcelableExtra("service");
@@ -145,8 +157,7 @@ public class AddServiceActivity extends AppCompatActivity {
                 editMode = true;
                 editExistingService();
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.err.println(e);
         }
 

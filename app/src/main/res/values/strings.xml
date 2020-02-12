@@ -138,6 +138,8 @@
     <string name="to">To</string>
     <string name="midnight_time">00:00</string>
     <string name="continue_to_set_service_schedule">Continue To Schedule</string>
+    <string name="my_services">My Services</string>
+    <string name="delete">Delete Service</string>
 
     //Settings
     <array name="settingsLimitValues">

@@ -57,8 +57,6 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
             public void onClick(View v) {
                 runActivity(singUpNewProvider());
 
-                Intent intent = new Intent(getBaseContext(), ProviderSingUpActivity.class);
-                startActivity(intent);
             }
         });
 
@@ -81,24 +79,11 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
     }
 
 
-
-    private void initView() {
-        Log.i(TAG_PROVIDER_SINGUP, "initView()");
-        providerCompanyName = findViewById(R.id.ed_provider_company_name);
-        providerProfession = findViewById(R.id.ed_provider_profession);
-        providerPhoneNumber = findViewById(R.id.ed_provider_phone_number);
-        providerAddress = findViewById(R.id.ed_provider_address);
-        providerProfilePicture = findViewById(R.id.im_provider_pic);
-        singUpProviderButton = findViewById(R.id.btn_sign_up_create_provider);
-        backToProfileButton = findViewById(R.id.btn_return_profile_screen);
-        Log.i(TAG_PROVIDER_SINGUP, "finished initView() ");
-    }
-
     private boolean singUpNewProvider() {
         Log.i(TAG_PROVIDER_SINGUP, "singUpNewProvider()");
         displayErrorToUserIfThereIsOne();
 
-        if (!checkIfInputValid()) {
+        if (checkIfInputValid()) {
             final String companyName = providerCompanyName.getText().toString();
             final String profession = providerProfession.getText().toString();
             final String phone = providerPhoneNumber.getText().toString();
@@ -117,14 +102,16 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
         return false;
     }
 
+
     private void runActivity(boolean singUpNewProvider) {
         if (singUpNewProvider) {
             Intent intent = new Intent(getBaseContext(), ProviderActivity.class);
             startActivity(intent);
         } else {
-            Toast.makeText(getBaseContext(),"Error occurred, Contact support team",Toast.LENGTH_LONG);
+            Log.i(TAG_PROVIDER_SINGUP, "User input Error");
         }
     }
+
 
     private void backToProfile() {
         Log.i(TAG_PROVIDER_SINGUP, "backToProfile() ");
@@ -151,8 +138,9 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
         }
     }
 
+
     private boolean checkIfInputValid() {
-        return checkIfEmpty(providerCompanyName) && checkIfEmpty(providerProfession) && checkIfEmpty(providerPhoneNumber) && !isPhoneValid(providerPhoneNumber.getText().toString()) && checkIfEmpty(providerAddress);
+        return !checkIfEmpty(providerCompanyName) && !checkIfEmpty(providerProfession) && !checkIfEmpty(providerPhoneNumber) && isPhoneValid(providerPhoneNumber.getText().toString()) && !checkIfEmpty(providerAddress);
     }
 
     private void displayErrorToUserIfThereIsOne() {
@@ -164,8 +152,21 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
             providerAddress.setError("You must add Your Business Address");
         if (checkIfEmpty(providerPhoneNumber))
             providerPhoneNumber.setError("You must fill Phone Number");
-        else if (isPhoneValid(providerPhoneNumber.getText().toString()) && providerPhoneNumber.getText().toString().length() != 10)
+        else if (isPhoneValid(providerPhoneNumber.getText().toString()) && providerPhoneNumber.getText().toString().length() < 10)
             providerPhoneNumber.setError("Phone Number is Incorrect");
+    }
+
+
+    private void initView() {
+        Log.i(TAG_PROVIDER_SINGUP, "initView()");
+        providerCompanyName = findViewById(R.id.ed_provider_company_name);
+        providerProfession = findViewById(R.id.ed_provider_profession);
+        providerPhoneNumber = findViewById(R.id.ed_provider_phone_number);
+        providerAddress = findViewById(R.id.ed_provider_address);
+        providerProfilePicture = findViewById(R.id.im_provider_pic);
+        singUpProviderButton = findViewById(R.id.btn_sign_up_create_provider);
+        backToProfileButton = findViewById(R.id.btn_return_profile_screen);
+        Log.i(TAG_PROVIDER_SINGUP, "finished initView() ");
     }
 
 
@@ -173,9 +174,11 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
         return PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber) || Patterns.PHONE.matcher(phoneNumber).matches();
     }
 
+
     private boolean checkIfEmpty(EditText editText) {
         return editText.getText().toString().isEmpty();
     }
+
 
     private boolean isFormClear() {
         return checkIfEmpty(providerCompanyName) && checkIfEmpty(providerProfession) && checkIfEmpty(providerPhoneNumber) && checkIfEmpty(providerAddress);
@@ -185,6 +188,7 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
     public EditText getProviderCompanyName() {
         return providerCompanyName;
     }
+
 
     public void setProviderCompanyName(EditText providerCompanyName) {
         this.providerCompanyName = providerCompanyName;
@@ -198,17 +202,21 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
         this.providerProfession = providerProfession;
     }
 
+
     public EditText getProviderPhoneNumber() {
         return providerPhoneNumber;
     }
+
 
     public void setProviderPhoneNumber(EditText providerPhoneNumber) {
         this.providerPhoneNumber = providerPhoneNumber;
     }
 
+
     public EditText getProviderAddress() {
         return providerAddress;
     }
+
 
     public void setProviderAddress(EditText providerAddress) {
         this.providerAddress = providerAddress;
