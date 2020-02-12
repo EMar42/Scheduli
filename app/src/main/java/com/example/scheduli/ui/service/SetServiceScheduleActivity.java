@@ -20,6 +20,7 @@ import com.example.scheduli.data.Sessions;
 import com.example.scheduli.data.TimeValidator;
 import com.example.scheduli.data.Service;
 import com.example.scheduli.data.WorkDay;
+import com.example.scheduli.data.repositories.ProviderDataRepository;
 import com.example.scheduli.utils.UsersUtils;
 
 import java.sql.SQLOutput;
@@ -126,11 +127,13 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
             int i = 0;
             for (Switch s : switchesOnToggle) {
                 Log.i(SET_SERVICE_SCHEDULE_TAG, "This is switch at isValid method  " + s.getText().toString());
-
                 createWorkingDays(s);
                 createDailySessions(s);
-
             }
+            service.setDailySessions(dailySessions);
+            service.setWorkingDays(workingDays);
+//            ProviderDataRepository.getInstance().setProviderServices(UsersUtils.getInstance().getCurrentUserUid(),
+//                    service);
         }
     }
 
@@ -436,54 +439,47 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 
     private void multiplyDailySessions(ArrayList<Sessions> ses) {
 
-        ArrayList<Sessions> tempDailySessions = new ArrayList<>();
-        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-        System.out.println("multiply daily sessions");
-        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+        ArrayList<Sessions> tempDailySessions;
         Calendar startCal = Calendar.getInstance();
         Calendar endCal = Calendar.getInstance();
-
-
-        startCal.setTime(new Date(ses.get(0).getStart()));
-        endCal.setTime(new Date(ses.get(0).getStart()));
         endCal.add(Calendar.MONTH, 1);
-        System.out.println("ses before");
-        for (Sessions s1 : ses) {
-            System.out.println("start "+ formatter1.format(s1.getStart()) + " end "
-                    + formatter1.format(s1.getEnd()));
-        }
 
-        int i = 0;
-        Calendar startCalSession = Calendar.getInstance();
-        Calendar endCalSession = Calendar.getInstance();
-        while (startCal.before(endCal)) {
-
-            while(i < ses.size()){
-                startCalSession.setTime(new Date(ses.get(i).getStart()));
-                startCalSession.setTime(new Date(ses.get(i).getEnd()));
-                System.out.println("This is @1\nstart "+formatter1.format(startCalSession.getTimeInMillis()) + " end " +
-                        formatter1.format(endCalSession.getTimeInMillis()));
-                startCalSession.add(Calendar.WEEK_OF_MONTH, 1);
-                startCalSession.add(Calendar.WEEK_OF_MONTH, 1);
-                System.out.println("This is @2\nstart "+formatter1.format(startCalSession.getTimeInMillis()) + " end " +
-                        formatter1.format(endCalSession.getTimeInMillis()));
-                Sessions tempSessions = new Sessions(startCalSession.getTimeInMillis(), endCalSession.getTimeInMillis(),
-                        true);
-                tempDailySessions.add(tempSessions);
-                i++;
-            }
-
-
-            startCal.add(Calendar.WEEK_OF_MONTH,1);
-            //put map
-        }
-
-//        System.out.println("ses after");
-//        for (Sessions s1 : tempDailySessions) {
-//            System.out.println("start "+ formatter1.format(s1.getStart()) + " end "
+//        System.out.println("sessions before");
+//        for (Sessions s1 : currentSession) {
+//            System.out.println("start " + formatter1.format(s1.getStart()) + " end "
 //                    + formatter1.format(s1.getEnd()));
 //        }
 
+
+        Calendar startCalSession = Calendar.getInstance();
+        Calendar endCalSession = Calendar.getInstance();
+        int i = 1;
+        while (startCal.before(endCal)) {
+            tempDailySessions = new ArrayList<>();
+            for (Sessions s:ses) {
+                startCalSession.setTime(new Date(s.getStart()));
+                endCalSession.setTime(new Date(s.getEnd()));
+                startCalSession.add(Calendar.WEEK_OF_MONTH, i);
+                endCalSession.add(Calendar.WEEK_OF_MONTH, i);
+                Sessions tempSessions = new Sessions(startCalSession.getTimeInMillis(), endCalSession.getTimeInMillis(),
+                        true);
+                tempDailySessions.add(tempSessions);
+            }
+
+            currentSession.addAll(tempDailySessions);
+            dailySessions.put(Long.toString(tempDailySessions.get(0).getStart()), tempDailySessions);
+            startCal.add(Calendar.WEEK_OF_MONTH,1 );
+            i++;
+        }
+
+
+//        System.out.println(" ");
+//        System.out.println("sessions after");
+//        for (Sessions s1 : currentSession) {
+//            System.out.println("start " + formatter1.format(s1.getStart()) + " end "
+//                    + formatter1.format(s1.getEnd()));
+//        }
+    }
 
 //        ses.addAll(tempDailySessions);
 //        System.out.println("ses after");
@@ -491,7 +487,6 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 //            System.out.println("start "+ formatter1.format(s1.getStart()) + " end "
 //                    + formatter1.format(s1.getEnd()));
 //        }
-
 
 
 //        for (Sessions s : ses) {             //adding next week daily sessions
@@ -526,8 +521,6 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 //            i++;
 //        }
 //        currentSession.addAll(tempSessionsArrayList);
-
-    }
 
 
     private void createDailySessions(Switch s) {
@@ -588,8 +581,8 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 
                 }
 
-                multiplyDailySessions(tempArrayList);
                 currentSession.addAll(tempArrayList);
+                multiplyDailySessions(tempArrayList);
                 sunDaySessions.addAll(tempArrayList);
                 dailySessions.put(Long.toString(tempArrayList.get(0).getStart()), tempArrayList);
 
@@ -670,6 +663,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                 }
 //                System.out.println("1st in daily session : " + tempArrayList.get(0).getStart());
                 currentSession.addAll(tempArrayList);
+                multiplyDailySessions(tempArrayList);
                 monDaySessions.addAll(tempArrayList);
                 dailySessions.put(Long.toString(tempArrayList.get(0).getStart()), tempArrayList);
 
@@ -750,6 +744,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                 }
 //                System.out.println("1st in daily session : " + tempArrayList.get(0).getStart());
                 currentSession.addAll(tempArrayList);
+                multiplyDailySessions(tempArrayList);
                 tueDaySessions.addAll(tempArrayList);
                 dailySessions.put(Long.toString(tempArrayList.get(0).getStart()), tempArrayList);
 
@@ -830,6 +825,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                 }
 //                System.out.println("1st in daily session : " + tempArrayList.get(0).getStart());
                 currentSession.addAll(tempArrayList);
+                multiplyDailySessions(tempArrayList);
                 wedDaySessions.addAll(tempArrayList);
                 dailySessions.put(Long.toString(tempArrayList.get(0).getStart()), tempArrayList);
 
@@ -910,32 +906,33 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                 }
 //                System.out.println("1st in daily session : " + tempArrayList.get(0).getStart());
                 currentSession.addAll(tempArrayList);
+                multiplyDailySessions(tempArrayList);
                 thuDaySessions.addAll(tempArrayList);
                 dailySessions.put(Long.toString(tempArrayList.get(0).getStart()), tempArrayList);
 
 
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("Staring for loop");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                for (Sessions s1 : tempArrayList) {
-                    //System.out.println("Printing sessions : " + s1.getStart() + " " + s1.getEnd());
-                    System.out.println("start date: " + s1.getStart() + " " + formatter1.format(s1.getStart()) +
-                            "  end date: " + formatter1.format(s1.getEnd()));
-
-                }
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                for (String name : dailySessions.keySet()) {
-                    String key = name;
-                    String value = dailySessions.get(name).toString();
-                    System.out.println(key + " " + value);
-                }
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("Staring for loop");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                for (Sessions s1 : tempArrayList) {
+//                    //System.out.println("Printing sessions : " + s1.getStart() + " " + s1.getEnd());
+//                    System.out.println("start date: " + s1.getStart() + " " + formatter1.format(s1.getStart()) +
+//                            "  end date: " + formatter1.format(s1.getEnd()));
+//
+//                }
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                for (String name : dailySessions.keySet()) {
+//                    String key = name;
+//                    String value = dailySessions.get(name).toString();
+//                    System.out.println(key + " " + value);
+//                }
 
                 break;
 
@@ -990,40 +987,42 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                 }
 //                System.out.println("1st in daily session : " + tempArrayList.get(0).getStart());
                 currentSession.addAll(tempArrayList);
+                multiplyDailySessions(tempArrayList);
                 friDaySessions.addAll(tempArrayList);
                 dailySessions.put(Long.toString(tempArrayList.get(0).getStart()), tempArrayList);
 
 
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("Staring for loop");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                for (Sessions s1 : tempArrayList) {
-                    //System.out.println("Printing sessions : " + s1.getStart() + " " + s1.getEnd());
-                    System.out.println("start date: " + s1.getStart() + " " + formatter1.format(s1.getStart()) +
-                            "  end date: " + formatter1.format(s1.getEnd()));
-
-                }
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                for (String name : dailySessions.keySet()) {
-                    String key = name;
-                    String value = dailySessions.get(name).toString();
-                    System.out.println(key + " " + value);
-                }
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("Staring for loop");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                for (Sessions s1 : tempArrayList) {
+//                    //System.out.println("Printing sessions : " + s1.getStart() + " " + s1.getEnd());
+//                    System.out.println("start date: " + s1.getStart() + " " + formatter1.format(s1.getStart()) +
+//                            "  end date: " + formatter1.format(s1.getEnd()));
+//
+//                }
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                for (String name : dailySessions.keySet()) {
+//                    String key = name;
+//                    String value = dailySessions.get(name).toString();
+//                    System.out.println(key + " " + value);
+//                }
 
                 break;
 
 
             case "Sat":
+                Log.i(SET_SERVICE_SCHEDULE_TAG, "Saturday Toggle ");
                 tempArrayList = new ArrayList<>();
-                System.out.println(" ");
-                System.out.println("satDAYYYYYYYYYYYYYYYYYYYYYYYY");
+//                System.out.println(" ");
+//                System.out.println("satDAYYYYYYYYYYYYYYYYYYYYYYYY");
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from7));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(from7));
                 long satdayStart = cal.getTimeInMillis();
@@ -1033,7 +1032,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                 long satdayEnd = cal.getTimeInMillis();
                 Date satSessionsSpanDate = new Date(TimeUnit.MINUTES.toMillis(sessionSpan));
                 Date satWorkingHours = new Date(satdayEnd - satdayStart);
-                System.out.println(satWorkingHours.getTime());
+//                System.out.println(satWorkingHours.getTime());
 
                 int satNumOfSlots = (int) ((satWorkingHours.getTime() / (1000 * 60)) / sessionSpan);
 
@@ -1041,9 +1040,6 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                 ArrayList<Date> satDates = new ArrayList<>();
 
                 i = 0;
-
-                Log.i(SET_SERVICE_SCHEDULE_TAG, "start month : " + startCal.get(Calendar.MONTH) +
-                        " halfYear month " + halfYearCal.get(Calendar.MONTH));
 
                 while (i < satNumOfSlots) {
                     long startSessionLong = satdayStart;
@@ -1056,11 +1052,11 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                     endSessionLong = satdayStart;
 //                    System.out.print(" end " + endSessionLong + "\n");
 
-
+//
                     Sessions tempSession = new Sessions(startSessionLong, endSessionLong, true);
-                    System.out.println("tempSession start: " + tempSession.getStart() + " tempSession end: " + tempSession.getEnd());
-                    System.out.println("tempSession start date: " + formatter1.format(tempSession.getStart()) +
-                            " tempSession end: date " + formatter1.format(tempSession.getEnd()));
+//                    System.out.println("tempSession start: " + tempSession.getStart() + " tempSession end: " + tempSession.getEnd());
+//                    System.out.println("tempSession start date: " + formatter1.format(tempSession.getStart()) +
+//                            " tempSession end: date " + formatter1.format(tempSession.getEnd()));
                     tempArrayList.add(tempSession);
                     i++;
 
@@ -1071,21 +1067,24 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                 }
 //                System.out.println("1st in daily session : " + tempArrayList.get(0).getStart());
                 currentSession.addAll(tempArrayList);
+                Log.i(SET_SERVICE_SCHEDULE_TAG, "Saturday Multiply");
+                multiplyDailySessions(tempArrayList);
                 satDaySessions.addAll(tempArrayList);
+                Log.i(SET_SERVICE_SCHEDULE_TAG, "Saturday update map dailySessions");
                 dailySessions.put(Long.toString(tempArrayList.get(0).getStart()), tempArrayList);
 
 
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("Staring for loop");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                for (Sessions s1 : tempArrayList) {
-                    //System.out.println("Printing sessions : " + s1.getStart() + " " + s1.getEnd());
-                    System.out.println("start date: " + s1.getStart() + " " + formatter1.format(s1.getStart()) +
-                            "  end date: " + formatter1.format(s1.getEnd()));
-
-                }
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("Staring for loop");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//                for (Sessions s1 : tempArrayList) {
+//                    //System.out.println("Printing sessions : " + s1.getStart() + " " + s1.getEnd());
+//                    System.out.println("start date: " + s1.getStart() + " " + formatter1.format(s1.getStart()) +
+//                            "  end date: " + formatter1.format(s1.getEnd()));
+//
+//                }
                 break;
         }
     }
@@ -1177,7 +1176,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
 
 
     private void initView() {
-
+        formatter1.setTimeZone(TimeZone.getTimeZone("UTC+2"));
         Intent intent = getIntent();
         service = intent.getParcelableExtra("service");
         serviceDuration = service.getSingleSessionInMinutes();
