@@ -7,7 +7,6 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
 public class Sessions implements Parcelable {
-    //TODO implement class
 
     private long start;
     private long end;

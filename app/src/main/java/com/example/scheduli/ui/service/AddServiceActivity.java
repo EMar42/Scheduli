@@ -40,6 +40,7 @@ public class AddServiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (editMode) {
+                    deleteServiceButton.setAlpha((float) 0.5);
                     serviceHeadLine.setText("Edit Service");
                     service.setName(String.valueOf(serviceName.getText()));
                     service.setSingleSessionInMinutes(Integer.parseInt(serviceDuration.getText().toString()));
@@ -49,6 +50,7 @@ public class AddServiceActivity extends AppCompatActivity {
                     intent.putExtra("service", service);
                     startActivity(intent);
                 } else
+
                     createNewService();
             }
         });
@@ -63,13 +65,35 @@ public class AddServiceActivity extends AppCompatActivity {
         deleteServiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: delete service method
+                deleteService();
+               //TODO: finish the delete service
+
             }
         });
     }
 
+    private void deleteService() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage("Are you sure you would like to delete the current service ?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //delete service method
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
     private void goBackToServices() {
-        if (!isFormClear()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             builder.setMessage("If you Quit now your data wont be saved")
@@ -89,7 +113,7 @@ public class AddServiceActivity extends AppCompatActivity {
                     });
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
-        }
+
     }
 
     private void createNewService() {
@@ -149,12 +173,16 @@ public class AddServiceActivity extends AppCompatActivity {
         serviceHeadLine = findViewById(R.id.tv_add_new_service_headline);
         serviceBackButton = findViewById(R.id.btn_back_service);
         deleteServiceButton = findViewById(R.id.btn_delete_service);
+        deleteServiceButton.setAlpha((float )0.5);
+        deleteServiceButton.setEnabled(false);
 
         intent = getIntent();
         service = intent.getParcelableExtra("service");
         try {
             if (service.getName() != null) { // not a strong condition
                 editMode = true;
+                deleteServiceButton.setAlpha((float )1.0);
+                deleteServiceButton.setEnabled(true);
                 editExistingService();
             }
         } catch (Exception e) {

@@ -52,7 +52,6 @@ public class ProviderDataRepository {
 
     public void createNewProviderInApp(String uid, Provider provider) {
         Log.i(TAG_PROVIDER_REPOSITORY, "Created new Provider " + provider);
-        //TODO: check if the provider exists
         dataBaseReference.child(uid).setValue(provider);
     }
 

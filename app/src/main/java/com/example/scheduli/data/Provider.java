@@ -127,7 +127,7 @@ public class Provider implements Parcelable {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getImageUrl() { // TODO: get Image from DB
+    public String getImageUrl() {
         return imageUrl;
     }
 

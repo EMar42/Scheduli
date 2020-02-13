@@ -60,18 +60,22 @@ public class ProviderActivity extends BaseMenuActivity {
         Intent intent = getIntent();
         provider = intent.getParcelableExtra("provider");
         services = new ArrayList<>();
+
         try {
             services = provider.getServices();
+            services.add(new Service());
         }catch (Exception e){
+            services.add(new Service());
             Log.i(TAG_PROVIDER_ACTIVITY, "no service currently");
         }
+//
+//        if (services == null || services.size() == 0) {
+//            services = new ArrayList<>();
+//            services.add(new Service());
+//        }
 
-        if (services == null || services.size() == 0) {
-            services = new ArrayList<>();
-            services.add(new Service());
-        }
 
-        mLayout = new GridLayoutManager(this, 1);
+        mLayout = new GridLayoutManager(this, 2);
         mAdapter = new ServiceAdapter(this, services);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLayout);
