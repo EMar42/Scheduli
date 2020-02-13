@@ -34,6 +34,7 @@ public class ProvidersAdapter extends RecyclerView.Adapter<ProvidersAdapter.Prov
 
     @Override
     public void onBindViewHolder(@NonNull ProviderViewHolder holder, int position) {
+
         Provider provider = providerList.get(position);
 
         holder.profileImg.setImageResource(R.drawable.ic_person);
