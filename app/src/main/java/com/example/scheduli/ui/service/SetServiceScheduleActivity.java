@@ -488,6 +488,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                 tempArrayList = new ArrayList<>();
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from1));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(from1));
+                cal.set(Calendar.DAY_OF_WEEK,1);
                 long sundayStart = cal.getTimeInMillis();
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(to1));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(to1));
@@ -534,6 +535,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                 tempArrayList = new ArrayList<>();
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from2));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(from2));
+                cal.set(Calendar.DAY_OF_WEEK,2);
                 long mondayStart = cal.getTimeInMillis();
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(to2));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(to2));
@@ -572,6 +574,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                 tempArrayList = new ArrayList<>();
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from3));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(from3));
+                cal.set(Calendar.DAY_OF_WEEK,3);
                 long tuedayStart = cal.getTimeInMillis();
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(to3));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(to3));
@@ -613,6 +616,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                 tempArrayList = new ArrayList<>();
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from4));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(from4));
+                cal.set(Calendar.DAY_OF_WEEK,4);
                 long weddayStart = cal.getTimeInMillis();
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(to4));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(to4));
@@ -653,6 +657,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                 tempArrayList = new ArrayList<>();
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from5));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(from5));
+                cal.set(Calendar.DAY_OF_WEEK,5);
                 long thudayStart = cal.getTimeInMillis();
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(to5));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(to5));
@@ -693,6 +698,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                 tempArrayList = new ArrayList<>();
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from6));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(from6));
+                cal.set(Calendar.DAY_OF_WEEK,6);
                 long fridayStart = cal.getTimeInMillis();
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(to6));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(to6));
@@ -733,6 +739,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                 tempArrayList = new ArrayList<>();
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(from7));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(from7));
+                cal.set(Calendar.DAY_OF_WEEK,7);
                 long satdayStart = cal.getTimeInMillis();
                 cal.set(Calendar.HOUR_OF_DAY, getHoursFromEditText(to7));
                 cal.set(Calendar.MINUTE, getMinutesFromEditText(to7));
