@@ -74,7 +74,7 @@ public class ProviderActivity extends BaseMenuActivity {
         services = new ArrayList<>();
 
         try {
-            services = intent.getParcelableExtra("service");
+            provider = intent.getParcelableExtra("provider");
             services = provider.getServices();
             if (services == null) {
                 services = new ArrayList<>();
