@@ -9,6 +9,7 @@ import com.example.scheduli.data.Appointment;
 import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.Service;
 import com.example.scheduli.data.Sessions;
+import com.example.scheduli.data.WorkDay;
 import com.example.scheduli.data.fireBase.DataBaseCallBackOperation;
 import com.example.scheduli.data.fireBase.FirebaseQueryLiveData;
 import com.example.scheduli.utils.UsersUtils;
@@ -24,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 @IgnoreExtraProperties
 
@@ -70,8 +72,21 @@ public class ProviderDataRepository {
                     //Provider provider = dataSnapshot.child(uid).getValue(Provider.class);
                     DataSnapshot providerSnapshot = dataSnapshot.child(uid);
                     for (DataSnapshot snapshot : providerSnapshot.child("services").getChildren()) {
-                        String key = snapshot.getKey();
-                        Service service = snapshot.child(key).getValue(Service.class);
+                        Service service = new Service();
+                        service.setCost(Float.valueOf(snapshot.child("cost").getValue().toString()));
+                        service.setDailySessions((Map<String, ArrayList<Sessions>>) snapshot.child("dailySessions").getValue());
+                        service.setName(snapshot.child("name").getValue().toString());
+                        service.setSingleSessionInMinutes(Integer.valueOf(snapshot.child("singleSessionInMinutes").getValue().toString()));
+
+                        HashMap<String, WorkDay> workDays = new HashMap<>();
+
+                        for (DataSnapshot ds : snapshot.child("workingDays").getChildren()) {
+                            String key = ds.getKey();
+                            WorkDay day = ds.getValue(WorkDay.class);
+                            workDays.put(key, day);
+                        }
+                        service.setWorkingDays(workDays);
+
                         services.add(service);
                     }
 

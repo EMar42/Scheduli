@@ -196,15 +196,21 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
                         Log.d(TAG_SEARCH_ACT, "User Choose: " + item_snapshot.toString());
 
                         joinedProvider.setPid(item_snapshot.getKey());
+                        ProviderDataRepository.getInstance().getProviderByUid(joinedProvider.getPid(), new DataBaseCallBackOperation() {
+                            @Override
+                            public void callBack(Object object) {
+                                Provider provider1 = (Provider) object;
+                                Intent intent = new Intent(SearchProviderActivity.this, BookingAppointmentActivity.class);
+                                intent.putExtra("companyName", provider.getCompanyName());
+                                intent.putExtra("pid", joinedProvider.getPid());
+                                intent.putExtra("provider", provider1);
+                                joinedProvider.setPid(null);
+                                startActivity(intent);
+                            }
+                        });
 
                         if (joinedProvider.getPid() != null && joinedProvider.getCompanyName() != null) {
-                            Intent intent = new Intent(SearchProviderActivity.this, BookingAppointmentActivity.class);
-                            intent.putExtra("companyName", provider.getCompanyName());
-                            intent.putExtra("pid", joinedProvider.getPid());
-                            intent.putExtra("provider", provider);
-                            joinedProvider.setPid(null);
-                            startActivity(intent);
-//                            finish();
+
                         } else {
                             Toast.makeText(getApplicationContext(), "Please Select provider", Toast.LENGTH_LONG).show();
                         }
