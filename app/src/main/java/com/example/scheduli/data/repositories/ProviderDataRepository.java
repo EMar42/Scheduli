@@ -71,39 +71,45 @@ public class ProviderDataRepository {
                     Log.i(TAG_PROVIDER_REPOSITORY, "Getting data from database on " + uid);
                     //Provider provider = dataSnapshot.child(uid).getValue(Provider.class);
                     DataSnapshot providerSnapshot = dataSnapshot.child(uid);
-                    for (DataSnapshot snapshot : providerSnapshot.child("services").getChildren()) {
-                        Service service = new Service();
-                        service.setCost(Float.valueOf(snapshot.child("cost").getValue().toString()));
-                        service.setDailySessions((Map<String, ArrayList<Sessions>>) snapshot.child("dailySessions").getValue());
-                        service.setName(snapshot.child("name").getValue().toString());
-                        service.setSingleSessionInMinutes(Integer.valueOf(snapshot.child("singleSessionInMinutes").getValue().toString()));
+                    if (providerSnapshot.getValue() != null) {
+                        for (DataSnapshot snapshot : providerSnapshot.child("services").getChildren()) {
+                            Service service = new Service();
+                            service.setCost(Float.valueOf(snapshot.child("cost").getValue().toString()));
+                            service.setDailySessions((Map<String, ArrayList<Sessions>>) snapshot.child("dailySessions").getValue());
+                            service.setName(snapshot.child("name").getValue().toString());
+                            service.setSingleSessionInMinutes(Integer.valueOf(snapshot.child("singleSessionInMinutes").getValue().toString()));
 
-                        HashMap<String, WorkDay> workDays = new HashMap<>();
+                            HashMap<String, WorkDay> workDays = new HashMap<>();
 
-                        for (DataSnapshot ds : snapshot.child("workingDays").getChildren()) {
-                            String key = ds.getKey();
-                            WorkDay day = ds.getValue(WorkDay.class);
-                            workDays.put(key, day);
+                            for (DataSnapshot ds : snapshot.child("workingDays").getChildren()) {
+                                String key = ds.getKey();
+                                WorkDay day = ds.getValue(WorkDay.class);
+                                workDays.put(key, day);
+                            }
+                            service.setWorkingDays(workDays);
+
+                            services.add(service);
                         }
-                        service.setWorkingDays(workDays);
 
-                        services.add(service);
-                    }
+                        Provider provider = new Provider();
+                        Object image = providerSnapshot.child("imageUrl").getValue();
+                        if (image == null) {
+                            provider.setImageUrl("");
+                        } else {
+                            provider.setImageUrl(image.toString());
+                        }
+                        provider.setProfession(providerSnapshot.child("profession").getValue().toString());
+                        provider.setCompanyName(providerSnapshot.child("companyName").getValue().toString());
+                        provider.setPhoneNumber(providerSnapshot.child("phoneNumber").getValue().toString());
+                        provider.setAddress(providerSnapshot.child("address").getValue().toString());
+                        provider.setServices(services);
 
-                    Provider provider = new Provider();
-                    Object image = providerSnapshot.child("imageUrl").getValue();
-                    if (image == null) {
-                        provider.setImageUrl("");
+                        callback.callBack(provider);
                     } else {
-                        provider.setImageUrl(image.toString());
+                        callback.callBack(null);
                     }
-                    provider.setProfession(providerSnapshot.child("profession").getValue().toString());
-                    provider.setCompanyName(providerSnapshot.child("companyName").getValue().toString());
-                    provider.setPhoneNumber(providerSnapshot.child("phoneNumber").getValue().toString());
-                    provider.setAddress(providerSnapshot.child("address").getValue().toString());
-                    provider.setServices(services);
 
-                    callback.callBack(provider);
+
                 }
             }
 
