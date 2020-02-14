@@ -60,12 +60,34 @@ public class ProviderDataRepository {
      * Provide Uid and a callback interface to receive the values in your caller.
      * */
     public void getProviderByUid(final String uid, final DataBaseCallBackOperation callback) {
-        ValueEventListener providerListener = new ValueEventListener() {
+        final ValueEventListener providerListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()) {
+                    ArrayList<Service> services = new ArrayList<>();
+
                     Log.i(TAG_PROVIDER_REPOSITORY, "Getting data from database on " + uid);
-                    Provider provider = dataSnapshot.child(uid).getValue(Provider.class);
+                    //Provider provider = dataSnapshot.child(uid).getValue(Provider.class);
+                    DataSnapshot providerSnapshot = dataSnapshot.child(uid);
+                    for (DataSnapshot snapshot : providerSnapshot.child("services").getChildren()) {
+                        String key = snapshot.getKey();
+                        Service service = snapshot.child(key).getValue(Service.class);
+                        services.add(service);
+                    }
+
+                    Provider provider = new Provider();
+                    Object image = providerSnapshot.child("imageUrl").getValue();
+                    if (image == null) {
+                        provider.setImageUrl("");
+                    } else {
+                        provider.setImageUrl(image.toString());
+                    }
+                    provider.setProfession(providerSnapshot.child("profession").getValue().toString());
+                    provider.setCompanyName(providerSnapshot.child("companyName").getValue().toString());
+                    provider.setPhoneNumber(providerSnapshot.child("phoneNumber").getValue().toString());
+                    provider.setAddress(providerSnapshot.child("address").getValue().toString());
+                    provider.setServices(services);
+
                     callback.callBack(provider);
                 }
             }

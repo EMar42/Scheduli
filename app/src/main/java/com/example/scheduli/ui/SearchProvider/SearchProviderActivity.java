@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.navigation.NavController;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,10 +20,11 @@ import com.example.scheduli.BaseMenuActivity;
 import com.example.scheduli.R;
 import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.ProvidersAdapter;
+import com.example.scheduli.data.fireBase.DataBaseCallBackOperation;
 import com.example.scheduli.data.joined.JoinedProvider;
+import com.example.scheduli.data.repositories.ProviderDataRepository;
 import com.example.scheduli.ui.BookingAppointment.BookingAppointmentActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -146,18 +146,23 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    Provider provider = snapshot.getValue(Provider.class);
-                    if(provider.getServices()!= null) {
-                        if(provider.getServices().size()>0) {
-                            providersList.add(provider);
-                            Log.d(TAG_SEARCH_ACT, "ADDED: " + provider.getCompanyName());
+                    ProviderDataRepository.getInstance().getProviderByUid(snapshot.getKey(), new DataBaseCallBackOperation() {
+                        @Override
+                        public void callBack(Object object) {
+                            Provider provider = (Provider) object;
+                            if (provider.getServices().size() > 0) {
+                                providersList.add(provider);
+                                Log.d(TAG_SEARCH_ACT, "ADDED: " + provider.getCompanyName());
+                            }
+
+                            if (!providersList.isEmpty()) {
+                                recyclerView.setAdapter(adapter);
+                            }
                         }
-                    }
+                    });
                 }
 
-                if (!providersList.isEmpty()) {
-                    recyclerView.setAdapter(adapter);
-                }
+
             }
         }
 
