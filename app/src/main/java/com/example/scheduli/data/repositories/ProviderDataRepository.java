@@ -198,10 +198,22 @@ public class ProviderDataRepository {
                 ArrayList<Service> services = new ArrayList<>();
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Service service = snapshot.getValue(Service.class);
-                    if (service != null) {
-                        services.add(service);
+                    Service service = new Service();
+                    service.setCost(Float.valueOf(snapshot.child("cost").getValue().toString()));
+                    service.setDailySessions((Map<String, ArrayList<Sessions>>) snapshot.child("dailySessions").getValue());
+                    service.setName(snapshot.child("name").getValue().toString());
+                    service.setSingleSessionInMinutes(Integer.valueOf(snapshot.child("singleSessionInMinutes").getValue().toString()));
+
+                    HashMap<String, WorkDay> workDays = new HashMap<>();
+
+                    for (DataSnapshot ds : snapshot.child("workingDays").getChildren()) {
+                        String key = ds.getKey();
+                        WorkDay day = ds.getValue(WorkDay.class);
+                        workDays.put(key, day);
                     }
+                    service.setWorkingDays(workDays);
+
+                    services.add(service);
                 }
 
                 insertService.callBack(services);
