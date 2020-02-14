@@ -61,8 +61,6 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
 
-        providersList = new ArrayList<>();
-
         initView();
         init();
 
@@ -101,13 +99,15 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
         searchBtn = (ImageButton) findViewById(R.id.search_provider_button);
         recyclerView = (RecyclerView) findViewById(R.id.search_results_list);
 
+        providersList = new ArrayList<>();
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         ref = FirebaseDatabase.getInstance().getReference().child("providers");
 
-        mLayout = new LinearLayoutManager(this);
         getAllProviders();
+        mLayout = new LinearLayoutManager(this);
         adapter = new ProvidersAdapter(providersList, this);
 
         recyclerView.setLayoutManager(mLayout);
@@ -125,6 +125,7 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
     private void firebaseProviderSearchByCompany(String company) {
 
         Query query = ref.orderByChild("companyName").equalTo(company);
+
         query.addListenerForSingleValueEvent(eventListener);
     }
 
@@ -146,8 +147,12 @@ public class SearchProviderActivity extends BaseMenuActivity implements Provider
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                     Provider provider = snapshot.getValue(Provider.class);
-                    providersList.add(provider);
-                    System.out.println("ADDED: " + provider.getCompanyName());
+                    if(provider.getServices()!= null) {
+                        if(provider.getServices().size()>0) {
+                            providersList.add(provider);
+                            Log.d(TAG_SEARCH_ACT, "ADDED: " + provider.getCompanyName());
+                        }
+                    }
                 }
 
                 if (!providersList.isEmpty()) {
