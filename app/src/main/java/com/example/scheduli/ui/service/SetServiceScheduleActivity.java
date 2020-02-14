@@ -135,7 +135,6 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
             service.setDailySessions(dailySessions);
             service.setWorkingDays(workingDays);
             Intent intent = new Intent(getBaseContext(), ProviderActivity.class);
-            intent.putExtra("service", service);
             startActivity(intent);
 
 

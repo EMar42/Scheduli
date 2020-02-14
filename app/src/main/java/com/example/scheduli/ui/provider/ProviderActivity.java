@@ -34,7 +34,6 @@ public class ProviderActivity extends BaseMenuActivity {
     private ArrayList<Service> services;
     private Button backButton;
     private Provider provider;
-    private Service service;
 
 
     @Override
@@ -72,11 +71,10 @@ public class ProviderActivity extends BaseMenuActivity {
         recyclerView = findViewById(R.id.rv_provider_services);
         backButton = findViewById(R.id.btn_back_addservice);
         Intent intent = getIntent();
-        provider = intent.getParcelableExtra("provider");
         services = new ArrayList<>();
-        //services = intent.getParcelableExtra("service");
 
         try {
+            services = intent.getParcelableExtra("service");
             services = provider.getServices();
             if (services == null) {
                 services = new ArrayList<>();
@@ -84,6 +82,8 @@ public class ProviderActivity extends BaseMenuActivity {
             } else
                 services.add(new Service());
         } catch (Exception e) {
+            services = new ArrayList<>();
+            services.add(new Service());
             Log.i(TAG_PROVIDER_ACTIVITY, "no service currently");
         }
 //
