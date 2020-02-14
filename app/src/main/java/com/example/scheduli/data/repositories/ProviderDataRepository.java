@@ -90,11 +90,13 @@ public class ProviderDataRepository {
 
 
     public void setProviderServices(String uid, ArrayList<Service> services) {
+        int index = 0;
 
-        dataBaseReference.child(uid).child("services").setValue(services);
+        for (Service service : services) {
+            dataBaseReference.child(uid).child("services").child(Integer.toString(index++)).setValue(service);
+        }
+
         Log.d(TAG_PROVIDER_REPOSITORY, "Services updated. " + uid);
-
-
     }
 
     public void setSingleAppointmentValue(String provider_id, int serviceIndex, Date date, int sessionIndex, Sessions session) {
