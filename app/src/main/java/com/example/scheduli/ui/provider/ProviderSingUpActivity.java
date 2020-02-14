@@ -115,7 +115,6 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
 
     private void backToProfile() {
         Log.i(TAG_PROVIDER_SINGUP, "backToProfile() ");
-        if (!isFormClear()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             builder.setMessage("If you Quit now your data wont be saved")
@@ -135,7 +134,6 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
                     });
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
-        }
     }
 
 

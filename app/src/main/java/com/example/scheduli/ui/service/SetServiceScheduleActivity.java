@@ -77,6 +77,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 updateService();
+                finish();
             }
         });
 
@@ -84,6 +85,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 goBackToProvider();
+                finish();
             }
         });
     }
@@ -133,6 +135,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
             service.setDailySessions(dailySessions);
             service.setWorkingDays(workingDays);
             Intent intent = new Intent(getBaseContext(), ProviderActivity.class);
+            intent.putExtra("service", service);
             startActivity(intent);
 
 
