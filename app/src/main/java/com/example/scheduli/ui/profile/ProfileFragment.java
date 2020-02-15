@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +72,9 @@ public class ProfileFragment extends Fragment {
                     public void callBack(Object object) {
                         try {
                             userProfilePictureIv.setImageBitmap((Bitmap) object);
+                            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(350, 350);
+                            userProfilePictureIv.setLayoutParams(layoutParams);
+
                         } catch (Exception e) {
                             Log.e("Profile fragment", "Cannot donwload image from user reason " + e.getMessage());
                         }
