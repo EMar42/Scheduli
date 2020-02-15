@@ -18,10 +18,7 @@ import com.example.scheduli.BaseMenuActivity;
 import com.example.scheduli.R;
 import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.repositories.ProviderDataRepository;
-import com.example.scheduli.ui.mainScreen.MainActivity;
 import com.example.scheduli.utils.UsersUtils;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class ProviderSingUpActivity extends BaseMenuActivity {
 
@@ -122,8 +119,7 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
+                            finish();
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {

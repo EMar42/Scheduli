@@ -1,7 +1,5 @@
 package com.example.scheduli.ui.service;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,10 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.scheduli.R;
 import com.example.scheduli.data.Service;
-import com.example.scheduli.data.repositories.ProviderDataRepository;
-import com.example.scheduli.ui.provider.ProviderActivity;
 
 public class AddServiceActivity extends AppCompatActivity {
 
@@ -101,8 +99,7 @@ public class AddServiceActivity extends AppCompatActivity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(getApplicationContext(), ProviderActivity.class);
-                            startActivity(intent);
+                            finish();
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {

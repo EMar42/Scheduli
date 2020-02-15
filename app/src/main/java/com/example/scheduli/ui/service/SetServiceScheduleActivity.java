@@ -1,30 +1,26 @@
 package com.example.scheduli.ui.service;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
-import android.se.omapi.Session;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.scheduli.R;
+import com.example.scheduli.data.Service;
 import com.example.scheduli.data.Sessions;
 import com.example.scheduli.data.TimeValidator;
-import com.example.scheduli.data.Service;
 import com.example.scheduli.data.WorkDay;
 import com.example.scheduli.data.repositories.ProviderDataRepository;
 import com.example.scheduli.ui.provider.ProviderActivity;
 import com.example.scheduli.utils.UsersUtils;
 
-import java.sql.SQLOutput;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -85,7 +81,6 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 goBackToProvider();
-                finish();
             }
         });
     }
@@ -101,8 +96,7 @@ public class SetServiceScheduleActivity extends AppCompatActivity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(getApplicationContext(), AddServiceActivity.class);
-                            startActivity(intent);
+                            finish();
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {

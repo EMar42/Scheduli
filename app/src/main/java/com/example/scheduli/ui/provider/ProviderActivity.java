@@ -1,26 +1,20 @@
 package com.example.scheduli.ui.provider;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.scheduli.BaseMenuActivity;
 import com.example.scheduli.R;
 import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.Service;
 import com.example.scheduli.data.ServiceAdapter;
-import com.example.scheduli.data.repositories.ProviderDataRepository;
-import com.example.scheduli.ui.BookingAppointment.BookingAppointmentActivity;
-import com.example.scheduli.ui.mainScreen.MainActivity;
 import com.example.scheduli.ui.service.AddServiceActivity;
-import com.example.scheduli.utils.UsersUtils;
 
 import java.util.ArrayList;
 
@@ -60,8 +54,7 @@ public class ProviderActivity extends BaseMenuActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
     }

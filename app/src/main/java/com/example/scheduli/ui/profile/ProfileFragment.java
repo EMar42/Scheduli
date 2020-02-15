@@ -1,6 +1,7 @@
 package com.example.scheduli.ui.profile;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,8 +21,11 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.scheduli.R;
 import com.example.scheduli.data.Provider;
 import com.example.scheduli.data.User;
+import com.example.scheduli.data.fireBase.DataBaseCallBackOperation;
+import com.example.scheduli.data.repositories.StorageRepository;
 import com.example.scheduli.ui.provider.ProviderActivity;
 import com.example.scheduli.ui.provider.ProviderSingUpActivity;
+import com.example.scheduli.utils.UsersUtils;
 
 public class ProfileFragment extends Fragment {
 
@@ -62,7 +66,16 @@ public class ProfileFragment extends Fragment {
                 userFullNameTv.setText(user.getFullName());
                 userPhoneNumberTv.setText(user.getPhoneNumber());
                 userEmailTv.setText(user.getEmail());
-                //TODO: Fix on click picture
+                StorageRepository.getInstance().downloadImageFromStorage(UsersUtils.getInstance().getCurrentUserUid(), user.getProfileImage(), new DataBaseCallBackOperation() {
+                    @Override
+                    public void callBack(Object object) {
+                        try {
+                            userProfilePictureIv.setImageBitmap((Bitmap) object);
+                        } catch (Exception e) {
+                            Log.e("Profile fragment", "Cannot donwload image from user reason " + e.getMessage());
+                        }
+                    }
+                });
             }
         });
         mViewModel.getProviderProfileData().observe(this, new Observer<Provider>() {
@@ -116,5 +129,6 @@ public class ProfileFragment extends Fragment {
         providerButton = view.findViewById(R.id.btn_profile_provider);
         providerButton.setAlpha(disableButtonColor);
         providerButton.setEnabled(false);
+        userProfilePictureIv = view.findViewById(R.id.user_profile_picture);
     }
 }
