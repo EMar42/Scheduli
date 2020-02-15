@@ -104,6 +104,7 @@ public class ProviderSingUpActivity extends BaseMenuActivity {
         if (singUpNewProvider) {
             Intent intent = new Intent(getBaseContext(), ProviderActivity.class);
             startActivity(intent);
+            finish();
         } else {
             Log.i(TAG_PROVIDER_SINGUP, "User input Error");
         }
