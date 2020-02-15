@@ -206,9 +206,10 @@ public class UserDataRepository {
 
         Calendar appointmentStartTime = Calendar.getInstance();
         appointmentStartTime.setTimeInMillis(appointment.getStart());
+        /* Need to fix sessions in database
         if (Calendar.getInstance().before(appointmentStartTime)) {
             ProviderDataRepository.getInstance().changeSessionStatusFromByUser(appointment.getProviderUid(), appointment);
-        }
+        }*/
     }
 
     // This deletes an appointment from a user if the start time is not after the current date time of current calendar
